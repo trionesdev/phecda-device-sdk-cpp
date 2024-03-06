@@ -3,4 +3,8 @@ project(phecda_device_sdk_cpp)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_library(phecda_device_sdk_cpp STATIC library.cpp)
+add_library(phecda_device_sdk_cpp STATIC library.cpp
+        protocol_driver.h
+        device_service_sdk.cpp
+        device_service_sdk.h
+)

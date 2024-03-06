@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-void hello()
+
+void bootstrap(const std::string& serviceKey,phecda::ProtocolDriver *driver)
 {
-    std::cout << "Hello, World!" << std::endl;
+    std::cout << "Hello, World!"<< serviceKey << std::endl;
 }
