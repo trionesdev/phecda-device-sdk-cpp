@@ -3,4 +3,7 @@ project(example)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(example main.cpp ../src/cmake-build-debug/libphecda_device_sdk_cpp.a)
+link_directories(../src/cmake-build-debug)
+
+add_executable(example main.cpp)
+target_link_libraries(example libphecda_device_sdk_cpp.a)

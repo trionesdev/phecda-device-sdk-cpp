@@ -3,7 +3,8 @@
 #include <iostream>
 
 
-void bootstrap(const std::string& serviceKey,phecda::ProtocolDriver *driver)
+void bootstrap(std::string serviceKey)
 {
-    std::cout << "Hello, World!"<< serviceKey << std::endl;
+    std::cout << "Hello, World!" << serviceKey<< std::endl;
+
 }
