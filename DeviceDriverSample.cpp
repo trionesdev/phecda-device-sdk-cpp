@@ -2,10 +2,14 @@
 // Created by fengxiaotx on 2024/5/21.
 //
 #include <iostream>
-#include "phecda-device-sdk/src/phecda_device_sdk.h"
+#include <phecda/ProtocolDriver.h>
+
 
 namespace phecda {
-    void phecda::ProtocolDriver::initialize() {
+    void phecda::ProtocolDriver::initialize(DeviceServiceSDK sdk) {
         std::cout << "Hello, World! initialize" << std::endl;
+
     }
+
+
 }
