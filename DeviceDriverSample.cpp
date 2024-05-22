@@ -6,7 +6,7 @@
 
 
 namespace phecda {
-    void phecda::ProtocolDriver::initialize(DeviceServiceSDK sdk) {
+    void phecda::ProtocolDriver::initialize(DeviceServiceSDK *sdk) {
         std::cout << "Hello, World! initialize" << std::endl;
 
     }

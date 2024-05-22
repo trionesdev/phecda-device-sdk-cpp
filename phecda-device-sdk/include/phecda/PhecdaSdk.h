@@ -9,6 +9,7 @@
 #include <phecda/ProtocolDriver.h>
 
 namespace phecda {
+
     void bootstrap(std::string args[], const std::string &serviceKey, const std::string &serviceVersion,
                    ProtocolDriver *protocolDriver);
 }

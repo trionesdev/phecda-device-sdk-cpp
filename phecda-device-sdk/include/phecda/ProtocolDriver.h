@@ -11,7 +11,7 @@ namespace phecda {
 //    class DeviceServiceSDK;
     class ProtocolDriver {
     public:
-        void initialize(DeviceServiceSDK sdk);
+        void initialize(DeviceServiceSDK *sdk);
     };
 }
 #endif //PHECDA_DEVICE_SDK_APP_PRPTOCOLDRIVER_H

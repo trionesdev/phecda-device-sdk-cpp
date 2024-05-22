@@ -11,4 +11,4 @@ include_directories(phecda-device-sdk/include)
 file(GLOB HEADERS phecda-device-sdk/include)
 
 add_executable(phecda_device main.cpp DeviceDriverSample.cpp ${HEADERS})
-target_link_libraries(phecda_device phecda_device_sdk )
+target_link_libraries(phecda_device phecda-device-sdk )
