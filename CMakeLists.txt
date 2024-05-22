@@ -17,7 +17,6 @@ set(LINK_DIR ${PROJECT_SOURCE_DIR}/third-party/lib)
 
 link_directories(${LINK_DIR})
 
-add_library(phecda-device-sdk STATIC ${HEADERS} ${SOURCES}
-        include/phecda/IDeviceServiceSDK.h)
+add_library(phecda-device-sdk STATIC ${HEADERS} ${SOURCES} )
 
 target_link_libraries(phecda-device-sdk PRIVATE  libyaml-cppd.a)

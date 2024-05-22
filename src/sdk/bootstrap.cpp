@@ -3,7 +3,6 @@
 //
 #include <iostream>
 #include <phecda/ProtocolDriver.h>
-#include <phecda/DeviceServiceSDK.h>
 
 namespace phecda {
     void bootstrap(std::string args[], const std::string &serviceKey, const std::string &serviceVersion,

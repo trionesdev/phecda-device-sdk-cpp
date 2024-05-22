@@ -3,7 +3,7 @@
 //
 #include <iostream>
 #include <phecda/ProtocolDriver.h>
-#include <phecda/DeviceServiceSDK.h>
+#include "../bootstrap/Bootstrap.h"
 
 namespace phecda {
     DeviceServiceSDK::DeviceServiceSDK(const std::string &serviceKey, const std::string &serviceVersion,
@@ -84,7 +84,7 @@ namespace phecda {
 
     void DeviceServiceSDK::run() {
         std::cout << "Hello, World! run" << std::endl;
-        protocolDriver->initialize(this);
+        runAndReturnWaitGroup({});
     }
 
 
