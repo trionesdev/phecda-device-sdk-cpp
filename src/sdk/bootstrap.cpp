@@ -8,7 +8,7 @@
 namespace phecda {
     void bootstrap(std::string args[], const std::string &serviceKey, const std::string &serviceVersion,
                    ProtocolDriver *protocolDriver) {
-        std::cout << "Hello, World! bootstrap" << std::endl;
+        std::cout << "Hello, World! bootstrap1" << std::endl;
         DeviceServiceSDK deviceService = DeviceServiceSDK::newDeviceService(serviceKey, serviceVersion, protocolDriver);
         deviceService.run();
     }

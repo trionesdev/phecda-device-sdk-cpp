@@ -18,7 +18,7 @@ namespace phecda {
         long modified;
     };
 
-    struct AutoEvent{
+    struct AutoEvent {
         std::string interval;
         bool onChange;
         std::string sourceName;
@@ -33,14 +33,14 @@ namespace phecda {
         std::map<std::string, std::map<std::string, std::any>> protocols;
         std::list<std::string> labels;
         std::any location;
-        std::string  serviceName;
+        std::string serviceName;
         std::string profileName;
         std::list<AutoEvent> autoEvents;
         std::map<std::string, std::any> tags;
         std::map<std::string, std::any> properties;
     };
 
-    struct ResourceProperties{
+    struct ResourceProperties {
         std::string valueType;
         std::string readWrite;
         std::string units;
@@ -57,7 +57,7 @@ namespace phecda {
         std::map<std::string, std::any> optional;
     };
 
-    struct DeviceResource{
+    struct DeviceResource {
         std::string name;
         std::string description;
         bool isHidden;
@@ -66,13 +66,13 @@ namespace phecda {
         std::map<std::string, std::any> tags;
     };
 
-    struct ResourceOperation{
+    struct ResourceOperation {
         std::string deviceResource;
         std::string defaultValue;
         std::map<std::string, std::string> mappings;
     };
 
-    struct DeviceCommand{
+    struct DeviceCommand {
         std::string name;
         bool isHidden;
         std::string readWrite;
@@ -80,7 +80,7 @@ namespace phecda {
         std::map<std::string, std::any> tags;
     };
 
-    struct DeviceProfile : DBTimestamp{
+    struct DeviceProfile : DBTimestamp {
         std::string id;
         std::string name;
         std::string description;
@@ -89,6 +89,14 @@ namespace phecda {
         std::list<std::string> labels;
         std::list<DeviceResource> deviceResources;
         std::list<DeviceCommand> deviceCommands;
+    };
+
+    struct DeviceService : DBTimestamp {
+        std::string id;
+        std::string name;
+        std::string description;
+        std::list<std::string> labels;
+        AdminState adminState;
     };
 
 }

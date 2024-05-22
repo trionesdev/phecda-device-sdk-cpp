@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include <phecda/ProtocolDriver.h>
+#include "phecda/DeviceServiceSDK.h"
 
 
 namespace phecda {

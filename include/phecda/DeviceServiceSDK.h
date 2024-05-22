@@ -7,6 +7,9 @@
 
 #include <string>
 #include <phecda/contracts/model.h>
+#include "phecda/sdk/AutoEventManager.h"
+#include "phecda/bootstrap/di/Container.h"
+#include "phecda/sdk/config.h"
 
 namespace phecda {
     class ProtocolDriver;  //向前申明
@@ -16,6 +19,10 @@ namespace phecda {
         std::string serviceKey;
         std::string baseServiceName;
         ProtocolDriver *protocolDriver;
+        AutoEventManager *autoEventManager;
+        DeviceService *deviceService;
+        ConfigurationStruct *config;
+        Container *dic;
     public:
         DeviceServiceSDK(const std::string &serviceKey, const std::string &serviceVersion,
                          ProtocolDriver *protocolDriver);

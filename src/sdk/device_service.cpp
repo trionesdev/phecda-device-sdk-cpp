@@ -8,6 +8,7 @@
 namespace phecda {
     DeviceServiceSDK::DeviceServiceSDK(const std::string &serviceKey, const std::string &serviceVersion,
                                        ProtocolDriver *protocolDriver) {
+
         this->serviceKey = serviceKey;
         this->serviceVersion = serviceVersion;
         this->protocolDriver = protocolDriver;
@@ -16,8 +17,15 @@ namespace phecda {
     DeviceServiceSDK
     DeviceServiceSDK::newDeviceService(const std::string &serviceKey, const std::string &serviceVersion,
                                        ProtocolDriver *protocolDriver) {
+        if (serviceKey.empty()) {
+            throw std::invalid_argument("please specify device service name");
+        }
+        if (serviceVersion.empty()) {
+            throw std::invalid_argument("please specify device service version");
+        }
         return {serviceKey, serviceVersion, protocolDriver};
     }
+
     void DeviceServiceSDK::addDevice(Device device) {
 
     }
@@ -26,7 +34,7 @@ namespace phecda {
         return {};
     }
 
-    Device DeviceServiceSDK::getDeviceByName(std::string name){
+    Device DeviceServiceSDK::getDeviceByName(std::string name) {
         return {};
     }
 
