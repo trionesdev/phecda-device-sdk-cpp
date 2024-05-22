@@ -1,14 +1,24 @@
 cmake_minimum_required(VERSION 3.27)
-project(phecda_device)
+project(phecda-device-sdk)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_subdirectory(phecda-device-sdk)
-#link_directories(src)
+enable_testing()
 
-include_directories(phecda-device-sdk/include)
+add_subdirectory(test)
 
-file(GLOB HEADERS phecda-device-sdk/include)
+file(GLOB HEADERS "${PROJECT_SOURCE_DIR}/include/**/*")
+file(GLOB SOURCES "${PROJECT_SOURCE_DIR}/src/**/*" "${PROJECT_SOURCE_DIR}/src/*")
 
-add_executable(phecda_device main.cpp DeviceDriverSample.cpp ${HEADERS})
-target_link_libraries(phecda_device phecda-device-sdk )
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/third-party/include)
+
+set(LINK_DIR third-party/lib)
+
+link_directories(${LINK_DIR})
+
+add_library(phecda-device-sdk STATIC ${HEADERS} ${SOURCES})
+
+target_link_libraries(phecda-device-sdk PRIVATE  libyaml-cppd.a)
+#add_executable(phecda_device_sdk main.cpp DeviceDriverSample.cpp ${SOURCES})
+#add_test(NAME sdktest COMMAND SdkTest)
