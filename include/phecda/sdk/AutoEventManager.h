@@ -10,9 +10,9 @@
 namespace phecda {
     class AutoEventManager {
     public:
-        void startAutoEvents();
-        void restartForDevice(std::string name);
-        void stopForDevice(std::string deviceName);
+        virtual void startAutoEvents();
+        virtual void restartForDevice(std::string name);
+        virtual void stopForDevice(std::string deviceName);
     };
 }
 #endif //PHECDA_DEVICE_AUTOEVENTMANAGER_H

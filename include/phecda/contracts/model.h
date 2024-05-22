@@ -99,6 +99,7 @@ namespace phecda {
         AdminState adminState;
     };
 
+
 }
 
 #endif //PHECDA_DEVICE_MODEL_H
