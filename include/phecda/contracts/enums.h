@@ -4,7 +4,7 @@
 
 #ifndef PHECDA_DEVICE_ENUMS_H
 #define PHECDA_DEVICE_ENUMS_H
-namespace phecda {
+namespace phecda::contracts {
     enum AdminState {
         LOCKED,
         UNLOCKED

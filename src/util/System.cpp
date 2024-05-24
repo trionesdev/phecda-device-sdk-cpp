@@ -9,15 +9,15 @@ namespace phecda {
     std::map<std::string, std::string> System::getEnv() {
         std::map<std::string, std::string> envVars;
 
-        for (char **env = environ; *env != nullptr; ++env) {
-            std::string var(*env);
-            size_t pos = var.find('=');
-            if (pos != std::string::npos) {
-                std::string key = var.substr(0, pos);
-                std::string value = var.substr(pos + 1);
-                envVars[key] = value;
-            }
-        }
+        // for (char **env = environ; *env != nullptr; ++env) {
+        //     std::string var(*env);
+        //     size_t pos = var.find('=');
+        //     if (pos != std::string::npos) {
+        //         std::string key = var.substr(0, pos);
+        //         std::string value = var.substr(pos + 1);
+        //         envVars[key] = value;
+        //     }
+        // }
         return envVars;
     }
 

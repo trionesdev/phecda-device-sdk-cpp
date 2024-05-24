@@ -5,8 +5,6 @@
 #ifndef PHECDA_DEVICE_AUTOEVENTMANAGER_H
 #define PHECDA_DEVICE_AUTOEVENTMANAGER_H
 
-#include <string>
-
 namespace phecda {
     class AutoEventManager {
     public:

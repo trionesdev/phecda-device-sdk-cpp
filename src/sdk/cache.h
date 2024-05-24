@@ -3,7 +3,7 @@
 //
 #include <string>
 
-namespace phecda{
+namespace phecda::sdk{
     void initCache(std::string instanceName, std::string baseServiceName){
 
     }

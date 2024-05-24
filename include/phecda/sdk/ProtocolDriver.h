@@ -5,9 +5,9 @@
 #ifndef PHECDA_DEVICE_SDK_APP_PRPTOCOLDRIVER_H
 #define PHECDA_DEVICE_SDK_APP_PRPTOCOLDRIVER_H
 
-#include <phecda/DeviceServiceSDK.h>
+#include <phecda/sdk/DeviceServiceSDK.h>
 
-namespace phecda {
+namespace phecda::sdk {
 //    class DeviceServiceSDK;
     class ProtocolDriver {
     public:

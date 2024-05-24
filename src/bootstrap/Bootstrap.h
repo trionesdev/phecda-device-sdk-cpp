@@ -3,7 +3,9 @@
 //
 #include <functional>
 
-namespace phecda {
+#include "phecda/bootstrap/di.h"
+
+namespace phecda::bootstrap {
     struct BootstrapHandlerArgs {
         Container *dic;
     };

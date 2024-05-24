@@ -6,12 +6,12 @@
 #define PHECDA_DEVICE_SDK_CPP_DEVICESDK_H
 
 #include <string>
-#include <phecda/contracts/model.h>
-#include "phecda/sdk/AutoEventManager.h"
-#include "phecda/bootstrap/di/Container.h"
-#include "phecda/sdk/config.h"
 
-namespace phecda {
+#include "phecda/contracts/model.h"
+
+using namespace phecda::contracts;
+
+namespace phecda::sdk {
     class ProtocolDriver;  //向前申明
     class DeviceServiceSDK {
     public:

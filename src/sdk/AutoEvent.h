@@ -4,9 +4,8 @@
 #include <phecda/sdk/AutoEventManager.h>
 #include <map>
 #include <any>
-#include "phecda/bootstrap/di/Container.h"
+#include "phecda/bootstrap/di.h"
 #include "phecda/contracts/model.h"
-#include "../bootstrap/Bootstrap.h"
 
 namespace phecda {
 
@@ -23,7 +22,7 @@ namespace phecda {
             return {};
         };
 
-        void run(Container *dic) {
+        void run(bootstrap::Container *dic) {
             Executor executor = *this;
 
         };
@@ -37,7 +36,7 @@ namespace phecda {
     class DeviceAutoEventManager : public AutoEventManager {
     private:
         std::map<std::string, std::list<Executor>> executorMap = {};
-        Container *dic;
+        bootstrap::Container *dic{};
 
         static bool bootstrapHandler(BootstrapHandlerArgs args) {
             DeviceAutoEventManager manager;

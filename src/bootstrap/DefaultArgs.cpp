@@ -4,17 +4,17 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include "phecda/bootstrap/args/CommonArgs.h"
+
+#include "phecda/bootstrap/flags.h"
 //#include "../environement/Variables.h"
 
 using namespace std;
-namespace phecda {
-//    CommonArgs CommonArgs::withUsage(std::string const &additionalUsage) {
-////        auto *argsObj = new CommonArgs();
-////        argsObj->defaultConfigFile = std::move(additionalUsage);
-////        CommonArgs commonArgs;
-//        return {};
-//    }
+namespace phecda::bootstrap {
+    CommonArgs* CommonArgs::withUsage(std::string const &additionalUsage) {
+        auto *argsObj = new CommonArgs();
+        argsObj->defaultConfigFile = additionalUsage;
+        return argsObj;
+    }
 
     void CommonArgs::helpCallback() {
 //        std::string help = (boost::format("Usage: %1% [options]\n"

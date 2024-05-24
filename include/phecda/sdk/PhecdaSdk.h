@@ -6,9 +6,9 @@
 #define PHECDA_DEVICE_SDK_APP_PHECDASDK_H
 
 #include <string>
-#include <phecda/ProtocolDriver.h>
+#include <phecda/sdk/ProtocolDriver.h>
 
-namespace phecda {
+namespace phecda::sdk {
 
     void bootstrap(std::string args[], const std::string &serviceKey, const std::string &serviceVersion,
                    ProtocolDriver *protocolDriver);

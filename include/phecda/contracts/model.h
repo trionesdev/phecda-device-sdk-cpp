@@ -11,7 +11,7 @@
 #include <list>
 #include "enums.h"
 
-namespace phecda {
+namespace phecda::contracts {
 
     struct DBTimestamp {
         long created;

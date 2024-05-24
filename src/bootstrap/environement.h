@@ -8,9 +8,9 @@
 #include <string>
 #include <list>
 #include <map>
-#include "../../util/System.h"
+#include "../util/System.h"
 
-namespace phecda {
+namespace phecda::bootstrap {
     static const std::list<std::string> args = {};
     static const std::map<std::string, std::string> envVars = {};
 
