@@ -10,7 +10,6 @@
 #include "phecda/sdk/AutoEventManager.h"
 #include "phecda/bootstrap/di/Container.h"
 #include "phecda/sdk/config.h"
-#include "phecda/bootstrap/args/CommonArgs.h"
 
 namespace phecda {
     class ProtocolDriver;  //向前申明

@@ -4,26 +4,28 @@
 #include <iostream>
 #include <phecda/ProtocolDriver.h>
 #include "../bootstrap/Bootstrap.h"
+#include "phecda/bootstrap/args/CommonArgs.h"
 #include "../bootstrap/environement/Variables.h"
+#include "phecda/Args.h"
 
 namespace phecda {
 
-    std::string _serviceVersion;
-    std::string _serviceKey;
-    std::string _baseServiceName;
-    ProtocolDriver *_protocolDriver;
-    AutoEventManager *autoEventManager;
-    CommonArgs *argsInst;
-    DeviceService *deviceService;
-    ConfigurationStruct *config;
-    Container *dic;
+//    std::string _serviceVersion;
+//    std::string _serviceKey;
+//    std::string _baseServiceName;
+//    ProtocolDriver *_protocolDriver;
+//    AutoEventManager *autoEventManager;
+//    CommonArgs *argsInst;
+//    DeviceService *deviceService;
+//    ConfigurationStruct *config;
+//    Container *dic;
 
 
     DeviceServiceSDK::DeviceServiceSDK(const std::string &serviceKey, const std::string &serviceVersion,
                                        ProtocolDriver *protocolDriver) {
-        _serviceKey = serviceKey;
-        _serviceVersion = serviceVersion;
-        _protocolDriver = protocolDriver;
+//        _serviceKey = serviceKey;
+//        _serviceVersion = serviceVersion;
+//        _protocolDriver = protocolDriver;
     }
 
     DeviceServiceSDK
@@ -99,8 +101,11 @@ namespace phecda {
         std::string instanceName = "";
         std::string additionalUsage = " -i, --instance  Provides a service name suffix which allows unique instance to be created"
                                       "If the option is provided, service name will be replaced with \"<name>_<instance>\"";
-        argsInst = CommonArgs::withUsage(additionalUsage);
-        argsInst->parse(phecda::args);
+//        argsInst =
+//        CommonArgs::withUsage(additionalUsage);
+//        argsInst->parse(phecda::args);
+
+//        Args::ss();
 
         auto instance = phecda::envVars.find("instance");
         if (instance != phecda::envVars.end()) {
@@ -128,9 +133,9 @@ namespace phecda {
         if (!envValue){
             instanceName = envValue;
         }
-        _baseServiceName = _serviceKey;
+//        _baseServiceName = _serviceKey;
         if (!instanceName.empty()) {
-            _serviceKey = _serviceKey + "_" + instanceName;
+//            _serviceKey = _serviceKey + "_" + instanceName;
         }
     }
 

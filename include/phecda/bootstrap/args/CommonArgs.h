@@ -7,7 +7,6 @@
 
 #include <string>
 #include <utility>
-#include <boost/format.hpp>
 
 using namespace std;
 
@@ -15,16 +14,18 @@ namespace phecda {
     class CommonArgs {
     public:
         std::string defaultConfigFile = "configuration.yaml";
-    private:
-        string additionalUsage;
-        bool _overwriteConfig = false;
-        bool devMode = false;
-        string _commonConfig = "";
-        string _profile = "";
-        string _configDir = "";
-        string _configFileName = "";
+//    private:
+//        string additionalUsage;
+//        bool _overwriteConfig = false;
+//        bool devMode = false;
+//        string _commonConfig = "";
+//        string _profile = "";
+//        string _configDir = "";
+//        string _configFileName = "";
     public:
-        static CommonArgs *withUsage(string additionalUsage);
+        static CommonArgs withUsage(std::string const &additionalUsage){
+            return {};
+        };
 
         void helpCallback();
 
