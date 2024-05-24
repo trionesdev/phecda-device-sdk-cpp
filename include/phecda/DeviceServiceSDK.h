@@ -10,19 +10,11 @@
 #include "phecda/sdk/AutoEventManager.h"
 #include "phecda/bootstrap/di/Container.h"
 #include "phecda/sdk/config.h"
+#include "phecda/bootstrap/args/CommonArgs.h"
 
 namespace phecda {
     class ProtocolDriver;  //向前申明
     class DeviceServiceSDK {
-    private:
-        std::string serviceVersion;
-        std::string serviceKey;
-        std::string baseServiceName;
-        ProtocolDriver *protocolDriver;
-        AutoEventManager *autoEventManager;
-        DeviceService *deviceService;
-        ConfigurationStruct *config;
-        Container *dic;
     public:
         DeviceServiceSDK(const std::string &serviceKey, const std::string &serviceVersion,
                          ProtocolDriver *protocolDriver);

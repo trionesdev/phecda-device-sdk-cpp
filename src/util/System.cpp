@@ -9,7 +9,6 @@ namespace phecda {
     std::map<std::string, std::string> System::getEnv() {
         std::map<std::string, std::string> envVars;
 
-        // 使用 std::getenv 获取所有环境变量
         for (char **env = environ; *env != nullptr; ++env) {
             std::string var(*env);
             size_t pos = var.find('=');

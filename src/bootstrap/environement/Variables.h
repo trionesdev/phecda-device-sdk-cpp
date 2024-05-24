@@ -29,9 +29,9 @@ namespace phecda {
         std::string envNameSeparator = "_";
         std::map<std::string, std::string> envVariables = {};
     public:
-        static Variables newVariables() {
-            Variables variablesObj;
-            variablesObj.envVariables = System::getEnv();
+        static Variables* newVariables() {
+            auto *variablesObj = new Variables();
+            variablesObj->envVariables = System::getEnv();
             return variablesObj;
         }
 
