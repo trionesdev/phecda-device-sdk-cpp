@@ -10,7 +10,7 @@
 #include <any>
 #include <list>
 
-namespace phecda{
+namespace phecda::sdk{
 
     struct CommandRequest{
         std::string deviceResourceName;

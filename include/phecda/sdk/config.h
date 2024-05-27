@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 
-namespace phecda{
+namespace phecda::sdk{
 
     struct DeviceInfo{
         bool dataTransform = false;

@@ -4,9 +4,9 @@
 #include <iostream>
 #include <boost/algorithm/string/trim.hpp>
 #include "../bootstrap/environement.h"
-#include "phecda/bootstrap/flags.h"
 #include "phecda/sdk/auto_event.h"
 #include "phecda/sdk/DeviceServiceSDK.h"
+#include "../bootstrap/di.cpp"
 
 using namespace phecda::bootstrap;
 
@@ -107,10 +107,17 @@ namespace phecda::sdk {
         deviceService = DeviceService();
         deviceService.name = _serviceKey;
 
-        this->dic = Container::newContainer({
-                                                    config, deviceService, _protocolDriver
-                                            });
+        std::list<class any> sss = {
+            config
+        };
+
+        this->dic = Container::newContainer(sss);
+
+
+        this->dic->registerService(config);
+
 //        auto ccc= this->dic->get<ConfigurationStruct>();
+//        std::cout << "ccc.maxEventSize:" << ccc.maxEventSize << std::endl;
 //        ccc.maxEventSize=12;
 //
 //        auto ccc2= std::any_cast<ConfigurationStruct>(this->dic->get(typeid(config).name()));
@@ -118,6 +125,8 @@ namespace phecda::sdk {
 //        auto  cc = this->dic->get(typeid(config).name());
 
 //        runAndReturnWaitGroup({});
+
+        std::cout << "ccc.maxEventSize:"  << std::endl;
     }
 
 
