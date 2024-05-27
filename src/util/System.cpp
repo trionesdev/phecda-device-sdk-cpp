@@ -3,8 +3,9 @@
 //
 
 #include "System.h"
+#include <boost/process.hpp>
 
-namespace phecda {
+namespace phecda::util {
 
     std::map<std::string, std::string> System::getEnv() {
         std::map<std::string, std::string> envVars;
@@ -18,7 +19,15 @@ namespace phecda {
         //         envVars[key] = value;
         //     }
         // }
+        for (const auto &var: boost::this_process::environment()) {
+            envVars[var.get_name()] = var.to_string();
+        }
         return envVars;
+    }
+
+    std::string System::getEnv(const std::string& key) {
+        auto env = boost::this_process::environment();
+        return env[key].to_string();
     }
 
 } // phecda

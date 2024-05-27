@@ -7,6 +7,7 @@
 
 namespace phecda::bootstrap
 {
+
     Container* Container::newContainer(const std::list<std::any>& services)
     {
         auto container = new Container();
@@ -21,5 +22,9 @@ namespace phecda::bootstrap
             auto name = typeid(service).name();
             serviceMap[name] = service;
         }
+    }
+
+    template<typename T> T& Container::get() {
+        return serviceMap[typeid(T).name()];
     }
 }

@@ -27,9 +27,8 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 #link_directories(${LIB_DIR})
 
 find_package(Boost REQUIRED)
-find_package(Poco REQUIRED)
 
 add_library(phecda-device-sdk STATIC ${HEADERS} ${SOURCES} )
 
 #file(GLOB STATIC_LIBS "${LIB_DIR}/*.a")
-target_link_libraries(phecda-device-sdk PRIVATE Poco::Poco boost::boost )
+target_link_libraries(phecda-device-sdk PRIVATE boost::boost )

@@ -8,15 +8,29 @@
 #include <string>
 
 #include "phecda/contracts/model.h"
+#include "auto_event.h"
+#include "config.h"
+#include "phecda/bootstrap/flags.h"
+#include "phecda/bootstrap/di.h"
 
+using namespace phecda::bootstrap;
 using namespace phecda::contracts;
 
 namespace phecda::sdk {
     class ProtocolDriver;  //向前申明
     class DeviceServiceSDK {
+    private:
+        std::string _serviceVersion;
+        std::string _serviceKey;
+        std::string _baseServiceName;
+        ProtocolDriver *_protocolDriver;
+        AutoEvent *_autoEventManager;
+        CommonArgs argsInst;
+        DeviceService deviceService;
+        ConfigurationStruct config;
+        Container *dic;
+        void setServiceName(std::string instanceName);
     public:
-        DeviceServiceSDK(const std::string &serviceKey, const std::string &serviceVersion,
-                         ProtocolDriver *protocolDriver);
 
         static DeviceServiceSDK newDeviceService(const std::string &serviceKey, const std::string &serviceVersion,
                                                  ProtocolDriver *protocolDriver);

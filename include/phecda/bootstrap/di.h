@@ -11,15 +11,20 @@
 #include <mutex>
 #include <list>
 
-namespace phecda::bootstrap{
-    class Container{
+namespace phecda::bootstrap {
+
+    class Container {
+
     private:
-        static std::map<std::string,std::any> serviceMap;
+        std::map<std::string, std::any> serviceMap = {};
         std::mutex mutex;
     public:
-        static Container* newContainer(const std::list<std::any>& services);
-        void update(const std::list<std::any>& services);
-        std::any get(std::string name);
+
+        static Container *newContainer(const std::list<std::any> &services);
+
+        void update(const std::list<std::any> &services);
+
+        template<typename T> T& get();
     };
 }
 #endif //PHECDA_DEVICE_CONTAINER_H

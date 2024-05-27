@@ -16,16 +16,17 @@ namespace phecda::bootstrap
     {
     public:
         std::string defaultConfigFile = "configuration.yaml";
-        //    private:
-        //        string additionalUsage;
-        //        bool _overwriteConfig = false;
-        //        bool devMode = false;
-        //        string _commonConfig = "";
-        //        string _profile = "";
-        //        string _configDir = "";
-        //        string _configFileName = "";
+    private:
+        string additionalUsage;
+        bool _overwriteConfig = false;
+        bool devMode = false;
+        string _commonConfig = "";
+        string _profile = "";
+        string _configDir = "";
+        string _configFileName = "";
+
     public:
-        static CommonArgs* withUsage(std::string const& additionalUsage);
+        static CommonArgs withUsage(std::string const& additionalUsage);
 
         void helpCallback();
 

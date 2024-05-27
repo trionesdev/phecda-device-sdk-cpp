@@ -7,11 +7,12 @@
 #include <map>
 #include <string>
 
-namespace phecda {
+namespace phecda::util {
 
     class System {
     public:
         static std::map<std::string, std::string> getEnv();
+        static std::string getEnv(const std::string& key);
     };
 
 } // phecda
