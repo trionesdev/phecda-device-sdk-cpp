@@ -23,7 +23,7 @@ namespace phecda::sdk {
         AutoEventManager manager;
         manager.executorMap = {};
         manager.dic = args.dic;
-        args.dic->update({manager});
+//        args.dic->update({manager});
         return true;
     }
 

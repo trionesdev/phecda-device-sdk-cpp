@@ -3,12 +3,18 @@
 //
 #include <iostream>
 #include <boost/algorithm/string/trim.hpp>
+#include "phecda/contracts/container.h"
+#include "phecda/sdk/container.h"
 #include "../bootstrap/environement.h"
 #include "phecda/sdk/auto_event.h"
+#include "phecda/sdk/ProtocolDriver.h"
 #include "phecda/sdk/DeviceServiceSDK.h"
-#include "../bootstrap/di.cpp"
+
+//#include "../bootstrap/di.cpp"
+
 
 using namespace phecda::bootstrap;
+using namespace phecda::contracts;
 
 namespace phecda::sdk {
 
@@ -90,8 +96,8 @@ namespace phecda::sdk {
         std::string additionalUsage =
                 " -i, --instance  Provides a service name suffix which allows unique instance to be created"
                 "If the option is provided, service name will be replaced with \"<name>_<instance>\"";
-        argsInst = CommonArgs::withUsage(additionalUsage);
-        argsInst.parse(args);
+        _args = CommonArgs::withUsage(additionalUsage);
+        _args.parse(args);
 
 
         auto instance = envVars.find("instance");
@@ -107,26 +113,21 @@ namespace phecda::sdk {
         deviceService = DeviceService();
         deviceService.name = _serviceKey;
 
-        std::list<class any> sss = {
-            config
-        };
+        this->dic = Container::newContainer({
+                                                    {configurationName,  config},
+                                                    {deviceServiceName,  deviceService},
+                                                    {protocolDriverName, &driver}
+                                            });
+        runAndReturnWaitGroup(_args,
+                              _serviceKey,
+                              config,
+                              dic,
+                              {
 
-        this->dic = Container::newContainer(sss);
+                              });
+        this->driver->start();
 
-
-        this->dic->registerService(config);
-
-//        auto ccc= this->dic->get<ConfigurationStruct>();
-//        std::cout << "ccc.maxEventSize:" << ccc.maxEventSize << std::endl;
-//        ccc.maxEventSize=12;
-//
-//        auto ccc2= std::any_cast<ConfigurationStruct>(this->dic->get(typeid(config).name()));
-//        std::cout << "ccc2.maxEventSize:" << ccc2.maxEventSize << std::endl;
-//        auto  cc = this->dic->get(typeid(config).name());
-
-//        runAndReturnWaitGroup({});
-
-        std::cout << "ccc.maxEventSize:"  << std::endl;
+        std::cout << "ccc.maxEventSize:" << std::endl;
     }
 
 

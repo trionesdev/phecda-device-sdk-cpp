@@ -14,10 +14,9 @@ namespace phecda::bootstrap {
     }
 
     StartupInfo Variables::getStartupInfo(std::string serviceKey) {
-        StartupInfo startupInfo{
-                .duration = bootTimeoutSecondsDefault,
-                .interval = bootRetrySecondsDefault,
-        };
+        StartupInfo startupInfo{};
+        startupInfo.duration = bootTimeoutSecondsDefault;
+        startupInfo.interval = bootRetrySecondsDefault;
         auto durationValue = util::System::getEnv(envKeyStartupDuration);
         if (!durationValue.empty()) {
             logEnvironmentOverride("Startup Duration", envKeyStartupDuration, durationValue);

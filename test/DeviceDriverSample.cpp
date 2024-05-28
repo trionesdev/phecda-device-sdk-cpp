@@ -12,5 +12,9 @@ namespace phecda {
 
     }
 
+    void sdk::ProtocolDriver::start() {
+
+    }
+
 
 }

@@ -23,9 +23,9 @@ namespace phecda::sdk {
         std::string _serviceVersion;
         std::string _serviceKey;
         std::string _baseServiceName;
-        ProtocolDriver *_protocolDriver;
+        ProtocolDriver *driver;
         AutoEvent *_autoEventManager;
-        CommonArgs argsInst;
+        CommonArgs _args;
         DeviceService deviceService;
         ConfigurationStruct config;
         Container *dic;

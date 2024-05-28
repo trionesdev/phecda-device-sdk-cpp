@@ -14,35 +14,31 @@
 
 namespace phecda::bootstrap {
 
-    typedef struct ClassType {
-    };
+    typedef std::map<std::string, std::any> ServiceConstructorMap;
 
     class Container {
     private:
         std::map<std::string, std::any> serviceMap;
         std::mutex mutex;
     public:
-        template<typename T>
-        static Container *newContainer(const std::list<T> &services) {
+        static Container *newContainer(const ServiceConstructorMap &services) {
             auto *container = new Container();
-            for (auto &service : services) {
-                container->serviceMap[typeid(service).name()] = service;
-                std::cout << typeid(service).name() << std::endl;
+            for (const auto &service: services) {
+                container->serviceMap[service.first] = service.second;
             }
             return container;
         };
 
-        template<typename T>
-        void registerService(T &service) {};
+        void update(const ServiceConstructorMap &services) {
+            for (const auto &service: services) {
+                serviceMap[service.first] = service.second;
+            }
+        };
 
         template<typename T>
-        void update(const std::list<T> &services) {};
-
-        template<typename T>
-        T get() {};
-
-        template<typename T>
-        void sss(ClassType aa) {};
+        T get(std::string name) {
+            return std::any_cast<T>(serviceMap[name]);
+        };
 
     };
 

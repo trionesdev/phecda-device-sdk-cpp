@@ -12,6 +12,7 @@ namespace phecda::sdk {
     class ProtocolDriver {
     public:
         void initialize(DeviceServiceSDK *sdk);
+        void start();
     };
 }
 #endif //PHECDA_DEVICE_SDK_APP_PRPTOCOLDRIVER_H
