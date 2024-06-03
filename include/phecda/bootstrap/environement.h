@@ -9,11 +9,10 @@
 #include <list>
 #include <map>
 #include <any>
-#include "phecda/util/System.h"
+#include "phecda/util/SystemUtils.h"
 
 namespace phecda::bootstrap {
-    static const std::list<std::string> argsStorage = {};
-    static std::map<std::string, std::string> envVarsStorage = {};
+
 
     struct StartupInfo {
         int duration = 0;
@@ -25,22 +24,25 @@ namespace phecda::bootstrap {
         static const int bootTimeoutSecondsDefault = 60;
         static const int bootRetrySecondsDefault = 1;
         std::string envKeyCommonConfig = "PECDA_COMMON_CONFIG";
-        const std::string envKeyStartupDuration = "PHECDA_STARTUP_DURATION";
-        std::string envKeyStartupInterval = "PHECDA_STARTUP_INTERVAL";
-        std::string envKeyConfigDir = "PHECDA_CONFIG_DIR";
-        std::string envKeyProfile = "PHECDA_PROFILE";
-        std::string envKeyConfigFile = "PHECDA_CONFIG_FILE";
+        inline static const std::string envKeyStartupDuration = "PHECDA_STARTUP_DURATION";
+        inline static std::string envKeyStartupInterval = "PHECDA_STARTUP_INTERVAL";
+        inline static std::string envKeyConfigDir = "PHECDA_CONFIG_DIR";
+        inline static std::string envKeyProfile = "PHECDA_PROFILE";
+        inline static std::string envKeyConfigFile = "PHECDA_CONFIG_FILE";
         std::string configPathSeparator = "/";
         std::string configNameSeparator = "-";
         std::string envNameSeparator = "_";
         std::map<std::string, std::string> _variables = {};
 
-        void logEnvironmentOverride(std::string name, std::string key, std::string value);
+        static void logEnvironmentOverride(std::string name, std::string key, std::string value);
 
     public:
+        inline static const std::list<std::string> args = {};
+        inline static std::map<std::string, std::string> envVars = {};
+
         static Variables *newVariables();
 
-        StartupInfo getStartupInfo(std::string serviceKey);
+        static StartupInfo getStartupInfo(std::string serviceKey);
 
         static std::string getConfigDir(std::string configDir);
 

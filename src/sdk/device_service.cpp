@@ -14,7 +14,7 @@ using namespace phecda::contracts;
 namespace phecda::sdk {
 
     void DeviceServiceSDK::setServiceName(std::string instanceName) {
-        auto envValue = util::System::getEnv("EnvInstanceName");
+        auto envValue = util::SystemUtils::getEnv("EnvInstanceName");
         if (!boost::trim_copy(envValue).empty()) {
             instanceName = envValue;
         }
@@ -93,15 +93,15 @@ namespace phecda::sdk {
                 " -i, --instance  Provides a service name suffix which allows unique instance to be created"
                 "If the option is provided, service name will be replaced with \"<name>_<instance>\"";
         args_ = CommonArgs::withUsage(additionalUsage);
-        args_->parse(argsStorage);
+        args_->parse(Variables::args);
 
 
-        auto instance = envVarsStorage.find("instance");
-        if (instance != envVarsStorage.end()) {
+        auto instance = Variables::envVars.find("instance");
+        if (instance != Variables::envVars.end()) {
             instanceName = instance->second;
         }
-        auto iValue = envVarsStorage.find("i");
-        if (iValue != envVarsStorage.end()) {
+        auto iValue = Variables::envVars.find("i");
+        if (iValue != Variables::envVars.end()) {
             instanceName = iValue->second;
         }
         setServiceName(instanceName);

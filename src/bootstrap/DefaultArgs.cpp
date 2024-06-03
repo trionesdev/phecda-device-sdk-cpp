@@ -65,7 +65,7 @@ namespace phecda::bootstrap {
     }
 
     string CommonArgs::configFileName() {
-        return this->_configFileName;
+        return this->configFileName_;
     }
 
     string CommonArgs::commonConfig() {
@@ -75,7 +75,7 @@ namespace phecda::bootstrap {
     void CommonArgs::parse(list<string> arguments) {
         std::string configProviderRE = "^--?(cp|configProvider)=?";
         std::map<std::string, std::string> argsMap = argsAsMap(arguments);
-        bootstrap::envVarsStorage = argsMap;
+        bootstrap::Variables::envVars = argsMap;
         auto commonConfig = argsMap.find("commonConfig");
         if (commonConfig != argsMap.end()) {
             this->_commonConfig = commonConfig->second;
@@ -86,11 +86,11 @@ namespace phecda::bootstrap {
         }
         auto cf = argsMap.find("cf");
         if (cf != argsMap.end()) {
-            this->_configFileName = cf->second;
+            this->configFileName_ = cf->second;
         }
         auto configFile = argsMap.find("configFile");
         if (configFile != argsMap.end()) {
-            this->_configFileName = configFile->second;
+            this->configFileName_ = configFile->second;
         }
         auto profile = argsMap.find("profile");
         if (profile != argsMap.end()) {

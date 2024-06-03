@@ -4,7 +4,7 @@
 #include "phecda/bootstrap/environement.h"
 
 namespace phecda::bootstrap {
-    Variables* Variables::newVariables() {
+    Variables *Variables::newVariables() {
         auto *variables = new Variables();
         return variables;
     }
@@ -17,12 +17,12 @@ namespace phecda::bootstrap {
         StartupInfo startupInfo{};
         startupInfo.duration = bootTimeoutSecondsDefault;
         startupInfo.interval = bootRetrySecondsDefault;
-        auto durationValue = util::System::getEnv(envKeyStartupDuration);
+        auto durationValue = util::SystemUtils::getEnv(envKeyStartupDuration);
         if (!durationValue.empty()) {
             logEnvironmentOverride("Startup Duration", envKeyStartupDuration, durationValue);
             startupInfo.duration = std::stoi(durationValue);
         }
-        auto intervalValue = util::System::getEnv(envKeyStartupInterval);
+        auto intervalValue = util::SystemUtils::getEnv(envKeyStartupInterval);
         if (!intervalValue.empty()) {
             logEnvironmentOverride("Startup Interval", envKeyStartupInterval, intervalValue);
             startupInfo.interval = std::stoi(intervalValue);
@@ -31,15 +31,31 @@ namespace phecda::bootstrap {
     }
 
     std::string Variables::getConfigDir(std::string configDir) {
-        return std::string();
+        auto envValue = util::SystemUtils::getEnv(envKeyConfigDir);
+        if (!envValue.empty()) {
+            configDir = envValue;
+            logEnvironmentOverride("-cf/--configDir", envKeyConfigDir, envValue);
+
+        }
+        return configDir;
     }
 
     std::string Variables::getProfileDir(std::string profileDir) {
-        return std::string();
+        auto envValue = util::SystemUtils::getEnv(envKeyProfile);
+        if (!envValue.empty()) {
+            profileDir = envValue;
+            logEnvironmentOverride("-pf/--profileDir", envKeyProfile, envValue);
+        }
+        return profileDir;
     }
 
     std::string Variables::getConfigFileName(std::string configFileName) {
-        return std::string();
+        auto envValue = util::SystemUtils::getEnv(envKeyConfigFile);
+        if (!envValue.empty()) {
+            configFileName = envValue;
+            logEnvironmentOverride("-cf/--configDir", envKeyConfigFile, envValue);
+        }
+        return configFileName;
     }
 
     std::string Variables::getCommonConfigFileName(std::string commonConfigFileName) {

@@ -21,12 +21,15 @@ namespace phecda::sdk {
 
     struct MqttInfo {
         std::string clientId;
+        std::string protocol;
+        std::string host;
     };
 
     struct ConfigurationStruct : public bootstrap::Configuration {
-        long maxEventSize;
+        long MaxEventSize;
         DeviceInfo device;
         std::map<std::string, std::string> driver;
+        MqttInfo mqtt;
     };
 }
 #endif //PHECDA_DEVICE_CONFIG_H

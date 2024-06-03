@@ -23,7 +23,7 @@ namespace phecda::bootstrap
         string _commonConfig = "";
         string _profile = "";
         string _configDir = "";
-        string _configFileName = "";
+        string configFileName_ = defaultConfigFile;
 
     public:
         static CommonArgs* withUsage(std::string const& additionalUsage);

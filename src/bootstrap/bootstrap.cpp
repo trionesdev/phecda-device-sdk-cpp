@@ -11,7 +11,7 @@ namespace phecda::bootstrap {
     std::shared_ptr<contracts::WaitGroup> runAndReturnWaitGroup(
             CommonArgs* args_,
             std::string &serviceKey,
-            Configuration *serviceConfig,
+            sdk::ConfigurationStruct *serviceConfig,
             Timer *startupTimer,
             Container *dic,
             std::list<std::function<bool(BootstrapHandlerArgs)>> bootstrapHandlers) {

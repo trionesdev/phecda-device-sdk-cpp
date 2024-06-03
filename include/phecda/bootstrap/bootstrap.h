@@ -11,6 +11,7 @@
 #include "phecda/bootstrap/flags.h"
 #include "phecda/contracts/WaitGroup.h"
 #include "phecda/bootstrap/startup.h"
+#include "phecda/sdk/config.h"
 
 namespace phecda::bootstrap {
     struct BootstrapHandlerArgs {
@@ -20,9 +21,9 @@ namespace phecda::bootstrap {
     };
 
     std::shared_ptr<contracts::WaitGroup> runAndReturnWaitGroup(
-            CommonArgs* args,
+            CommonArgs *args,
             std::string &serviceKey,
-            Configuration *serviceConfig,
+            sdk::ConfigurationStruct *serviceConfig,
             Timer *startupTimer,
             Container *dic,
             std::list<std::function<bool(BootstrapHandlerArgs)>> bootstrapHandlers);
