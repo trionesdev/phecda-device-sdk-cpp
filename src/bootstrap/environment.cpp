@@ -1,11 +1,11 @@
 //
 // Created by fengxiaotx on 2024/5/27.
 //
-#include "environement.h"
+#include "phecda/bootstrap/environement.h"
 
 namespace phecda::bootstrap {
-    Variables Variables::newVariables() {
-        Variables variables;
+    Variables* Variables::newVariables() {
+        auto *variables = new Variables();
         return variables;
     }
 

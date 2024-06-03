@@ -4,6 +4,7 @@
 
 #ifndef PHECDA_DEVICE_SDK_WAITGROUP_H
 #define PHECDA_DEVICE_SDK_WAITGROUP_H
+
 #include <iostream>
 #include <mutex>
 
@@ -12,9 +13,17 @@ namespace phecda::contracts {
     class WaitGroup {
     private:
         int count_;
-        std::mutex mtx_;
-        std::condition_variable cv_;
+        std::mutex mutex_;
+        std::condition_variable condition_;
     public:
+        WaitGroup();
+        ~WaitGroup();
+
+        void add(int delta);
+
+        void done();
+
+        void wait();
 
     };
 

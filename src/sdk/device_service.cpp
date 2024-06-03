@@ -5,12 +5,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include "phecda/contracts/container.h"
 #include "phecda/sdk/container.h"
-#include "../bootstrap/environement.h"
-#include "phecda/sdk/auto_event.h"
-#include "phecda/sdk/ProtocolDriver.h"
-#include "phecda/sdk/DeviceServiceSDK.h"
-
-//#include "../bootstrap/di.cpp"
+#include "phecda/bootstrap/environement.h"
 
 
 using namespace phecda::bootstrap;
@@ -23,9 +18,9 @@ namespace phecda::sdk {
         if (!boost::trim_copy(envValue).empty()) {
             instanceName = envValue;
         }
-        this->_baseServiceName = _serviceKey;
+        this->_baseServiceName = serviceKey_;
         if (!boost::trim_copy(instanceName).empty()) {
-            _serviceKey = _serviceKey + "_" + instanceName;
+            serviceKey_ = serviceKey_ + "_" + instanceName;
         }
     }
 
@@ -93,40 +88,42 @@ namespace phecda::sdk {
     void DeviceServiceSDK::run() {
         std::cout << "Hello, World! run" << std::endl;
         std::string instanceName = "";
+        auto startupTimer = Timer::newStartUpTimer(serviceKey_);
         std::string additionalUsage =
                 " -i, --instance  Provides a service name suffix which allows unique instance to be created"
                 "If the option is provided, service name will be replaced with \"<name>_<instance>\"";
-        _args = CommonArgs::withUsage(additionalUsage);
-        _args.parse(args);
+        args_ = CommonArgs::withUsage(additionalUsage);
+        args_->parse(argsStorage);
 
 
-        auto instance = envVars.find("instance");
-        if (instance != envVars.end()) {
+        auto instance = envVarsStorage.find("instance");
+        if (instance != envVarsStorage.end()) {
             instanceName = instance->second;
         }
-        auto iValue = envVars.find("i");
-        if (iValue != envVars.end()) {
+        auto iValue = envVarsStorage.find("i");
+        if (iValue != envVarsStorage.end()) {
             instanceName = iValue->second;
         }
         setServiceName(instanceName);
-        config = ConfigurationStruct();
+        config = new ConfigurationStruct();
         deviceService = DeviceService();
-        deviceService.name = _serviceKey;
+        deviceService.name = serviceKey_;
 
         this->dic = Container::newContainer({
                                                     {configurationName,  config},
                                                     {deviceServiceName,  deviceService},
                                                     {protocolDriverName, &driver}
                                             });
-        runAndReturnWaitGroup(_args,
-                              _serviceKey,
-                              config,
-                              dic,
-                              {
+        auto wg = runAndReturnWaitGroup(args_,
+                                        serviceKey_,
+                                        config,
+                                        startupTimer,
+                                        dic,
+                                        {
 
-                              });
+                                        });
         this->driver->start();
-
+        wg->wait();
         std::cout << "ccc.maxEventSize:" << std::endl;
     }
 

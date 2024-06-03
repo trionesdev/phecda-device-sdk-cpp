@@ -5,6 +5,9 @@
 #ifndef PHECDA_DEVICE_SDK_STARTUP_H
 #define PHECDA_DEVICE_SDK_STARTUP_H
 namespace phecda::bootstrap {
-
+    class Timer{
+    public:
+        static Timer* newStartUpTimer(std::string  serviceKey);
+    };
 }
 #endif //PHECDA_DEVICE_SDK_STARTUP_H

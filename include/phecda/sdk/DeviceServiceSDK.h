@@ -12,6 +12,7 @@
 #include "config.h"
 #include "phecda/bootstrap/flags.h"
 #include "phecda/bootstrap/di.h"
+#include "phecda/bootstrap/startup.h"
 
 using namespace phecda::bootstrap;
 using namespace phecda::contracts;
@@ -21,13 +22,13 @@ namespace phecda::sdk {
     class DeviceServiceSDK {
     private:
         std::string _serviceVersion;
-        std::string _serviceKey;
+        std::string serviceKey_;
         std::string _baseServiceName;
         ProtocolDriver *driver;
         AutoEvent *_autoEventManager;
-        CommonArgs _args;
+        CommonArgs *args_;
         DeviceService deviceService;
-        ConfigurationStruct config;
+        ConfigurationStruct *config;
         Container *dic;
         void setServiceName(std::string instanceName);
     public:

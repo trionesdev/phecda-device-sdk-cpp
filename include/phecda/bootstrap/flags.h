@@ -26,7 +26,7 @@ namespace phecda::bootstrap
         string _configFileName = "";
 
     public:
-        static CommonArgs withUsage(std::string const& additionalUsage);
+        static CommonArgs* withUsage(std::string const& additionalUsage);
 
         void helpCallback();
 

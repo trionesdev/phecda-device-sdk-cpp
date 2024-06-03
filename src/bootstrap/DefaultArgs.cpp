@@ -5,7 +5,7 @@
 #include <list>
 #include <string>
 
-#include "./environement.h"
+#include "phecda/bootstrap/environement.h"
 #include "phecda/bootstrap/flags.h"
 #include <boost/format.hpp>
 #include <map>
@@ -17,9 +17,9 @@ namespace phecda::bootstrap {
         return {};
     }
 
-    CommonArgs CommonArgs::withUsage(std::string const &additionalUsage) {
-        CommonArgs argsObj;
-        argsObj.defaultConfigFile = additionalUsage;
+    CommonArgs *CommonArgs::withUsage(std::string const &additionalUsage) {
+        auto *argsObj = new CommonArgs();
+        argsObj->defaultConfigFile = additionalUsage;
         return argsObj;
     }
 
@@ -75,7 +75,7 @@ namespace phecda::bootstrap {
     void CommonArgs::parse(list<string> arguments) {
         std::string configProviderRE = "^--?(cp|configProvider)=?";
         std::map<std::string, std::string> argsMap = argsAsMap(arguments);
-        bootstrap::envVars = argsMap;
+        bootstrap::envVarsStorage = argsMap;
         auto commonConfig = argsMap.find("commonConfig");
         if (commonConfig != argsMap.end()) {
             this->_commonConfig = commonConfig->second;
