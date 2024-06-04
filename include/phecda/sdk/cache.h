@@ -5,7 +5,7 @@
 #include <phecda/bootstrap/di-container.h>
 #include <phecda/contracts/model.h>
 
-namespace phecda::sdk {
+namespace phecda::sdk::cache {
 
 
     class DeviceCache {
@@ -34,7 +34,7 @@ namespace phecda::sdk {
     static DeviceCache dc;
     static ProfileCache pc;
 
-    static void initCache(std::string instanceName, std::string baseServiceName, bootstrap::DiContainer *dic);
+    void initCache(std::string instanceName, std::string baseServiceName, bootstrap::DiContainer *dic);
     static DeviceCache devices();
     static ProfileCache profiles();
 }

@@ -2,7 +2,7 @@
 // Created by fengxiaotx on 2024/6/4.
 //
 #include <phecda/sdk/service.h>
-
+#include <phecda/sdk/cache.h>
 #include <utility>
 
 namespace phecda::sdk {
@@ -16,6 +16,9 @@ namespace phecda::sdk {
     bool Bootstrap::bootstrapHandler(bootstrap::BootstrapHandlerArgs args) {
         auto dic = args.dic;
         ds->autoEventManager_ = container::autoEventManagerFrom(dic);
+
+        cache::initCache(ds->serviceKey_, ds->baseServiceName_, dic);
+
         return true;
     }
 

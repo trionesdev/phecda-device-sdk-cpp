@@ -21,7 +21,7 @@ namespace phecda::sdk {
         if (!boost::trim_copy(envValue).empty()) {
             instanceName = envValue;
         }
-        this->_baseServiceName = serviceKey_;
+        this->baseServiceName_ = serviceKey_;
         if (!boost::trim_copy(instanceName).empty()) {
             serviceKey_ = serviceKey_ + "_" + instanceName;
         }
@@ -130,7 +130,7 @@ namespace phecda::sdk {
                                                             std::forward<decltype(args)>(args));
                                                 },
                                                 [bootstrap = MessagingBootstrap::newMessagingBootstrap(
-                                                        _baseServiceName)](auto args) {
+                                                        baseServiceName_)](auto args) {
                                                     return bootstrap->bootstrapHandler(
                                                             std::forward<decltype(args)>(args));
                                                 }

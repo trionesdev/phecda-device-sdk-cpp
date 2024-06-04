@@ -3,7 +3,7 @@
 //
 #include <phecda/sdk/cache.h>
 
-namespace phecda::sdk {
+namespace phecda::sdk::cache {
 
     DeviceCache *DeviceCache::newDeviceCache(std::list<contracts::Device> devices) {
         return nullptr;
