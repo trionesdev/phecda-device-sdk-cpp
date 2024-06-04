@@ -113,9 +113,9 @@ namespace phecda::sdk {
         deviceService->name = serviceKey_;
 
         this->dic = DiContainer::newContainer({
-                                                      {sdk::container::configurationName, config},
+                                                      {sdk::container::configurationName,               config},
                                                       {phecda::contracts::container::deviceServiceName, deviceService},
-                                                      {sdk::container::protocolDriverName, driver}
+                                                      {sdk::container::protocolDriverName,              driver}
                                               });
 
         auto wg = runAndReturnWaitGroup(args_,
@@ -127,6 +127,11 @@ namespace phecda::sdk {
                                                 AutoEventManager::bootstrapHandler,
                                                 [bootStrap = Bootstrap::newBootstrap(this)](auto args) {
                                                     return bootStrap->bootstrapHandler(
+                                                            std::forward<decltype(args)>(args));
+                                                },
+                                                [bootstrap = MessagingBootstrap::newMessagingBootstrap(
+                                                        _baseServiceName)](auto args) {
+                                                    return bootstrap->bootstrapHandler(
                                                             std::forward<decltype(args)>(args));
                                                 }
                                         });

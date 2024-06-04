@@ -3,6 +3,8 @@
 //
 #include <phecda/sdk/service.h>
 
+#include <utility>
+
 namespace phecda::sdk {
 
     Bootstrap *Bootstrap::newBootstrap(DeviceServiceSDK *sdk) {
@@ -14,6 +16,16 @@ namespace phecda::sdk {
     bool Bootstrap::bootstrapHandler(bootstrap::BootstrapHandlerArgs args) {
         auto dic = args.dic;
         ds->autoEventManager_ = container::autoEventManagerFrom(dic);
+        return true;
+    }
+
+    MessagingBootstrap *MessagingBootstrap::newMessagingBootstrap(std::string baseServiceName) {
+        auto *bootstrap = new MessagingBootstrap();
+        bootstrap->baseServiceName = std::move(baseServiceName);
+        return bootstrap;
+    }
+
+    bool MessagingBootstrap::bootstrapHandler(bootstrap::BootstrapHandlerArgs args) {
         return true;
     }
 }
