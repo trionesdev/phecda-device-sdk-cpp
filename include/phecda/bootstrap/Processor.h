@@ -6,7 +6,7 @@
 #define PHECDA_DEVICE_SDK_PROCESSOR_H
 
 #include <iostream>
-#include "flags.h"
+#include <phecda/bootstrap/flags.h>
 #include "environement.h"
 #include "startup.h"
 #include "interfaces.h"
