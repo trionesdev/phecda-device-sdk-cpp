@@ -23,7 +23,7 @@ namespace phecda::contracts {
 
         void done();
 
-        void wait();
+        void await();
 
     };
 

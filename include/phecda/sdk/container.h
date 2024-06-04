@@ -6,6 +6,7 @@
 
 #include <string>
 #include "phecda/sdk/config.h"
+#include "phecda/sdk/auto_event.h"
 #include "phecda/bootstrap/di-container.h"
 //#include "ProtocolDriver.h"
 
@@ -23,6 +24,13 @@ namespace phecda::sdk::container {
     static ProtocolDriver *protocolDriverFrom(bootstrap::DiContainer *dic) {
         return dic->get<ProtocolDriver *>(protocolDriverName);
     };
+
+    static std::string autoEventManagerName = "autoEventManager";
+
+    static AutoEventManager *autoEventManagerFrom(bootstrap::DiContainer *dic) {
+        return dic->get<AutoEventManager *>(autoEventManagerName);
+    };
+
 }
 
 #endif //PHECDA_DEVICE_SDK_CONTAINER_H

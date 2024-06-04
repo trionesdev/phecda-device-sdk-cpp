@@ -2,7 +2,7 @@
 // Created by fengxiaotx on 2024/5/27.
 //
 #include <phecda/sdk/auto_event.h>
-
+#include <phecda/sdk/container.h>
 
 namespace phecda::sdk {
 
@@ -20,10 +20,11 @@ namespace phecda::sdk {
     }
 
     bool AutoEventManager::bootstrapHandler(phecda::bootstrap::BootstrapHandlerArgs args) {
-        AutoEventManager manager;
-        manager.executorMap = {};
-        manager.dic = args.dic;
-//        args.dic->update({manager});
+        auto *manager = new AutoEventManager();
+        manager->executorMap = {};
+        manager->dic = args.dic;
+        manager->wg = args.wg;
+        args.dic->update({{phecda::sdk::container::autoEventManagerName, manager}});
         return true;
     }
 

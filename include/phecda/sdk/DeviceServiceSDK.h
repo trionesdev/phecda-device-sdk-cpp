@@ -10,6 +10,7 @@
 #include "phecda/bootstrap/flags.h"
 #include "config.h"
 #include "phecda/bootstrap/di-container.h"
+#include "phecda/sdk/auto_event.h"
 
 using namespace phecda::bootstrap;
 using namespace phecda::contracts;
@@ -22,13 +23,14 @@ namespace phecda::sdk {
         std::string serviceKey_;
         std::string _baseServiceName;
         ProtocolDriver *driver;
-        AutoEvent *_autoEventManager;
+
         CommonArgs *args_;
         DeviceService *deviceService;
         ConfigurationStruct *config;
         DiContainer *dic;
         void setServiceName(std::string instanceName);
     public:
+        AutoEventManager *autoEventManager_;
 
         static DeviceServiceSDK newDeviceService(const std::string &serviceKey, const std::string &serviceVersion,
                                                  ProtocolDriver *protocolDriver);

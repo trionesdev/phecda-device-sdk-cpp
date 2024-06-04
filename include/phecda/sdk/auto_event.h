@@ -28,19 +28,19 @@ namespace phecda::sdk {
     };
 
 
-
-
     class AutoEventManager {
     private:
         std::map<std::string, std::list<Executor>> executorMap = {};
+        std::shared_ptr<contracts::WaitGroup> wg;
         bootstrap::DiContainer *dic;
     public:
         static bool bootstrapHandler(BootstrapHandlerArgs args);
-         void startAutoEvents();
 
-         void restartForDevice(std::string name);
+        void startAutoEvents();
 
-         void stopForDevice(std::string deviceName);
+        void restartForDevice(std::string name);
+
+        void stopForDevice(std::string deviceName);
     };
 
 }

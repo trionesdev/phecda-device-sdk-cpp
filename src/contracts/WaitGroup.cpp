@@ -22,7 +22,7 @@ namespace phecda::contracts {
         }
     }
 
-    void WaitGroup::wait() {
+    void WaitGroup::await() {
         std::unique_lock<std::mutex> lock(mutex_);
         condition_.wait(lock, [this] { return count_ == 0; });
     }

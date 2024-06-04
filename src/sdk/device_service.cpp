@@ -7,6 +7,8 @@
 #include "phecda/contracts/container.h"
 #include "phecda/bootstrap/startup.h"
 #include "phecda/bootstrap/bootstrap.h"
+#include "phecda/sdk/auto_event.h"
+#include "phecda/sdk/service.h"
 
 
 using namespace phecda::bootstrap;
@@ -111,21 +113,25 @@ namespace phecda::sdk {
         deviceService->name = serviceKey_;
 
         this->dic = DiContainer::newContainer({
-                                                    {sdk::container::configurationName,               config},
-                                                    {phecda::contracts::container::deviceServiceName, deviceService},
-                                                    {sdk::container::protocolDriverName,              driver}
-                                            });
+                                                      {sdk::container::configurationName, config},
+                                                      {phecda::contracts::container::deviceServiceName, deviceService},
+                                                      {sdk::container::protocolDriverName, driver}
+                                              });
+
         auto wg = runAndReturnWaitGroup(args_,
                                         serviceKey_,
                                         config,
                                         startupTimer,
                                         dic,
                                         {
-
+                                                AutoEventManager::bootstrapHandler,
+                                                [bootStrap = Bootstrap::newBootstrap(this)](auto args) {
+                                                    return bootStrap->bootstrapHandler(
+                                                            std::forward<decltype(args)>(args));
+                                                }
                                         });
         this->driver->start();
-        wg->wait();
-        std::cout << "ccc.maxEventSize:" << std::endl;
+        wg->await();
     }
 
 
