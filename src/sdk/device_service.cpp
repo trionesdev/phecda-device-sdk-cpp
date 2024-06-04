@@ -1,6 +1,8 @@
 //
 // Created by fengxiaotx on 2024/5/21.
 //
+#include "phecda/sdk/DeviceServiceSDK.h"
+#include "phecda/sdk/ProtocolDriver.h"
 #include <boost/algorithm/string/trim.hpp>
 #include "phecda/contracts/container.h"
 #include "phecda/sdk/container.h"
@@ -105,13 +107,13 @@ namespace phecda::sdk {
         }
         setServiceName(instanceName);
         config = new ConfigurationStruct();
-        deviceService = DeviceService();
-        deviceService.name = serviceKey_;
+        deviceService = new DeviceService();
+        deviceService->name = serviceKey_;
 
         this->dic = Container::newContainer({
                                                     {configurationName,            config},
                                                     {contracts::container::deviceServiceName, deviceService},
-                                                    {protocolDriverName,           &driver}
+                                                    {protocolDriverName,           driver}
                                             });
         auto wg = runAndReturnWaitGroup(args_,
                                         serviceKey_,

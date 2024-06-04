@@ -4,6 +4,8 @@
 
 #ifndef PHECDA_DEVICE_SDK_STARTUP_H
 #define PHECDA_DEVICE_SDK_STARTUP_H
+#include <string>
+
 namespace phecda::bootstrap {
     class Timer{
     public:

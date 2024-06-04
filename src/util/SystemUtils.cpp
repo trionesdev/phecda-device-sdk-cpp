@@ -3,7 +3,6 @@
 //
 
 #include "phecda/util/SystemUtils.h"
-#include <boost/process.hpp>
 
 namespace phecda::util {
 

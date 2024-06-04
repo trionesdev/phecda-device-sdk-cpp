@@ -5,13 +5,14 @@
 #ifndef PHECDA_DEVICE_SDK_PROCESSOR_H
 #define PHECDA_DEVICE_SDK_PROCESSOR_H
 
-
+#include <iostream>
 #include "flags.h"
 #include "environement.h"
 #include "startup.h"
 #include "interfaces.h"
 #include  <phecda/bootstrap/di.h>
 #include  <phecda/sdk/config.h>
+#include <filesystem>
 
 
 namespace phecda::bootstrap {

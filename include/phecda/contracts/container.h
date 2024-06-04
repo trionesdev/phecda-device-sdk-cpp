@@ -11,4 +11,4 @@ namespace phecda::contracts::container {
      std::string deviceServiceName = "deviceServiceName";
 }
 
-#endif //PHECDA_DEVICE_SDK_CONTAINER_H
+#endif //PHECDA_DEVICE_SDK_CONTRACTS_CONTAINER_H

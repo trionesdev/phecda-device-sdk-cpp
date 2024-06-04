@@ -7,6 +7,7 @@
 
 #include "phecda/bootstrap/di.h"
 #include "phecda/bootstrap/bootstrap.h"
+#include <phecda/contracts/model.h>
 
 using namespace phecda::bootstrap;
 

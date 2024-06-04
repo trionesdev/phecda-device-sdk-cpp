@@ -6,7 +6,7 @@
 #define PHECDA_DEVICE_SDK_APP_PRPTOCOLDRIVER_H
 
 #include <phecda/sdk/DeviceServiceSDK.h>
-#include <phecda/sdk/model.h>
+
 
 namespace phecda::sdk {
 //    class DeviceServiceSDK;

@@ -18,7 +18,7 @@ namespace phecda::bootstrap {
         auto processor = Processor::newProcessor(args_, envVars_, startupTimer, dic);
         processor->process(serviceKey, serviceConfig);
         dic->update({
-//                            {configurationName, serviceConfig},
+//                            {sdk::configurationName, serviceConfig},
                     });
         if (bootstrapHandlers.empty()) {
             return wg;

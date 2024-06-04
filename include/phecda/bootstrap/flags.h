@@ -6,6 +6,12 @@
 #define PHECDA_DEVICE_SDK_FLAGS_H
 #include <list>
 #include <string>
+#include "phecda/bootstrap/environement.h"
+#include <boost/format.hpp>
+#include <map>
+#include <iostream>
+#include <list>
+#include <string>
 
 using namespace std;
 

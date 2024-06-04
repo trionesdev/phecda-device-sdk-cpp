@@ -6,6 +6,7 @@
 #define PHECDA_DEVICE_SDK_SYSTEMUTILS_H
 #include <map>
 #include <string>
+#include <boost/process.hpp>
 
 namespace phecda::util {
 

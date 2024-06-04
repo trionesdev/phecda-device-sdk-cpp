@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 enable_testing()
 
+add_definitions( -D_WIN32_WINNT=0x0A00 )
+
 add_subdirectory(test)
 
 file(GLOB HEADERS "${PROJECT_SOURCE_DIR}/include/**/*")

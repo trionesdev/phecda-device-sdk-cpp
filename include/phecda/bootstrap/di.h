@@ -2,8 +2,8 @@
 // Created by fengxiaotx on 2024/5/22.
 //
 
-#ifndef PHECDA_DEVICE_CONTAINER_H
-#define PHECDA_DEVICE_CONTAINER_H
+#ifndef PHECDA_DEVICE_DI_H
+#define PHECDA_DEVICE_DI_H
 
 #include <map>
 #include <string>
@@ -44,4 +44,4 @@ namespace phecda::bootstrap {
 
 
 }
-#endif //PHECDA_DEVICE_CONTAINER_H
+#endif //PHECDA_DEVICE_DI_H

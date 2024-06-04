@@ -6,7 +6,8 @@
 #define PHECDA_DEVICE_SDK_BOOTSTRAP_BOOTSTRAP_H
 
 #include <functional>
-#include "phecda/bootstrap/di.h"
+//#include "phecda/bootstrap/di.h"
+#include "phecda/sdk/container.h"
 #include "phecda/bootstrap/interfaces.h"
 #include "phecda/bootstrap/flags.h"
 #include "phecda/contracts/WaitGroup.h"
@@ -14,6 +15,7 @@
 #include "phecda/sdk/config.h"
 #include "phecda/bootstrap/environement.h"
 #include "phecda/bootstrap/Processor.h"
+
 
 namespace phecda::bootstrap {
     struct BootstrapHandlerArgs {

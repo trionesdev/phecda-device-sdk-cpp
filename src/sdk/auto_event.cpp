@@ -2,7 +2,7 @@
 // Created by fengxiaotx on 2024/5/27.
 //
 #include <phecda/sdk/auto_event.h>
-#include <phecda/contracts/model.h>
+
 
 namespace phecda::sdk {
 

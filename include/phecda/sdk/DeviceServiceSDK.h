@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 
+#include <phecda/sdk/model.h>
 #include "phecda/contracts/model.h"
 #include "auto_event.h"
 #include "config.h"
@@ -29,7 +30,7 @@ namespace phecda::sdk {
         ProtocolDriver *driver;
         AutoEvent *_autoEventManager;
         CommonArgs *args_;
-        DeviceService deviceService;
+        DeviceService *deviceService;
         ConfigurationStruct *config;
         Container *dic;
         void setServiceName(std::string instanceName);
