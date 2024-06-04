@@ -27,28 +27,75 @@ namespace phecda::bootstrap {
     }
 
 
-    void loadConfigYamlFromFile(std::string configFile, sdk::ConfigurationStruct *serviceConfig) {
+    void loadConfigYamlFromFile(const std::string &configFile, sdk::ConfigurationStruct *serviceConfig) {
         try {
             YAML::Node config = YAML::LoadFile(configFile);
             serviceConfig->MaxEventSize = config["MaxEventSize"].as<int>();
             sdk::DeviceInfo deviceInfo{};
-            if (!config["Device"].IsNull()) {
-                auto device = config["Device"];
-                if (!device["ProfilesDir"].IsNull()) {
-                    deviceInfo.profilesDir = device["ProfilesDir"].as<std::string>();
+            auto device = config["Device"];
+            if (device && !device.IsNull()) {
+                auto profilesDir = config["ProfilesDir"];
+                if (profilesDir && !profilesDir.IsNull()) {
+                    deviceInfo.profilesDir = profilesDir.as<std::string>();
                 }
-                if (!device["DevicesDir"].IsNull()) {
-                    deviceInfo.devicesDir = device["DevicesDir"].as<std::string>();
+                auto devicesDir = device["DevicesDir"];
+                if (devicesDir && !devicesDir.IsNull()) {
+                    deviceInfo.devicesDir = devicesDir.as<std::string>();
                 }
             }
 
             serviceConfig->device = deviceInfo;
 
             sdk::MqttInfo mqttInfo{};
-            if (!config["MQTT"].IsNull()) {
-                auto mqtt = config["MQTT"];
-                if (!mqtt["Host"].IsNull()) {
-                    mqttInfo.host = mqtt["Host"].as<std::string>();
+            auto mqtt = config["MQTT"];
+            if (mqtt && !mqtt.IsNull()) {
+                auto clientId = mqtt["ClientId"];
+                if (clientId && !clientId.IsNull()) {
+                    mqttInfo.clientId = clientId.as<std::string>();
+                }
+                auto protocol = mqtt["Protocol"];
+                if (protocol && !protocol.IsNull()) {
+                    mqttInfo.protocol = protocol.as<std::string>();
+                }
+                auto host = mqtt["Host"];
+                if (host && !host.IsNull()) {
+                    mqttInfo.host = host.as<std::string>();
+                }
+                auto port = mqtt["Port"];
+                if (port && !port.IsNull()) {
+                    mqttInfo.port = port.as<int>();
+                }
+                auto username = mqtt["Username"];
+                if (username && !username.IsNull()) {
+                    mqttInfo.username = username.as<std::string>();
+                }
+                auto password = mqtt["Password"];
+                if (password && !password.IsNull()) {
+                    mqttInfo.password = password.as<std::string>();
+                }
+                auto qos = mqtt["QOS"];
+                if (qos && !qos.IsNull()) {
+                    mqttInfo.qos = qos.as<int>();
+                }
+                auto connectionTimeout = mqtt["ConnectionTimeout"];
+                if (connectionTimeout && !connectionTimeout.IsNull()) {
+                    mqttInfo.connectionTimeout = connectionTimeout.as<int>();
+                }
+                auto keepAliveInterval = mqtt["KeepAliveInterval"];
+                if (keepAliveInterval && !keepAliveInterval.IsNull()) {
+                    mqttInfo.keepAliveInterval = keepAliveInterval.as<int>();
+                }
+                auto cleanSession = mqtt["CleanSession"];
+                if (cleanSession && !cleanSession.IsNull()) {
+                    mqttInfo.cleanSession = cleanSession.as<bool>();
+                }
+                auto automaticReconnect = mqtt["AutomaticReconnect"];
+                if (automaticReconnect && !automaticReconnect.IsNull()) {
+                    mqttInfo.automaticReconnect = automaticReconnect.as<bool>();
+                }
+                auto topicPrefix = mqtt["TopicPrefix"];
+                if (topicPrefix && !topicPrefix.IsNull()) {
+                    mqttInfo.topicPrefix = topicPrefix.as<std::string>();
                 }
             }
             serviceConfig->mqtt = mqttInfo;

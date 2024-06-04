@@ -21,7 +21,7 @@ namespace phecda::sdk {
 
     ProtocolDriver protocolDriverFrom(bootstrap::Container *dic) {
         return dic->get<ProtocolDriver>(protocolDriverName);
-    }
+    };
 }
 
 #endif //PHECDA_DEVICE_SDK_CONTAINER_H

@@ -3,13 +3,11 @@
 //
 #include <phecda/bootstrap/bootstrap.h>
 
-#include "phecda/bootstrap/environement.h"
-#include "phecda/bootstrap/Processor.h"
 
 namespace phecda::bootstrap {
 
     std::shared_ptr<contracts::WaitGroup> runAndReturnWaitGroup(
-            CommonArgs* args_,
+            CommonArgs *args_,
             std::string &serviceKey,
             sdk::ConfigurationStruct *serviceConfig,
             Timer *startupTimer,
@@ -18,11 +16,14 @@ namespace phecda::bootstrap {
         std::shared_ptr<contracts::WaitGroup> wg = std::make_unique<contracts::WaitGroup>();
         auto envVars_ = Variables::newVariables();
         auto processor = Processor::newProcessor(args_, envVars_, startupTimer, dic);
-        processor->process(serviceKey,serviceConfig);
+        processor->process(serviceKey, serviceConfig);
+        dic->update({
+//                            {configurationName, serviceConfig},
+                    });
         if (bootstrapHandlers.empty()) {
             return wg;
         }
-        for (const auto& handler: bootstrapHandlers) {
+        for (const auto &handler: bootstrapHandlers) {
             BootstrapHandlerArgs handlerArgs;
             handlerArgs.wg = wg;
             handlerArgs.dic = dic;

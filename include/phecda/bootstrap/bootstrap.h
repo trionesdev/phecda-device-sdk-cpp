@@ -12,6 +12,8 @@
 #include "phecda/contracts/WaitGroup.h"
 #include "phecda/bootstrap/startup.h"
 #include "phecda/sdk/config.h"
+#include "phecda/bootstrap/environement.h"
+#include "phecda/bootstrap/Processor.h"
 
 namespace phecda::bootstrap {
     struct BootstrapHandlerArgs {

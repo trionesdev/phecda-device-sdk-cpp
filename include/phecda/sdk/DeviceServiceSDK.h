@@ -6,6 +6,7 @@
 #define PHECDA_DEVICE_SDK_CPP_DEVICESDK_H
 
 #include <string>
+#include <iostream>
 
 #include "phecda/contracts/model.h"
 #include "auto_event.h"
@@ -13,6 +14,7 @@
 #include "phecda/bootstrap/flags.h"
 #include "phecda/bootstrap/di.h"
 #include "phecda/bootstrap/startup.h"
+
 
 using namespace phecda::bootstrap;
 using namespace phecda::contracts;

@@ -1,7 +1,6 @@
 //
 // Created by fengxiaotx on 2024/5/21.
 //
-#include <iostream>
 #include <boost/algorithm/string/trim.hpp>
 #include "phecda/contracts/container.h"
 #include "phecda/sdk/container.h"
@@ -110,9 +109,9 @@ namespace phecda::sdk {
         deviceService.name = serviceKey_;
 
         this->dic = Container::newContainer({
-                                                    {configurationName,  config},
-                                                    {deviceServiceName,  deviceService},
-                                                    {protocolDriverName, &driver}
+                                                    {configurationName,            config},
+                                                    {contracts::container::deviceServiceName, deviceService},
+                                                    {protocolDriverName,           &driver}
                                             });
         auto wg = runAndReturnWaitGroup(args_,
                                         serviceKey_,

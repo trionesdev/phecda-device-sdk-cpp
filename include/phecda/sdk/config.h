@@ -23,6 +23,15 @@ namespace phecda::sdk {
         std::string clientId;
         std::string protocol;
         std::string host;
+        int port;
+        std::string username;
+        std::string password;
+        int qos = 0;
+        int connectionTimeout = 0;
+        int keepAliveInterval = 0;
+        bool cleanSession = true;
+        bool automaticReconnect = true;
+        std::string topicPrefix = "phecda";
     };
 
     struct ConfigurationStruct : public bootstrap::Configuration {
