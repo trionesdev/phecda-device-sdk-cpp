@@ -10,7 +10,7 @@
 #include "environement.h"
 #include "startup.h"
 #include "interfaces.h"
-#include  <phecda/bootstrap/di.h>
+#include  <phecda/bootstrap/di-container.h>
 #include  <phecda/sdk/config.h>
 #include <filesystem>
 
@@ -22,10 +22,10 @@ namespace phecda::bootstrap {
         CommonArgs *args;
         Variables *variables;
         Timer *startupTimer;
-        Container *dic;
+        DiContainer *dic;
 
     public:
-        static Processor *newProcessor(CommonArgs *args, Variables *variables, Timer *startupTimer, Container *dic);
+        static Processor *newProcessor(CommonArgs *args, Variables *variables, Timer *startupTimer, DiContainer *dic);
 
         void process(std::string serviceKey, sdk::ConfigurationStruct *serviceConfig);
     };

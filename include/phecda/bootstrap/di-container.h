@@ -16,13 +16,13 @@ namespace phecda::bootstrap {
 
     typedef std::map<std::string, std::any> ServiceConstructorMap;
 
-    class Container {
+    class DiContainer {
     private:
         std::map<std::string, std::any> serviceMap;
         std::mutex mutex;
     public:
-        static Container *newContainer(const ServiceConstructorMap &services) {
-            auto *container = new Container();
+        static DiContainer *newContainer(const ServiceConstructorMap &services) {
+            auto *container = new DiContainer();
             for (const auto &service: services) {
                 container->serviceMap[service.first] = service.second;
             }

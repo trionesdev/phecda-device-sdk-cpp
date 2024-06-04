@@ -5,7 +5,7 @@
 #ifndef PHECDA_DEVICE_AUTOEVENTMANAGER_H
 #define PHECDA_DEVICE_AUTOEVENTMANAGER_H
 
-#include "phecda/bootstrap/di.h"
+#include "phecda/bootstrap/di-container.h"
 #include "phecda/bootstrap/bootstrap.h"
 #include <phecda/contracts/model.h>
 
@@ -22,7 +22,7 @@ namespace phecda::sdk {
     public:
         static Executor newExecutor();
 
-        void run(Container *dic);
+        void run(DiContainer *dic);
 
         void stop();
     };
@@ -33,7 +33,7 @@ namespace phecda::sdk {
     class AutoEventManager {
     private:
         std::map<std::string, std::list<Executor>> executorMap = {};
-        bootstrap::Container *dic;
+        bootstrap::DiContainer *dic;
     public:
         static bool bootstrapHandler(BootstrapHandlerArgs args);
          void startAutoEvents();

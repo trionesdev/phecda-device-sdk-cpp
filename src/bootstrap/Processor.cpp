@@ -8,7 +8,7 @@
 
 
 namespace phecda::bootstrap {
-    Processor *Processor::newProcessor(CommonArgs *args, Variables *variables, Timer *startupTimer, Container *dic) {
+    Processor *Processor::newProcessor(CommonArgs *args, Variables *variables, Timer *startupTimer, DiContainer *dic) {
         auto *processor = new Processor();
         processor->args = args;
         processor->variables = variables;

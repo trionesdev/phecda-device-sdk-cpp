@@ -3,10 +3,10 @@
 //
 #include "phecda/sdk/DeviceServiceSDK.h"
 #include "phecda/sdk/ProtocolDriver.h"
-#include <boost/algorithm/string/trim.hpp>
-#include "phecda/contracts/container.h"
 #include "phecda/sdk/container.h"
-#include "phecda/bootstrap/environement.h"
+#include "phecda/contracts/container.h"
+#include "phecda/bootstrap/startup.h"
+#include "phecda/bootstrap/bootstrap.h"
 
 
 using namespace phecda::bootstrap;
@@ -110,10 +110,10 @@ namespace phecda::sdk {
         deviceService = new DeviceService();
         deviceService->name = serviceKey_;
 
-        this->dic = Container::newContainer({
-                                                    {configurationName,            config},
-                                                    {contracts::container::deviceServiceName, deviceService},
-                                                    {protocolDriverName,           driver}
+        this->dic = DiContainer::newContainer({
+                                                    {sdk::container::configurationName,               config},
+                                                    {phecda::contracts::container::deviceServiceName, deviceService},
+                                                    {sdk::container::protocolDriverName,              driver}
                                             });
         auto wg = runAndReturnWaitGroup(args_,
                                         serviceKey_,

@@ -11,7 +11,7 @@ namespace phecda::sdk {
         return Executor();
     }
 
-    void Executor::run(Container *dic) {
+    void Executor::run(DiContainer *dic) {
 
     }
 
@@ -28,7 +28,7 @@ namespace phecda::sdk {
     }
 
     std::list<Executor>
-    triggerExecutors(std::string deviceName, std::list<contracts::AutoEvent> autoEvents, bootstrap::Container *dic) {
+    triggerExecutors(std::string deviceName, std::list<contracts::AutoEvent> autoEvents, bootstrap::DiContainer *dic) {
         auto executors = std::list<Executor>();
         if (!autoEvents.empty()) {
             for (auto autoEvent: autoEvents) {

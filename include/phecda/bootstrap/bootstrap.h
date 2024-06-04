@@ -6,21 +6,17 @@
 #define PHECDA_DEVICE_SDK_BOOTSTRAP_BOOTSTRAP_H
 
 #include <functional>
-//#include "phecda/bootstrap/di.h"
-#include "phecda/sdk/container.h"
-#include "phecda/bootstrap/interfaces.h"
-#include "phecda/bootstrap/flags.h"
 #include "phecda/contracts/WaitGroup.h"
-#include "phecda/bootstrap/startup.h"
+#include "startup.h"
+#include "flags.h"
 #include "phecda/sdk/config.h"
-#include "phecda/bootstrap/environement.h"
-#include "phecda/bootstrap/Processor.h"
+#include "phecda/bootstrap/di-container.h"
 
 
 namespace phecda::bootstrap {
     struct BootstrapHandlerArgs {
         std::shared_ptr<contracts::WaitGroup> wg;
-        Container *dic;
+        DiContainer *dic;
         Timer *startupTimer;
     };
 
@@ -29,7 +25,7 @@ namespace phecda::bootstrap {
             std::string &serviceKey,
             sdk::ConfigurationStruct *serviceConfig,
             Timer *startupTimer,
-            Container *dic,
+            DiContainer *dic,
             std::list<std::function<bool(BootstrapHandlerArgs)>> bootstrapHandlers);
 
 }

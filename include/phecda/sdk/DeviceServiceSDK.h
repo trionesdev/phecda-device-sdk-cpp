@@ -2,20 +2,14 @@
 // Created by fengxiaotx on 2024/5/21.
 //
 
-#ifndef PHECDA_DEVICE_SDK_CPP_DEVICESDK_H
-#define PHECDA_DEVICE_SDK_CPP_DEVICESDK_H
+#ifndef PHECDA_DEVICE_SDK_DEVICESDK_H
+#define PHECDA_DEVICE_SDK_DEVICESDK_H
 
-#include <string>
-#include <iostream>
 
-#include <phecda/sdk/model.h>
 #include "phecda/contracts/model.h"
-#include "auto_event.h"
-#include "config.h"
 #include "phecda/bootstrap/flags.h"
-#include "phecda/bootstrap/di.h"
-#include "phecda/bootstrap/startup.h"
-
+#include "config.h"
+#include "phecda/bootstrap/di-container.h"
 
 using namespace phecda::bootstrap;
 using namespace phecda::contracts;
@@ -32,7 +26,7 @@ namespace phecda::sdk {
         CommonArgs *args_;
         DeviceService *deviceService;
         ConfigurationStruct *config;
-        Container *dic;
+        DiContainer *dic;
         void setServiceName(std::string instanceName);
     public:
 

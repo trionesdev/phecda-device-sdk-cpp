@@ -8,7 +8,7 @@
 #include <string>
 
 namespace phecda::contracts::container {
-     std::string deviceServiceName = "deviceServiceName";
+    static std::string deviceServiceName = "deviceServiceName";
 }
 
 #endif //PHECDA_DEVICE_SDK_CONTRACTS_CONTAINER_H
