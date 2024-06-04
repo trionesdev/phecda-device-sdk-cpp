@@ -39,7 +39,20 @@ namespace phecda::sdk::cache {
     }
 
     void ProfileCache::add(contracts::DeviceProfile profile) {
-
+        auto profileName = profile.name;
+        if (!profileName.empty()) {
+            deviceProfileMap[profileName] = profile;
+            std::map<std::string, contracts::DeviceResource> profileDeviceResourcesMap = {};
+            for (auto &deviceResource: profile.deviceResources) {
+                profileDeviceResourcesMap[deviceResource.name] = deviceResource;
+            }
+            deviceResourceMap[profileName] = profileDeviceResourcesMap;
+            std::map<std::string, contracts::DeviceCommand> profileDeviceCommandsMap = {};
+            for (auto &deviceCommand: profile.deviceCommands) {
+                profileDeviceCommandsMap[deviceCommand.name] = deviceCommand;
+            }
+            deviceCommandMap[profileName] = profileDeviceCommandsMap;
+        }
     }
 
     void ProfileCache::update(contracts::DeviceProfile profile) {
@@ -71,4 +84,13 @@ namespace phecda::sdk::cache {
         DeviceCache::newDeviceCache({});
         ProfileCache::newProfileCache({});
     }
+
+    DeviceCache devices() {
+        return dc;
+    };
+
+    ProfileCache profiles() {
+        return pc;
+    };
+
 }

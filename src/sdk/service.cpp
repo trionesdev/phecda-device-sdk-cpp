@@ -4,6 +4,8 @@
 #include <phecda/sdk/service.h>
 #include <phecda/sdk/cache.h>
 #include <utility>
+#include <phecda/sdk/ProtocolDriver.h>
+#include <phecda/sdk/provision.h>
 
 namespace phecda::sdk {
 
@@ -19,6 +21,17 @@ namespace phecda::sdk {
 
         cache::initCache(ds->serviceKey_, ds->baseServiceName_, dic);
 
+        if (ds->asyncReadingsEnabled()) {
+
+        }
+
+        //region driver initialize
+        ds->driver->initialize(ds);
+        //endregion
+
+        phecda::sdk::provision::loadProfiles(ds->config->device.profilesDir, dic);
+
+        ds->autoEventManager_->startAutoEvents();
         return true;
     }
 

@@ -20,18 +20,17 @@ namespace phecda::sdk {
     class DeviceServiceSDK {
     private:
         std::string _serviceVersion;
-
-        ProtocolDriver *driver;
-
         CommonArgs *args_;
         DeviceService *deviceService;
-        ConfigurationStruct *config;
+
         DiContainer *dic;
         void setServiceName(std::string instanceName);
     public:
         std::string serviceKey_;
         std::string baseServiceName_;
+        ProtocolDriver *driver;
         AutoEventManager *autoEventManager_;
+        ConfigurationStruct *config;
 
         static DeviceServiceSDK newDeviceService(const std::string &serviceKey, const std::string &serviceVersion,
                                                  ProtocolDriver *protocolDriver);

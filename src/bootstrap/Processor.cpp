@@ -4,6 +4,7 @@
 
 #include "phecda/bootstrap/Processor.h"
 #include <yaml-cpp/yaml.h>
+#include <filesystem>
 
 
 
@@ -33,7 +34,7 @@ namespace phecda::bootstrap {
             sdk::DeviceInfo deviceInfo{};
             auto device = config["Device"];
             if (device && !device.IsNull()) {
-                auto profilesDir = config["ProfilesDir"];
+                auto profilesDir = device["ProfilesDir"];
                 if (profilesDir && !profilesDir.IsNull()) {
                     deviceInfo.profilesDir = profilesDir.as<std::string>();
                 }
