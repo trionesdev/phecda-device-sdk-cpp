@@ -112,8 +112,8 @@ namespace phecda::sdk::provision {
             return;
         }
         auto profiles = loadProfilesFromFile(path);
-        for (auto profile: profiles) {
-            phecda::sdk::cache::profiles().add(profile);
+        for (const auto& profile: profiles) {
+//            phecda::sdk::cache::profiles()->add(profile);
         }
     };
 

@@ -9,12 +9,18 @@ namespace phecda::sdk::cache {
 
 
     class DeviceCache {
+    private:
+        std::map<std::string, contracts::Device> deviceMap = {};
     public:
-        static DeviceCache *newDeviceCache(std::list<contracts::Device> devices);
+
+
+        static std::shared_ptr<DeviceCache> newDeviceCache(const std::list<contracts::Device> &devices);
 
         contracts::Device forName(std::string name);
 
         std::list<contracts::Device> all();
+
+        void add(contracts::Device device);
 
         void update(contracts::Device device);
 
@@ -27,9 +33,9 @@ namespace phecda::sdk::cache {
         std::map<std::string, std::map<std::string, contracts::DeviceResource>> deviceResourceMap = {};
         std::map<std::string, std::map<std::string, contracts::DeviceCommand>> deviceCommandMap = {};
     public:
-        static ProfileCache *newProfileCache(std::list<contracts::DeviceProfile> profiles);
+        static std::shared_ptr<ProfileCache> newProfileCache(std::list<contracts::DeviceProfile> profiles);
 
-        contracts::DeviceProfile forName(std::string name);
+        contracts::DeviceProfile *forName(const std::string &name);
 
         std::list<contracts::DeviceProfile> all();
 
@@ -48,12 +54,12 @@ namespace phecda::sdk::cache {
         contracts::ResourceOperation resourceOperation(std::string profileName, std::string deviceResource);
     };
 
-    static DeviceCache dc;
-    static ProfileCache pc;
+    static std::shared_ptr<DeviceCache> dc;
+    static std::shared_ptr<ProfileCache> pc;
 
     void initCache(std::string instanceName, std::string baseServiceName, bootstrap::DiContainer *dic);
 
-    DeviceCache devices();
+    DeviceCache *devices();
 
-    ProfileCache profiles();
+    ProfileCache *profiles();
 }

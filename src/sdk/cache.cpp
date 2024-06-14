@@ -5,37 +5,89 @@
 
 namespace phecda::sdk::cache {
 
-    DeviceCache *DeviceCache::newDeviceCache(std::list<contracts::Device> devices) {
-        return nullptr;
+    std::shared_ptr<DeviceCache> DeviceCache::newDeviceCache(const std::list<contracts::Device> &devices) {
+        std::map<std::string, contracts::Device> deviceMap;
+        for (auto &device: devices) {
+            if (!device.name.empty()) {
+                deviceMap[device.name] = device;
+            }
+        }
+        dc = std::make_shared<DeviceCache>();
+        dc->deviceMap = deviceMap;
+        return dc;
     }
 
     contracts::Device DeviceCache::forName(std::string name) {
-        return contracts::Device();
+        return this->deviceMap[name];
     }
 
     std::list<contracts::Device> DeviceCache::all() {
-        return std::list<contracts::Device>();
+        std::list<contracts::Device> devices;
+        for (auto &device: this->deviceMap) {
+            devices.push_back(device.second);
+        }
+        return devices;
+    }
+
+    void DeviceCache::add(contracts::Device device) {
+        if (!device.name.empty()) {
+            deviceMap[device.name] = device;
+        }
     }
 
     void DeviceCache::update(contracts::Device device) {
-
+        if (!device.name.empty()) {
+            deviceMap[device.name] = device;
+        }
     }
 
     void DeviceCache::removeByName(std::string name) {
-
+        deviceMap.erase(name);
     }
 
 
-    ProfileCache *ProfileCache::newProfileCache(std::list<contracts::DeviceProfile> profiles) {
-        return nullptr;
+    std::shared_ptr<ProfileCache> ProfileCache::newProfileCache(std::list<contracts::DeviceProfile> profiles) {
+        std::map<std::string, contracts::DeviceProfile> dpMap;
+        std::map<std::string, std::map<std::string, contracts::DeviceResource>> drMap;
+        std::map<std::string, std::map<std::string, contracts::DeviceCommand>> dcMap;
+        for (auto &profile: profiles) {
+            if (!profile.name.empty()) {
+                dpMap[profile.name] = profile;
+                std::map<std::string, contracts::DeviceResource> profileDeviceResourcesMap = {};
+                for (auto &deviceResource: profile.deviceResources) {
+                    profileDeviceResourcesMap[deviceResource.name] = deviceResource;
+                }
+                drMap[profile.name] = profileDeviceResourcesMap;
+                std::map<std::string, contracts::DeviceCommand> profileDeviceCommandsMap = {};
+                for (auto &deviceCommand: profile.deviceCommands) {
+                    profileDeviceCommandsMap[deviceCommand.name] = deviceCommand;
+                }
+                dcMap[profile.name] = profileDeviceCommandsMap;
+            }
+        }
+        pc = std::make_shared<ProfileCache>();
+        pc->deviceProfileMap = dpMap;
+        pc->deviceResourceMap = drMap;
+        pc->deviceCommandMap = dcMap;
+        return pc;
     }
 
-    contracts::DeviceProfile ProfileCache::forName(std::string name) {
-        return contracts::DeviceProfile();
+    contracts::DeviceProfile* ProfileCache::forName(const std::string& name) {
+        if (deviceProfileMap.find(name) != deviceProfileMap.end()){
+            return &deviceProfileMap[name];
+        } else{
+            return nullptr;
+        }
     }
 
     std::list<contracts::DeviceProfile> ProfileCache::all() {
-        return std::list<contracts::DeviceProfile>();
+        std::list<contracts::DeviceProfile> profiles;
+        if (!deviceProfileMap.empty()) {
+            for (auto &profile: deviceProfileMap) {
+                profiles.push_back(profile.second);
+            }
+        }
+        return profiles;
     }
 
     void ProfileCache::add(contracts::DeviceProfile profile) {
@@ -56,15 +108,21 @@ namespace phecda::sdk::cache {
     }
 
     void ProfileCache::update(contracts::DeviceProfile profile) {
-
+        removeByName(profile.name);
+        add(profile);
     }
 
     void ProfileCache::removeByName(std::string name) {
-
+        auto it = deviceProfileMap.find(name);
+        if (it != deviceProfileMap.end()) {
+            deviceProfileMap.erase(name);
+            deviceResourceMap.erase(name);
+            deviceCommandMap.erase(name);
+        }
     }
 
     contracts::DeviceResource ProfileCache::deviceResource(std::string profileName, std::string resourceName) {
-        return contracts::DeviceResource();
+        return deviceResourceMap[profileName][resourceName];
     }
 
     contracts::DeviceResource ProfileCache::deviceResourcesByRegex(std::string profileName, std::string regex) {
@@ -72,7 +130,7 @@ namespace phecda::sdk::cache {
     }
 
     contracts::DeviceCommand ProfileCache::deviceCommand(std::string profileName, std::string commandName) {
-        return contracts::DeviceCommand();
+        return deviceCommandMap[profileName][commandName];
     }
 
     contracts::ResourceOperation ProfileCache::resourceOperation(std::string profileName, std::string deviceResource) {
@@ -85,12 +143,14 @@ namespace phecda::sdk::cache {
         ProfileCache::newProfileCache({});
     }
 
-    DeviceCache devices() {
-        return dc;
+    DeviceCache *devices() {
+//        return DeviceCache::dc;
+        return {};
     };
 
-    ProfileCache profiles() {
-        return pc;
+    ProfileCache *profiles() {
+//        return ProfileCache::pc;
+        return {};
     };
 
 }
