@@ -8,6 +8,7 @@
 #include "phecda/bootstrap/di-container.h"
 #include "phecda/bootstrap/bootstrap.h"
 #include <phecda/contracts/model.h>
+#include <phecda/util/DurationUtils.h>
 
 using namespace phecda::bootstrap;
 

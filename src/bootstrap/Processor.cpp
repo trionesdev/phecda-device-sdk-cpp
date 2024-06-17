@@ -5,15 +5,16 @@
 #include "phecda/bootstrap/Processor.h"
 #include <yaml-cpp/yaml.h>
 #include <filesystem>
+#include <utility>
 
 
 
 namespace phecda::bootstrap {
-    Processor *Processor::newProcessor(CommonArgs *args, Variables *variables, Timer *startupTimer, DiContainer *dic) {
+    Processor *Processor::newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer> startupTimer, DiContainer *dic) {
         auto *processor = new Processor();
         processor->args = args;
         processor->variables = variables;
-        processor->startupTimer = startupTimer;
+        processor->startupTimer = std::move(startupTimer);
         processor->dic = dic;
         return processor;
     }

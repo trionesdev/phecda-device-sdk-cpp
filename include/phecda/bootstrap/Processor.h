@@ -21,11 +21,11 @@ namespace phecda::bootstrap {
     private:
         CommonArgs *args;
         Variables *variables;
-        Timer *startupTimer;
+        std::shared_ptr<Timer> startupTimer;
         DiContainer *dic;
 
     public:
-        static Processor *newProcessor(CommonArgs *args, Variables *variables, Timer *startupTimer, DiContainer *dic);
+        static Processor *newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer>  startupTimer, DiContainer *dic);
 
         void process(std::string serviceKey, sdk::ConfigurationStruct *serviceConfig);
     };

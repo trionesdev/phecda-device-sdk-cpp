@@ -3,7 +3,6 @@
 //
 #include <phecda/sdk/auto_event.h>
 #include <phecda/sdk/container.h>
-#include <phecda/util/DurationUtils.h>
 
 namespace phecda::sdk {
 

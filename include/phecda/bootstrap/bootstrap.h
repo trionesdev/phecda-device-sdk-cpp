@@ -17,14 +17,14 @@ namespace phecda::bootstrap {
     struct BootstrapHandlerArgs {
         std::shared_ptr<contracts::WaitGroup> wg;
         DiContainer *dic;
-        Timer *startupTimer;
+        std::shared_ptr<Timer> startupTimer;
     };
 
     std::shared_ptr<contracts::WaitGroup> runAndReturnWaitGroup(
             CommonArgs *args,
             std::string &serviceKey,
             sdk::ConfigurationStruct *serviceConfig,
-            Timer *startupTimer,
+            std::shared_ptr<Timer> startupTimer,
             DiContainer *dic,
             std::list<std::function<bool(BootstrapHandlerArgs)>> bootstrapHandlers);
 
