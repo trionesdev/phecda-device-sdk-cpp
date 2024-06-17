@@ -14,7 +14,7 @@ namespace phecda::util {
 
         class DurationUtils {
         public:
-            std::chrono::duration<int> parse(std::string value);
+           static std::chrono::duration<int> parse(std::string value);
         };
 
     } // utils

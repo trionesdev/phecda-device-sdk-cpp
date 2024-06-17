@@ -3,12 +3,21 @@
 //
 #include <phecda/sdk/auto_event.h>
 #include <phecda/sdk/container.h>
+#include <phecda/util/DurationUtils.h>
 
 namespace phecda::sdk {
 
 
-    Executor Executor::newExecutor() {
-        return Executor();
+    std::shared_ptr<Executor>
+    Executor::newExecutor(const std::string &deviceName, const contracts::AutoEvent &autoEvent) {
+        auto duration = phecda::util::DurationUtils::parse(autoEvent.interval);
+        auto executor = std::make_shared<Executor>();
+        executor->_deviceName = deviceName;
+        executor->_sourceName = autoEvent.sourceName;
+        executor->_onChange = autoEvent.onChange;
+        executor->_duration = duration;
+        executor->_stop = false;
+        return executor;
     }
 
     void Executor::run(DiContainer *dic) {
@@ -20,7 +29,7 @@ namespace phecda::sdk {
     }
 
     bool AutoEventManager::bootstrapHandler(phecda::bootstrap::BootstrapHandlerArgs args) {
-        auto *manager = new AutoEventManager();
+        auto manager = make_shared<AutoEventManager>();
         manager->executorMap = {};
         manager->dic = args.dic;
         manager->wg = args.wg;
@@ -28,21 +37,28 @@ namespace phecda::sdk {
         return true;
     }
 
-    std::list<Executor>
-    triggerExecutors(std::string deviceName, std::list<contracts::AutoEvent> autoEvents, bootstrap::DiContainer *dic) {
-        auto executors = std::list<Executor>();
+    std::list<std::shared_ptr<Executor>>
+    triggerExecutors(const std::string &deviceName, const std::list<contracts::AutoEvent> &autoEvents,
+                     bootstrap::DiContainer *dic) {
+        auto executors = std::list<std::shared_ptr<Executor>>();
         if (!autoEvents.empty()) {
-            for (auto autoEvent: autoEvents) {
-
+            for (const auto &autoEvent: autoEvents) {
+                try {
+                    auto executor = Executor::newExecutor(deviceName, autoEvent);
+                    executors.push_back(executor);
+                    executor->run(dic);
+                } catch (std::exception &e) {
+                    //TODO log
+                    continue;
+                }
             }
         }
         return executors;
     }
 
-    void AutoEventManager::stopForDevice(std::string name) {
-        auto executors = executorMap.find(name);
-        if (executors != executorMap.end()) {
-            for (auto executor: executors->second) {
+    void AutoEventManager::stopForDevice(const std::string& name) {
+        if (executorMap.find(name) != executorMap.end()) {
+            for (auto executor: executorMap[name]) {
                 executor.stop();
             }
             executorMap.erase(name);

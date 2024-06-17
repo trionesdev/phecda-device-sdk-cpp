@@ -14,13 +14,14 @@ using namespace phecda::bootstrap;
 namespace phecda::sdk {
     class Executor {
     private:
-        std::string deviceName;
-        std::string sourceName;
-        bool onChange = false;
-        std::map<std::string, std::any> lastReadings;
+        std::string _deviceName;
+        std::string _sourceName;
+        bool _onChange = false;
+        std::map<std::string, std::any> _lastReadings;
+        std::chrono::duration<int> _duration;
         bool _stop = false;
     public:
-        static Executor newExecutor();
+        static std::shared_ptr<Executor> newExecutor(const std::string& deviceName,const contracts::AutoEvent& autoEvent);
 
         void run(DiContainer *dic);
 
@@ -40,7 +41,7 @@ namespace phecda::sdk {
 
         void restartForDevice(std::string name);
 
-        void stopForDevice(std::string deviceName);
+        void stopForDevice(const std::string& deviceName);
     };
 
 }
