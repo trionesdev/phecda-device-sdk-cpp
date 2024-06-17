@@ -17,8 +17,12 @@ namespace phecda::sdk::cache {
         return dc;
     }
 
-    contracts::Device DeviceCache::forName(std::string name) {
-        return this->deviceMap[name];
+    std::optional<contracts::Device> DeviceCache::forName(const std::string &name) {
+        if (this->deviceMap.find(name) != this->deviceMap.end()) {
+            return this->deviceMap[name];
+        } else {
+            return std::nullopt;
+        }
     }
 
     std::list<contracts::Device> DeviceCache::all() {
@@ -29,24 +33,24 @@ namespace phecda::sdk::cache {
         return devices;
     }
 
-    void DeviceCache::add(contracts::Device device) {
+    void DeviceCache::add(const contracts::Device &device) {
         if (!device.name.empty()) {
             deviceMap[device.name] = device;
         }
     }
 
-    void DeviceCache::update(contracts::Device device) {
+    void DeviceCache::update(const contracts::Device &device) {
         if (!device.name.empty()) {
             deviceMap[device.name] = device;
         }
     }
 
-    void DeviceCache::removeByName(std::string name) {
+    void DeviceCache::removeByName(const std::string &name) {
         deviceMap.erase(name);
     }
 
 
-    std::shared_ptr<ProfileCache> ProfileCache::newProfileCache(std::list<contracts::DeviceProfile> profiles) {
+    std::shared_ptr<ProfileCache> ProfileCache::newProfileCache(const std::list<contracts::DeviceProfile> &profiles) {
         std::map<std::string, contracts::DeviceProfile> dpMap;
         std::map<std::string, std::map<std::string, contracts::DeviceResource>> drMap;
         std::map<std::string, std::map<std::string, contracts::DeviceCommand>> dcMap;
@@ -72,10 +76,10 @@ namespace phecda::sdk::cache {
         return pc;
     }
 
-    contracts::DeviceProfile* ProfileCache::forName(const std::string& name) {
-        if (deviceProfileMap.find(name) != deviceProfileMap.end()){
+    contracts::DeviceProfile *ProfileCache::forName(const std::string &name) {
+        if (deviceProfileMap.find(name) != deviceProfileMap.end()) {
             return &deviceProfileMap[name];
-        } else{
+        } else {
             return nullptr;
         }
     }
@@ -90,7 +94,7 @@ namespace phecda::sdk::cache {
         return profiles;
     }
 
-    void ProfileCache::add(contracts::DeviceProfile profile) {
+    void ProfileCache::add(const contracts::DeviceProfile &profile) {
         auto profileName = profile.name;
         if (!profileName.empty()) {
             deviceProfileMap[profileName] = profile;
@@ -107,12 +111,12 @@ namespace phecda::sdk::cache {
         }
     }
 
-    void ProfileCache::update(contracts::DeviceProfile profile) {
+    void ProfileCache::update(const contracts::DeviceProfile &profile) {
         removeByName(profile.name);
         add(profile);
     }
 
-    void ProfileCache::removeByName(std::string name) {
+    void ProfileCache::removeByName(const std::string &name) {
         auto it = deviceProfileMap.find(name);
         if (it != deviceProfileMap.end()) {
             deviceProfileMap.erase(name);
@@ -121,36 +125,75 @@ namespace phecda::sdk::cache {
         }
     }
 
-    contracts::DeviceResource ProfileCache::deviceResource(std::string profileName, std::string resourceName) {
+    std::optional<contracts::DeviceResource>
+    ProfileCache::deviceResource(const std::string &profileName, const std::string &resourceName) {
+        if (deviceResourceMap.find(profileName) == deviceResourceMap.end()) {
+            return std::nullopt;
+        }
+        if (deviceResourceMap[profileName].find(resourceName) == deviceResourceMap[profileName].end()) {
+            return std::nullopt;
+        }
         return deviceResourceMap[profileName][resourceName];
     }
 
-    contracts::DeviceResource ProfileCache::deviceResourcesByRegex(std::string profileName, std::string regex) {
-        return contracts::DeviceResource();
+    std::list<contracts::DeviceResource>
+    ProfileCache::deviceResourcesByRegex(const std::string &profileName, const std::string &regex) {
+        if (deviceResourceMap.find(profileName) == deviceResourceMap.end()) {
+            return {};
+        }
+        std::list<contracts::DeviceResource> res;
+        for (auto &resource: deviceResourceMap[profileName]) {
+            if (resource.second.name == regex) {
+                res.push_back(resource.second);
+                continue;
+            }
+            if (std::regex_match(resource.second.name, std::regex(regex))) {
+                res.push_back(resource.second);
+            }
+        }
+        return res;
     }
 
-    contracts::DeviceCommand ProfileCache::deviceCommand(std::string profileName, std::string commandName) {
+    std::optional<contracts::DeviceCommand>
+    ProfileCache::deviceCommand(const std::string &profileName, const std::string &commandName) {
+        if (deviceCommandMap.find(profileName) == deviceCommandMap.end()) {
+            return std::nullopt;
+        }
+        if (deviceCommandMap[profileName].find(commandName) == deviceCommandMap[profileName].end()) {
+            return std::nullopt;
+        }
         return deviceCommandMap[profileName][commandName];
     }
 
-    contracts::ResourceOperation ProfileCache::resourceOperation(std::string profileName, std::string deviceResource) {
-        return contracts::ResourceOperation();
+    std::optional<contracts::ResourceOperation>
+    ProfileCache::resourceOperation(const std::string &profileName, const std::string &deviceResource) {
+        if (deviceCommandMap.find(profileName) == deviceCommandMap.end()) {
+            return std::nullopt;
+        }
+        for (auto &command: deviceCommandMap[profileName]) {
+            if (!command.second.resourceOperations.empty()) {
+                for (auto &ro: command.second.resourceOperations) {
+                    if (ro.deviceResource == deviceResource) {
+                        return ro;
+                    }
+                }
+            }
+        }
+        return std::nullopt;
     }
 
 
-    void initCache(std::string instanceName, std::string baseServiceName, bootstrap::DiContainer *dic) {
+    void initCache(const std::string &instanceName, const std::string &baseServiceName, bootstrap::DiContainer *dic) {
         DeviceCache::newDeviceCache({});
         ProfileCache::newProfileCache({});
     }
 
-    DeviceCache *devices() {
-//        return DeviceCache::dc;
-        return {};
+    std::shared_ptr<DeviceCache> devices() {
+        return dc;
     };
 
-    ProfileCache *profiles() {
-//        return ProfileCache::pc;
-        return {};
+    std::shared_ptr<ProfileCache> profiles() {
+        return pc;
     };
 
 }

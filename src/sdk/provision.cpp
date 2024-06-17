@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 
 namespace phecda::sdk::provision {
 
-    FileType getFileType(fs::path filePath) {
+    FileType getFileType(const fs::path& filePath) {
         std::string extension = filePath.extension().string();
         if (extension == ".json") {
             return FileType::JSON;
@@ -23,7 +23,7 @@ namespace phecda::sdk::provision {
         }
     }
 
-    contracts::DeviceProfile deviceProfileFromYamlFile(fs::path path) {
+    contracts::DeviceProfile deviceProfileFromYamlFile(const fs::path &path) {
         auto deviceProfile = contracts::DeviceProfile();
         YAML::Node config = YAML::LoadFile(path.string());
         auto name = config["name"];
@@ -83,7 +83,7 @@ namespace phecda::sdk::provision {
         return deviceProfile;
     }
 
-    contracts::DeviceProfile processProfiles(fs::path path) {
+    contracts::DeviceProfile processProfiles(const fs::path &path) {
         auto fileType = getFileType(path);
         switch (fileType) {
             case FileType::JSON:
@@ -95,7 +95,7 @@ namespace phecda::sdk::provision {
         }
     }
 
-    std::list<contracts::DeviceProfile> loadProfilesFromFile(std::string path) {
+    std::list<contracts::DeviceProfile> loadProfilesFromFile(const std::string &path) {
         std::filesystem::path configFilePath = std::filesystem::path(path);
         std::list<contracts::DeviceProfile> profiles = {};
         for (const auto &entry: fs::directory_iterator(configFilePath)) {
@@ -107,26 +107,118 @@ namespace phecda::sdk::provision {
         return profiles;
     }
 
-    void loadProfiles(std::string path, phecda::bootstrap::DiContainer *container) {
+    void loadProfiles(const std::string &path, phecda::bootstrap::DiContainer *container) {
         if (path.empty()) {
             return;
         }
         auto profiles = loadProfilesFromFile(path);
-        for (const auto& profile: profiles) {
-//            phecda::sdk::cache::profiles()->add(profile);
+        for (const auto &profile: profiles) {
+            phecda::sdk::cache::profiles()->add(profile);
         }
     };
 
-    std::list<contracts::Device> loadDevicesFromFile(std::string path, std::string serviceName) {
+    std::list<contracts::Device> deviceFromYamlFile(const fs::path &path) {
+        auto deviceProfile = contracts::DeviceProfile();
         std::list<contracts::Device> devices = {};
+        YAML::Node config = YAML::LoadFile(path.string());
+        auto deviceList = config["deviceList"];
+        if (deviceList.IsDefined() && deviceList.IsSequence()) {
+            for (auto device: deviceList) {
+                auto deviceStruct = contracts::Device();
+
+                auto name = device["name"];
+                if (name.IsDefined() && !name.IsNull()) {
+                    deviceStruct.name = name.as<std::string>();
+                }
+                auto profileName = device["profileName"];
+                if (profileName.IsDefined() && !profileName.IsNull()) {
+                    deviceStruct.profileName = profileName.as<std::string>();
+                }
+                auto description = device["description"];
+                if (description.IsDefined() && !description.IsNull()) {
+                    deviceStruct.description = description.as<std::string>();
+                }
+                auto labels = device["labels"];
+                if (labels.IsDefined() && labels.IsSequence()) {
+                    for (auto label: labels) {
+                        deviceStruct.labels.push_back(label.as<std::string>());
+                    }
+                }
+                auto tags = device["tags"];
+                if (tags.IsDefined() && tags.IsMap()) {
+                    for (auto tag: tags) {
+                        deviceStruct.tags.insert({tag.first.as<std::string>(), tag.second.as<std::string>()});
+                    }
+                }
+                auto protocols = device["protocols"];
+                if (protocols.IsDefined() && protocols.IsMap()) {
+                    for (auto protocol: protocols) {
+                        if (protocol.second.IsMap()) {
+                            std::map<std::string, std::any> protocolValue = {};
+                            for (auto value: protocol.second) {
+                                protocolValue.insert({value.first.as<std::string>(), value.second.as<std::string>()});
+                            }
+                            deviceStruct.protocols.insert({protocol.first.as<std::string>(), protocolValue});
+                        }
+                    }
+                }
+                auto autoEvents = device["autoEvents"];
+                if (autoEvents.IsDefined() && autoEvents.IsSequence()) {
+                    for (auto autoEvent: autoEvents) {
+                        auto autoEventStruct = contracts::AutoEvent();
+                        auto interval = autoEvent["interval"];
+                        if (interval.IsDefined() && !interval.IsNull()) {
+                            autoEventStruct.interval = interval.as<std::string>();
+                        }
+                        auto onChange = autoEvent["onChange"];
+                        if (onChange.IsDefined() && !onChange.IsNull()) {
+                            autoEventStruct.onChange = onChange.as<bool>();
+                        }
+                        auto sourceName = autoEvent["sourceName"];
+                        if (sourceName.IsDefined() && !sourceName.IsNull()) {
+                            autoEventStruct.sourceName = sourceName.as<std::string>();
+                        }
+                        deviceStruct.autoEvents.push_back(autoEventStruct);
+                    }
+                }
+                devices.push_back(deviceStruct);
+            }
+        }
         return devices;
     }
 
-    void loadDevices(std::string path, phecda::bootstrap::DiContainer *dic) {
+    std::list<contracts::Device> processDevices(const fs::path &path) {
+        auto fileType = getFileType(path);
+        switch (fileType) {
+            case FileType::JSON:
+                return {};
+            case FileType::YAML:
+                return deviceFromYamlFile(path);
+            default:
+                return {};
+        }
+    }
+
+    std::list<contracts::Device> loadDevicesFromFile(const std::string &path, std::string serviceName) {
+        std::filesystem::path configFilePath = std::filesystem::path(path);
+        std::list<contracts::Device> devices = {};
+        for (const auto &entry: fs::directory_iterator(configFilePath)) {
+            if (fs::is_regular_file(entry)) {
+                auto filesDevices = processDevices(entry);
+                devices.insert(devices.end(), filesDevices.begin(), filesDevices.end());
+            }
+        }
+        return devices;
+    }
+
+    void loadDevices(const std::string &path, phecda::bootstrap::DiContainer *dic) {
         if (path.empty()) {
             return;
         }
         auto serviceName = contracts::container::deviceServiceFrom(dic)->name;
         auto devices = loadDevicesFromFile(path, serviceName);
+        for (const auto &device: devices) {
+            phecda::sdk::cache::devices()->add(device);
+        }
     }
 }

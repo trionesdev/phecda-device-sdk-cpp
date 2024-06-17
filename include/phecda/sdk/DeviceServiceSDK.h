@@ -35,33 +35,33 @@ namespace phecda::sdk {
         static DeviceServiceSDK newDeviceService(const std::string &serviceKey, const std::string &serviceVersion,
                                                  ProtocolDriver *protocolDriver);
 
-        void addDevice(Device device);
+        void addDevice(const Device& device);
 
         std::list<Device> getDevices();
 
-        Device getDeviceByName(std::string name);
+        Device getDeviceByName(const std::string& name);
 
-        void updateDevice(Device device);
+        void updateDevice(const Device& device);
 
-        void removeDeviceByName(std::string name);
+        void removeDeviceByName(const std::string& name);
 
-        void addDeviceProfile(DeviceProfile profile);
+        void addDeviceProfile(const DeviceProfile& profile);
 
         std::list<DeviceProfile> deviceProfiles();
 
-        DeviceProfile getProfileByName(std::string name);
+        DeviceProfile getProfileByName(const std::string& name);
 
-        void updateDeviceProfile(DeviceProfile profile);
+        void updateDeviceProfile(const DeviceProfile& profile);
 
-        void removeDeviceProfileByName(std::string name);
+        void removeDeviceProfileByName(const std::string& name);
 
-        DeviceResource deviceResource(std::string deviceName, std::string resourceName);
+        DeviceResource deviceResource(const std::string& deviceName, std::string resourceName);
 
-        DeviceCommand deviceCommand(std::string deviceName, std::string commandName);
+        DeviceCommand deviceCommand(const std::string& deviceName, std::string commandName);
 
-        void addDeviceAutoEvent(std::string deviceName, std::string sourceName, AutoEvent autoEvent);
+        void addDeviceAutoEvent(const std::string& deviceName, const std::string& sourceName, const AutoEvent& autoEvent);
 
-        void removeDeviceAutoEvent(std::string deviceName, std::string autoEventName);
+        void removeDeviceAutoEvent(const std::string& deviceName, const std::string& autoEventName);
 
         void run();
 

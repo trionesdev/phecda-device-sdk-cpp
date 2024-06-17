@@ -16,8 +16,8 @@ namespace phecda::sdk::provision {
         OTHER
     };
 
-    void loadProfiles(std::string path, phecda::bootstrap::DiContainer *container);
+    void loadProfiles(const std::string& path, phecda::bootstrap::DiContainer *container);
 
-    void loadDevices(std::string path, phecda::bootstrap::DiContainer *container);
+    void loadDevices(const std::string& path, phecda::bootstrap::DiContainer *container);
 }
 #endif //PHECDA_DEVICE_SDK_PROVISION_H

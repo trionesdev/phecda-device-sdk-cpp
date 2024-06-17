@@ -14,7 +14,7 @@ namespace phecda::sdk {
     private:
         DeviceServiceSDK *ds;
     public:
-        static Bootstrap *newBootstrap(DeviceServiceSDK *sdk);
+        static std::shared_ptr<Bootstrap> newBootstrap(DeviceServiceSDK *sdk);
 
         bool bootstrapHandler(bootstrap::BootstrapHandlerArgs args);
     };
@@ -23,7 +23,7 @@ namespace phecda::sdk {
     public:
         std::string baseServiceName;
 
-        static MessagingBootstrap *newMessagingBootstrap(std::string baseServiceName);
+        static std::shared_ptr<MessagingBootstrap> newMessagingBootstrap(const std::string& baseServiceName);
 
         bool bootstrapHandler(bootstrap::BootstrapHandlerArgs args);
     };

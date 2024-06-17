@@ -2,6 +2,8 @@
 // Created by fengxiaotx on 2024/5/22.
 //
 #include <string>
+#include <optional>
+#include <regex>
 #include <phecda/bootstrap/di-container.h>
 #include <phecda/contracts/model.h>
 
@@ -16,15 +18,15 @@ namespace phecda::sdk::cache {
 
         static std::shared_ptr<DeviceCache> newDeviceCache(const std::list<contracts::Device> &devices);
 
-        contracts::Device forName(std::string name);
+        std::optional<contracts::Device> forName(const std::string &name);
 
         std::list<contracts::Device> all();
 
-        void add(contracts::Device device);
+        void add(const contracts::Device &device);
 
-        void update(contracts::Device device);
+        void update(const contracts::Device &device);
 
-        void removeByName(std::string name);
+        void removeByName(const std::string &name);
     };
 
     class ProfileCache {
@@ -33,33 +35,35 @@ namespace phecda::sdk::cache {
         std::map<std::string, std::map<std::string, contracts::DeviceResource>> deviceResourceMap = {};
         std::map<std::string, std::map<std::string, contracts::DeviceCommand>> deviceCommandMap = {};
     public:
-        static std::shared_ptr<ProfileCache> newProfileCache(std::list<contracts::DeviceProfile> profiles);
+        static std::shared_ptr<ProfileCache> newProfileCache(const std::list<contracts::DeviceProfile> &profiles);
 
         contracts::DeviceProfile *forName(const std::string &name);
 
         std::list<contracts::DeviceProfile> all();
 
-        void add(contracts::DeviceProfile profile);
+        void add(const contracts::DeviceProfile &profile);
 
-        void update(contracts::DeviceProfile profile);
+        void update(const contracts::DeviceProfile &profile);
 
-        void removeByName(std::string name);
+        void removeByName(const std::string &name);
 
-        contracts::DeviceResource deviceResource(std::string profileName, std::string resourceName);
+        std::optional<contracts::DeviceResource>
+        deviceResource(const std::string &profileName, const std::string &resourceName);
 
-        contracts::DeviceResource deviceResourcesByRegex(std::string profileName, std::string regex);
+        std::list<contracts::DeviceResource> deviceResourcesByRegex(const std::string& profileName, const std::string& regex);
 
-        contracts::DeviceCommand deviceCommand(std::string profileName, std::string commandName);
+        std::optional<contracts::DeviceCommand> deviceCommand(const std::string& profileName, const std::string& commandName);
 
-        contracts::ResourceOperation resourceOperation(std::string profileName, std::string deviceResource);
+        std::optional<contracts::ResourceOperation>
+        resourceOperation(const std::string& profileName, const std::string& deviceResource);
     };
 
     static std::shared_ptr<DeviceCache> dc;
     static std::shared_ptr<ProfileCache> pc;
 
-    void initCache(std::string instanceName, std::string baseServiceName, bootstrap::DiContainer *dic);
+    void initCache(const std::string& instanceName, const std::string& baseServiceName, bootstrap::DiContainer *dic);
 
-    DeviceCache *devices();
+    std::shared_ptr<DeviceCache> devices();
 
-    ProfileCache *profiles();
+    std::shared_ptr<ProfileCache> profiles();
 }

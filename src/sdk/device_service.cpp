@@ -40,57 +40,57 @@ namespace phecda::sdk {
         return {};
     }
 
-    void DeviceServiceSDK::addDevice(Device device) {
+    void DeviceServiceSDK::addDevice(const Device& device) {
     }
 
     std::list<Device> DeviceServiceSDK::getDevices() {
         return {};
     }
 
-    Device DeviceServiceSDK::getDeviceByName(std::string name) {
+    Device DeviceServiceSDK::getDeviceByName(const std::string& name) {
         return {};
     }
 
-    void DeviceServiceSDK::updateDevice(Device device) {
+    void DeviceServiceSDK::updateDevice(const Device& device) {
     }
 
-    void DeviceServiceSDK::removeDeviceByName(std::string name) {
+    void DeviceServiceSDK::removeDeviceByName(const std::string& name) {
     }
 
-    void DeviceServiceSDK::addDeviceProfile(DeviceProfile profile) {
+    void DeviceServiceSDK::addDeviceProfile(const DeviceProfile& profile) {
     }
 
     std::list<DeviceProfile> DeviceServiceSDK::deviceProfiles() {
         return std::list<DeviceProfile>();
     }
 
-    DeviceProfile DeviceServiceSDK::getProfileByName(std::string name) {
+    DeviceProfile DeviceServiceSDK::getProfileByName(const std::string& name) {
         return DeviceProfile();
     }
 
-    void DeviceServiceSDK::updateDeviceProfile(DeviceProfile profile) {
+    void DeviceServiceSDK::updateDeviceProfile(const DeviceProfile& profile) {
     }
 
-    void DeviceServiceSDK::removeDeviceProfileByName(std::string name) {
+    void DeviceServiceSDK::removeDeviceProfileByName(const std::string& name) {
     }
 
-    DeviceResource DeviceServiceSDK::deviceResource(std::string deviceName, std::string resourceName) {
+    DeviceResource DeviceServiceSDK::deviceResource(const std::string& deviceName, std::string resourceName) {
         return DeviceResource();
     }
 
-    DeviceCommand DeviceServiceSDK::deviceCommand(std::string deviceName, std::string commandName) {
+    DeviceCommand DeviceServiceSDK::deviceCommand(const std::string& deviceName, std::string commandName) {
         return DeviceCommand();
     }
 
-    void DeviceServiceSDK::addDeviceAutoEvent(std::string deviceName, std::string sourceName, AutoEvent autoEvent) {
+    void DeviceServiceSDK::addDeviceAutoEvent(const std::string& deviceName, const std::string& sourceName, const AutoEvent& autoEvent) {
     }
 
-    void DeviceServiceSDK::removeDeviceAutoEvent(std::string deviceName, std::string autoEventName) {
+    void DeviceServiceSDK::removeDeviceAutoEvent(const std::string& deviceName, const std::string& autoEventName) {
     }
 
     void DeviceServiceSDK::run() {
         std::cout << "Hello, World! run" << std::endl;
-        std::string instanceName = "";
+        std::string instanceName;
         auto startupTimer = Timer::newStartUpTimer(serviceKey_);
         std::string additionalUsage =
                 " -i, --instance  Provides a service name suffix which allows unique instance to be created"
@@ -103,9 +103,9 @@ namespace phecda::sdk {
         if (instance != Variables::envVars.end()) {
             instanceName = instance->second;
         }
-        auto iValue = Variables::envVars.find("i");
-        if (iValue != Variables::envVars.end()) {
-            instanceName = iValue->second;
+
+        if (Variables::envVars.find("i") != Variables::envVars.end()) {
+            instanceName = Variables::envVars["i"];
         }
         setServiceName(instanceName);
         config = new ConfigurationStruct();
