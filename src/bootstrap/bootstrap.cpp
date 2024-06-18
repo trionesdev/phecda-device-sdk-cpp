@@ -11,10 +11,11 @@ namespace phecda::bootstrap {
     std::shared_ptr<contracts::WaitGroup> runAndReturnWaitGroup(
             CommonArgs *args_,
             std::string &serviceKey,
-            sdk::ConfigurationStruct *serviceConfig,
-            std::shared_ptr<Timer> startupTimer,
-            std::shared_ptr<DiContainer> dic,
-            std::list<std::function<bool(BootstrapHandlerArgs)>> bootstrapHandlers) {
+            std::shared_ptr<sdk::ConfigurationStruct> serviceConfig,
+            const std::shared_ptr<Timer> &startupTimer,
+            const std::shared_ptr<DiContainer> &dic,
+            const std::list<std::function<bool(BootstrapHandlerArgs)>> &bootstrapHandlers
+    ) {
         std::shared_ptr<contracts::WaitGroup> wg = std::make_unique<contracts::WaitGroup>();
         auto envVars_ = Variables::newVariables();
         auto processor = Processor::newProcessor(args_, envVars_, startupTimer, dic);

@@ -108,8 +108,8 @@ namespace phecda::sdk {
             instanceName = Variables::envVars["i"];
         }
         setServiceName(instanceName);
-        config = new ConfigurationStruct();
-        deviceService = new DeviceService();
+        config = std::make_shared<ConfigurationStruct>();
+        deviceService = std::make_shared<DeviceService>();
         deviceService->name = serviceKey_;
 
         this->dic = DiContainer::newContainer({

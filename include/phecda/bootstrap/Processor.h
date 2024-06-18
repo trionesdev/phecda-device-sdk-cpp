@@ -24,10 +24,10 @@ namespace phecda::bootstrap {
         std::shared_ptr<DiContainer> dic;
 
     public:
-        static Processor *newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer> startupTimer,
+        static std::shared_ptr<Processor> newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer> startupTimer,
                                        std::shared_ptr<DiContainer> dic);
 
-        void process(std::string serviceKey, sdk::ConfigurationStruct *serviceConfig);
+        void process(const std::string& serviceKey, std::shared_ptr<sdk::ConfigurationStruct> serviceConfig);
     };
 
 } // bootstrap

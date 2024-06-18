@@ -15,8 +15,8 @@ namespace phecda::sdk::container {
 
     static std::string configurationName = "configurationStruct";
 
-    static ConfigurationStruct *configurationFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
-        return dic->get<ConfigurationStruct *>(configurationName);
+    static std::shared_ptr<ConfigurationStruct> configurationFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
+        return dic->get<std::shared_ptr<ConfigurationStruct>>(configurationName);
     };
 
     static std::string protocolDriverName = "protocolDriver";

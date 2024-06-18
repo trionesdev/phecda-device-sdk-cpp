@@ -9,9 +9,10 @@
 
 
 namespace phecda::bootstrap {
-    Processor *Processor::newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer> startupTimer,
-                                       std::shared_ptr<DiContainer> dic) {
-        auto *processor = new Processor();
+    std::shared_ptr<Processor>
+    Processor::newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer> startupTimer,
+                            std::shared_ptr<DiContainer> dic) {
+        auto processor = std::make_shared<Processor>();
         processor->args = args;
         processor->variables = variables;
         processor->startupTimer = std::move(startupTimer);
@@ -28,7 +29,8 @@ namespace phecda::bootstrap {
     }
 
 
-    void loadConfigYamlFromFile(const std::string &configFile, sdk::ConfigurationStruct *serviceConfig) {
+    void
+    loadConfigYamlFromFile(const std::string &configFile, const std::shared_ptr<sdk::ConfigurationStruct>& serviceConfig) {
         try {
             YAML::Node config = YAML::LoadFile(configFile);
             serviceConfig->MaxEventSize = config["MaxEventSize"].as<int>();
@@ -107,7 +109,7 @@ namespace phecda::bootstrap {
 
     }
 
-    void Processor::process(std::string serviceKey, sdk::ConfigurationStruct *serviceConfig) {
+    void Processor::process(const std::string& serviceKey, std::shared_ptr<sdk::ConfigurationStruct> serviceConfig) {
         std::string filePath = getConfigFileLocation(args);
         loadConfigYamlFromFile(filePath, serviceConfig);
     }
