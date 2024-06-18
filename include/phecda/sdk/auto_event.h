@@ -9,6 +9,7 @@
 #include "phecda/bootstrap/bootstrap.h"
 #include <phecda/contracts/model.h>
 #include <phecda/util/DurationUtils.h>
+#include <phecda/util/Timer.h>
 
 using namespace phecda::bootstrap;
 
@@ -20,9 +21,13 @@ namespace phecda::sdk {
         bool _onChange = false;
         std::map<std::string, std::any> _lastReadings;
         std::chrono::duration<int> _duration;
+        std::shared_ptr<phecda::util::Timer> _timer;
         bool _stop = false;
     public:
-        static std::shared_ptr<Executor> newExecutor(const std::string& deviceName,const contracts::AutoEvent& autoEvent);
+        static std::shared_ptr<Executor>
+        newExecutor(const std::string &deviceName, const contracts::AutoEvent &autoEvent);
+
+        static contracts::Event readResource(const std::shared_ptr<Executor>& executor, DiContainer *dic);
 
         void run(DiContainer *dic);
 
@@ -32,7 +37,7 @@ namespace phecda::sdk {
 
     class AutoEventManager {
     private:
-        std::map<std::string, std::list<Executor>> executorMap = {};
+        std::map<std::string, std::list<std::shared_ptr<Executor>>> executorMap = {};
         std::shared_ptr<contracts::WaitGroup> wg;
         bootstrap::DiContainer *dic;
     public:
@@ -40,9 +45,9 @@ namespace phecda::sdk {
 
         void startAutoEvents();
 
-        void restartForDevice(std::string name);
+        void restartForDevice(const std::string &name);
 
-        void stopForDevice(const std::string& deviceName);
+        void stopForDevice(const std::string &deviceName);
     };
 
 }

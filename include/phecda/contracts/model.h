@@ -99,6 +99,9 @@ namespace phecda::contracts {
         AdminState adminState;
     };
 
+    struct Event{
+
+    };
 
 }
 

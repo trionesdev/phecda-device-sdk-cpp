@@ -3,6 +3,8 @@
 //
 #include <phecda/sdk/auto_event.h>
 #include <phecda/sdk/container.h>
+#include <phecda/sdk/cache.h>
+#include <phecda/contracts/constants.h>
 
 namespace phecda::sdk {
 
@@ -19,13 +21,25 @@ namespace phecda::sdk {
         return executor;
     }
 
-    void Executor::run(DiContainer *dic) {
+    contracts::Event Executor::readResource(const std::shared_ptr<Executor> &executor, DiContainer *dic) {
+        std::map<std::string, std::string> vars = {};
+        vars[phecda::contracts::constants::NAME] = executor->_deviceName;
+        vars[phecda::contracts::constants::COMMAND] = executor->_sourceName;
+        return {};
+    }
 
+    void Executor::run(DiContainer *dic) {
+        std::chrono::milliseconds milliseconds = std::chrono::duration_cast<std::chrono::minutes>(_duration);
+        function<void(void)> fun = [this, dic]() {
+        };
+        _timer = std::make_shared<phecda::util::Timer>();
+        _timer->schedule(fun, milliseconds.count(), milliseconds.count());
     }
 
     void Executor::stop() {
-
+        _stop = true;
     }
+
 
     bool AutoEventManager::bootstrapHandler(phecda::bootstrap::BootstrapHandlerArgs args) {
         auto manager = make_shared<AutoEventManager>();
@@ -55,21 +69,30 @@ namespace phecda::sdk {
         return executors;
     }
 
-    void AutoEventManager::stopForDevice(const std::string& name) {
+    void AutoEventManager::stopForDevice(const std::string &name) {
         if (executorMap.find(name) != executorMap.end()) {
-            for (auto executor: executorMap[name]) {
-                executor.stop();
+            for (const auto &executor: executorMap[name]) {
+                executor->stop();
             }
             executorMap.erase(name);
         }
     }
 
     void AutoEventManager::startAutoEvents() {
-
+        auto devices = phecda::sdk::cache::devices()->all();
+        for (const auto &device: devices) {
+            if (executorMap.find(device.name) != executorMap.end()) {
+                executorMap[device.name] = triggerExecutors(device.name, device.autoEvents, dic);
+            }
+        }
     }
 
-    void AutoEventManager::restartForDevice(std::string name) {
-
+    void AutoEventManager::restartForDevice(const std::string &name) {
+        stopForDevice(name);
+        auto device = phecda::sdk::cache::devices()->forName(name);
+        if (device.has_value()) {
+            executorMap[name] = triggerExecutors(name, device.value().autoEvents, dic);
+        }
     }
 
 
