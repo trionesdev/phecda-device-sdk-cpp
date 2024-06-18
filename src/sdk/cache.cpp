@@ -183,7 +183,7 @@ namespace phecda::sdk::cache {
     }
 
 
-    void initCache(const std::string &instanceName, const std::string &baseServiceName, bootstrap::DiContainer *dic) {
+    void initCache(const std::string &instanceName, const std::string &baseServiceName, std::shared_ptr<bootstrap::DiContainer> dic) {
         DeviceCache::newDeviceCache({});
         ProfileCache::newProfileCache({});
     }

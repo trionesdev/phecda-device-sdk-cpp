@@ -6,6 +6,7 @@
 
 namespace phecda::util {
     void Timer::schedule(std::function<void()> &run, long long delay, long long period) {
+        running_ = true;
         thread_ = std::thread([this, run, delay, period]() {
             if (delay > 0) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(delay));

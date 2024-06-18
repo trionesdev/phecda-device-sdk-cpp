@@ -6,6 +6,7 @@
 #define PHECDA_DEVICE_SDK_PROVISION_H
 
 #include <string>
+#include <memory>
 #include <phecda/bootstrap/di-container.h>
 
 namespace phecda::sdk::provision {
@@ -16,8 +17,8 @@ namespace phecda::sdk::provision {
         OTHER
     };
 
-    void loadProfiles(const std::string& path, phecda::bootstrap::DiContainer *container);
+    void loadProfiles(const std::string& path, std::shared_ptr<bootstrap::DiContainer> dic);
 
-    void loadDevices(const std::string& path, phecda::bootstrap::DiContainer *container);
+    void loadDevices(const std::string& path, std::shared_ptr<bootstrap::DiContainer> dic);
 }
 #endif //PHECDA_DEVICE_SDK_PROVISION_H

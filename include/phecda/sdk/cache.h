@@ -61,7 +61,7 @@ namespace phecda::sdk::cache {
     static std::shared_ptr<DeviceCache> dc;
     static std::shared_ptr<ProfileCache> pc;
 
-    void initCache(const std::string& instanceName, const std::string& baseServiceName, bootstrap::DiContainer *dic);
+    void initCache(const std::string& instanceName, const std::string& baseServiceName, std::shared_ptr<bootstrap::DiContainer> dic);
 
     std::shared_ptr<DeviceCache> devices();
 

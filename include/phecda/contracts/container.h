@@ -12,7 +12,7 @@
 namespace phecda::contracts::container {
     static std::string deviceServiceName = "deviceServiceName";
 
-    DeviceService *deviceServiceFrom(bootstrap::DiContainer *dic);
+    DeviceService *deviceServiceFrom(std::shared_ptr<bootstrap::DiContainer> dic);
 }
 
 #endif //PHECDA_DEVICE_SDK_CONTRACTS_CONTAINER_H

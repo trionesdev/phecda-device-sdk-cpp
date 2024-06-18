@@ -13,7 +13,7 @@ namespace phecda::bootstrap {
             std::string &serviceKey,
             sdk::ConfigurationStruct *serviceConfig,
             std::shared_ptr<Timer> startupTimer,
-            DiContainer *dic,
+            std::shared_ptr<DiContainer> dic,
             std::list<std::function<bool(BootstrapHandlerArgs)>> bootstrapHandlers) {
         std::shared_ptr<contracts::WaitGroup> wg = std::make_unique<contracts::WaitGroup>();
         auto envVars_ = Variables::newVariables();

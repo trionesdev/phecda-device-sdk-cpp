@@ -23,45 +23,48 @@ namespace phecda::sdk {
         CommonArgs *args_;
         DeviceService *deviceService;
 
-        DiContainer *dic;
+        std::shared_ptr<DiContainer> dic;
+
         void setServiceName(std::string instanceName);
+
     public:
         std::string serviceKey_;
         std::string baseServiceName_;
         ProtocolDriver *driver;
-        AutoEventManager *autoEventManager_;
+        std::shared_ptr<AutoEventManager> autoEventManager_;
         ConfigurationStruct *config;
 
         static DeviceServiceSDK newDeviceService(const std::string &serviceKey, const std::string &serviceVersion,
                                                  ProtocolDriver *protocolDriver);
 
-        void addDevice(const Device& device);
+        void addDevice(const Device &device);
 
         std::list<Device> getDevices();
 
-        Device getDeviceByName(const std::string& name);
+        Device getDeviceByName(const std::string &name);
 
-        void updateDevice(const Device& device);
+        void updateDevice(const Device &device);
 
-        void removeDeviceByName(const std::string& name);
+        void removeDeviceByName(const std::string &name);
 
-        void addDeviceProfile(const DeviceProfile& profile);
+        void addDeviceProfile(const DeviceProfile &profile);
 
         std::list<DeviceProfile> deviceProfiles();
 
-        DeviceProfile getProfileByName(const std::string& name);
+        DeviceProfile getProfileByName(const std::string &name);
 
-        void updateDeviceProfile(const DeviceProfile& profile);
+        void updateDeviceProfile(const DeviceProfile &profile);
 
-        void removeDeviceProfileByName(const std::string& name);
+        void removeDeviceProfileByName(const std::string &name);
 
-        DeviceResource deviceResource(const std::string& deviceName, std::string resourceName);
+        DeviceResource deviceResource(const std::string &deviceName, std::string resourceName);
 
-        DeviceCommand deviceCommand(const std::string& deviceName, std::string commandName);
+        DeviceCommand deviceCommand(const std::string &deviceName, std::string commandName);
 
-        void addDeviceAutoEvent(const std::string& deviceName, const std::string& sourceName, const AutoEvent& autoEvent);
+        void
+        addDeviceAutoEvent(const std::string &deviceName, const std::string &sourceName, const AutoEvent &autoEvent);
 
-        void removeDeviceAutoEvent(const std::string& deviceName, const std::string& autoEventName);
+        void removeDeviceAutoEvent(const std::string &deviceName, const std::string &autoEventName);
 
         void run();
 

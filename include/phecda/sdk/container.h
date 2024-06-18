@@ -15,20 +15,20 @@ namespace phecda::sdk::container {
 
     static std::string configurationName = "configurationStruct";
 
-    static ConfigurationStruct *configurationFrom(bootstrap::DiContainer *dic) {
+    static ConfigurationStruct *configurationFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
         return dic->get<ConfigurationStruct *>(configurationName);
     };
 
     static std::string protocolDriverName = "protocolDriver";
 
-    static ProtocolDriver *protocolDriverFrom(bootstrap::DiContainer *dic) {
+    static ProtocolDriver *protocolDriverFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
         return dic->get<ProtocolDriver *>(protocolDriverName);
     };
 
     static std::string autoEventManagerName = "autoEventManager";
 
-    static AutoEventManager *autoEventManagerFrom(bootstrap::DiContainer *dic) {
-        return dic->get<AutoEventManager *>(autoEventManagerName);
+    static std::shared_ptr<AutoEventManager> autoEventManagerFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
+        return dic->get<std::shared_ptr<AutoEventManager>>(autoEventManagerName);
     };
 
 }

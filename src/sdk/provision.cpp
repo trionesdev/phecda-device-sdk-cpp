@@ -107,7 +107,7 @@ namespace phecda::sdk::provision {
         return profiles;
     }
 
-    void loadProfiles(const std::string &path, phecda::bootstrap::DiContainer *container) {
+    void loadProfiles(const std::string &path, std::shared_ptr<bootstrap::DiContainer> dic) {
         if (path.empty()) {
             return;
         }
@@ -211,7 +211,7 @@ namespace phecda::sdk::provision {
         return devices;
     }
 
-    void loadDevices(const std::string &path, phecda::bootstrap::DiContainer *dic) {
+    void loadDevices(const std::string& path, std::shared_ptr<bootstrap::DiContainer> dic) {
         if (path.empty()) {
             return;
         }

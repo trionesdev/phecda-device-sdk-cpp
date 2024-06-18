@@ -21,16 +21,22 @@ namespace phecda::sdk {
         return executor;
     }
 
-    contracts::Event Executor::readResource(const std::shared_ptr<Executor> &executor, DiContainer *dic) {
+    contracts::Event Executor::readResource(const Executor *executor, std::shared_ptr<bootstrap::DiContainer> dic) {
         std::map<std::string, std::string> vars = {};
         vars[phecda::contracts::constants::NAME] = executor->_deviceName;
         vars[phecda::contracts::constants::COMMAND] = executor->_sourceName;
         return {};
     }
 
-    void Executor::run(DiContainer *dic) {
-        std::chrono::milliseconds milliseconds = std::chrono::duration_cast<std::chrono::minutes>(_duration);
+    void Executor::run(const std::shared_ptr<bootstrap::DiContainer>& dic) {
+        std::chrono::milliseconds milliseconds = std::chrono::duration_cast<std::chrono::seconds>(_duration);
         function<void(void)> fun = [this, dic]() {
+            contracts::Event event;
+            try {
+                event = readResource(this, dic);
+            } catch (std::exception &e) {
+            }
+
         };
         _timer = std::make_shared<phecda::util::Timer>();
         _timer->schedule(fun, milliseconds.count(), milliseconds.count());
@@ -52,7 +58,7 @@ namespace phecda::sdk {
 
     std::list<std::shared_ptr<Executor>>
     triggerExecutors(const std::string &deviceName, const std::list<contracts::AutoEvent> &autoEvents,
-                     bootstrap::DiContainer *dic) {
+                     std::shared_ptr<bootstrap::DiContainer> dic) {
         auto executors = std::list<std::shared_ptr<Executor>>();
         if (!autoEvents.empty()) {
             for (const auto &autoEvent: autoEvents) {
@@ -81,7 +87,7 @@ namespace phecda::sdk {
     void AutoEventManager::startAutoEvents() {
         auto devices = phecda::sdk::cache::devices()->all();
         for (const auto &device: devices) {
-            if (executorMap.find(device.name) != executorMap.end()) {
+            if (executorMap.find(device.name) == executorMap.end()) {
                 executorMap[device.name] = triggerExecutors(device.name, device.autoEvents, dic);
             }
         }

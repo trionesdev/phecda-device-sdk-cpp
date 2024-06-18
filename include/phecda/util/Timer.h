@@ -15,6 +15,7 @@ namespace phecda::util {
         bool running_;
         std::thread thread_;
     public:
+        Timer() : running_(false) {}
         void schedule(std::function<void()> &run, long long delay, long long period);
 
         void stop();

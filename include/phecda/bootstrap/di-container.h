@@ -21,8 +21,8 @@ namespace phecda::bootstrap {
         std::map<std::string, std::any> serviceMap;
         std::mutex mutex;
     public:
-        static DiContainer *newContainer(const ServiceConstructorMap &services) {
-            auto *container = new DiContainer();
+        static std::shared_ptr<DiContainer> newContainer(const ServiceConstructorMap &services) {
+            auto container = std::make_shared<DiContainer>();
             for (const auto &service: services) {
                 container->serviceMap[service.first] = service.second;
             }
@@ -36,7 +36,7 @@ namespace phecda::bootstrap {
         };
 
         template<typename T>
-        T get(std::string name) {
+        T get(std::string &name) {
             return std::any_cast<T>(serviceMap[name]);
         };
 

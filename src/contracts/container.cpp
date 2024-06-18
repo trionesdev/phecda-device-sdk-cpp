@@ -4,7 +4,7 @@
 #include <phecda/contracts/container.h>
 
 namespace phecda::contracts::container {
-    DeviceService *deviceServiceFrom(bootstrap::DiContainer *dic) {
+    DeviceService *deviceServiceFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
         return dic->get<DeviceService *>(deviceServiceName);
     }
 }

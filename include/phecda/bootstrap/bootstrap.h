@@ -16,7 +16,7 @@
 namespace phecda::bootstrap {
     struct BootstrapHandlerArgs {
         std::shared_ptr<contracts::WaitGroup> wg;
-        DiContainer *dic;
+        std::shared_ptr<DiContainer> dic;
         std::shared_ptr<Timer> startupTimer;
     };
 
@@ -25,7 +25,7 @@ namespace phecda::bootstrap {
             std::string &serviceKey,
             sdk::ConfigurationStruct *serviceConfig,
             std::shared_ptr<Timer> startupTimer,
-            DiContainer *dic,
+            std::shared_ptr<DiContainer> dic,
             std::list<std::function<bool(BootstrapHandlerArgs)>> bootstrapHandlers);
 
 }

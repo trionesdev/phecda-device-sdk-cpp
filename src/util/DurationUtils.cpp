@@ -16,7 +16,7 @@ namespace phecda::util {
             if (unit == "s") {
                 return std::chrono::seconds(num);
             } else if (unit == "m") {
-                return std::chrono::minutes(num);
+                return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::minutes(num));
             } else if (unit == "h") {
             }
         }

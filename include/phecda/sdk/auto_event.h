@@ -27,9 +27,9 @@ namespace phecda::sdk {
         static std::shared_ptr<Executor>
         newExecutor(const std::string &deviceName, const contracts::AutoEvent &autoEvent);
 
-        static contracts::Event readResource(const std::shared_ptr<Executor>& executor, DiContainer *dic);
+        static contracts::Event readResource(const Executor* executor, std::shared_ptr<bootstrap::DiContainer> dic);
 
-        void run(DiContainer *dic);
+        void run(const std::shared_ptr<bootstrap::DiContainer>& dic);
 
         void stop();
     };
@@ -39,7 +39,7 @@ namespace phecda::sdk {
     private:
         std::map<std::string, std::list<std::shared_ptr<Executor>>> executorMap = {};
         std::shared_ptr<contracts::WaitGroup> wg;
-        bootstrap::DiContainer *dic;
+        std::shared_ptr<bootstrap::DiContainer> dic;
     public:
         static bool bootstrapHandler(BootstrapHandlerArgs args);
 

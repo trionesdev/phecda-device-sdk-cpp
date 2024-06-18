@@ -14,7 +14,7 @@ namespace phecda::sdk {
         return bootstrap;
     }
 
-    bool Bootstrap::bootstrapHandler(bootstrap::BootstrapHandlerArgs args) {
+    bool Bootstrap::bootstrapHandler(const bootstrap::BootstrapHandlerArgs& args) {
         auto dic = args.dic;
         ds->autoEventManager_ = container::autoEventManagerFrom(dic);
 

@@ -14,7 +14,6 @@
 #include  <phecda/sdk/config.h>
 
 
-
 namespace phecda::bootstrap {
 
     class Processor {
@@ -22,10 +21,11 @@ namespace phecda::bootstrap {
         CommonArgs *args;
         Variables *variables;
         std::shared_ptr<Timer> startupTimer;
-        DiContainer *dic;
+        std::shared_ptr<DiContainer> dic;
 
     public:
-        static Processor *newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer>  startupTimer, DiContainer *dic);
+        static Processor *newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer> startupTimer,
+                                       std::shared_ptr<DiContainer> dic);
 
         void process(std::string serviceKey, sdk::ConfigurationStruct *serviceConfig);
     };

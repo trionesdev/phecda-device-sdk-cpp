@@ -8,9 +8,9 @@
 #include <utility>
 
 
-
 namespace phecda::bootstrap {
-    Processor *Processor::newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer> startupTimer, DiContainer *dic) {
+    Processor *Processor::newProcessor(CommonArgs *args, Variables *variables, std::shared_ptr<Timer> startupTimer,
+                                       std::shared_ptr<DiContainer> dic) {
         auto *processor = new Processor();
         processor->args = args;
         processor->variables = variables;
