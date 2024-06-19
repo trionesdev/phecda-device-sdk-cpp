@@ -10,23 +10,34 @@
 #include <any>
 #include <list>
 
-namespace phecda::sdk{
+namespace phecda::sdk {
 
-    struct CommandRequest{
+    struct CommandRequest {
         std::string deviceResourceName;
         std::map<std::string, std::any> attributes;
         std::string type;
     };
 
-    struct CommandValue{
+    struct CommandValue {
         std::string deviceResourceName;
-        std::string  type;
+        std::string type;
         std::any value;
-        long origin;
-        std::map<std::string,std::any> tags;
+        long origin = 0;
+        std::map<std::string, std::any> tags;
+
+    public:
+        static CommandValue
+        newCommandValue(const std::string &deviceResourceName, const std::string &valueType, const std::any &value) {
+            CommandValue cv;
+            cv.deviceResourceName = deviceResourceName;
+            cv.type = valueType;
+            cv.value = value;
+            return cv;
+        }
+
     };
 
-    struct AsyncValues{
+    struct AsyncValues {
         std::string deviceName;
         std::string sourceName;
         std::list<CommandRequest> commandValues;
