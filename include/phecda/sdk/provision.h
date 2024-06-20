@@ -17,7 +17,7 @@ namespace phecda::sdk::provision {
         OTHER
     };
 
-    void loadProfiles(const std::string& path, std::shared_ptr<bootstrap::DiContainer> dic);
+    void loadProfiles(const std::string& path, const std::shared_ptr<bootstrap::DiContainer>& dic);
 
     void loadDevices(const std::string& path, std::shared_ptr<bootstrap::DiContainer> dic);
 }

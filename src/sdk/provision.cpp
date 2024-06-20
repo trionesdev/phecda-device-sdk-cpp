@@ -107,7 +107,7 @@ namespace phecda::sdk::provision {
         return profiles;
     }
 
-    void loadProfiles(const std::string &path, std::shared_ptr<bootstrap::DiContainer> dic) {
+    void loadProfiles(const std::string &path, const std::shared_ptr<bootstrap::DiContainer>& dic) {
         if (path.empty()) {
             return;
         }

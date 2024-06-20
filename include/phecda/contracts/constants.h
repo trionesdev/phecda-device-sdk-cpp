@@ -2,8 +2,8 @@
 // Created by fengxiaotx on 2024/6/18.
 //
 
-#ifndef PHECDA_DEVICE_SDK_CONSTANTS_H
-#define PHECDA_DEVICE_SDK_CONSTANTS_H
+#ifndef PHECDA_DEVICE_SDK_CONTRACTS_CONSTANTS_H
+#define PHECDA_DEVICE_SDK_CONTRACTS_CONSTANTS_H
 
 #include <string>
 
@@ -35,4 +35,4 @@ namespace phecda::contracts::constants {
 
 }
 
-#endif //PHECDA_DEVICE_SDK_CONSTANTS_H
+#endif //PHECDA_DEVICE_SDK_CONTRACTS_CONSTANTS_H

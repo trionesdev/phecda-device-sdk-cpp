@@ -1,13 +1,15 @@
 //
 // Created by fengxiaotx on 2024/6/17.
 //
-
 #include "phecda/sdk/application.h"
 #include "phecda/contracts/container.h"
+#include "phecda/sdk/container.h"
 #include "phecda/contracts/errors.h"
 #include "phecda/contracts/constants.h"
+#include "phecda/sdk/constants.h"
 #include "phecda/sdk/cache.h"
 #include "phecda/sdk/model.h"
+#include "phecda/sdk/transformer.h"
 #include <boost/algorithm/string.hpp>
 #include <nlohmann/json.hpp>
 
@@ -141,6 +143,7 @@ namespace phecda::sdk::application {
             const std::map<std::string, std::any> &requests,
             const std::shared_ptr<bootstrap::DiContainer> &dic
     ) {
+
         return std::nullopt;
     }
 
@@ -166,10 +169,33 @@ namespace phecda::sdk::application {
                                                        " not found in request body and no default value defined");
             }
             v = dr->properties.defaultValue;
-        }
+            auto cv = createCommandValueFromDeviceResource(dr.value(), v);
+            auto req = CommandRequest();
+            req.deviceResourceName = cv.deviceResourceName;
+            req.attributes = dr->attributes;
+            req.type = cv.type;
+            if (attributes.empty()) {
+                if (req.attributes.empty()) {
+                    req.attributes = {};
+                }
+                req.attributes[phecda::sdk::constants::URLRawQuery] = attributes;
+            }
 
+            auto configuration = sdk::container::configurationFrom(dic);
+            if (configuration->device.dataTransform) {
+                sdk::transformer::transformWriteParameter(cv, dr->properties);
+            }
+            auto driver = sdk::container::protocolDriverFrom(dic);
+            if (driver != nullptr) {
+                driver->handleWriteCommands(device.name, device.protocols, {req}, {cv});
+            }
+            if (dr->properties.readWrite == contracts::constants::READ_WRITE_W) {
+                return transformer::commandValuesToEvent({cv}, device.name, resourceName, false, dic);
+            }
+        }
         return std::nullopt;
     }
+
 
     std::optional<contracts::Device> validateServiceAndDeviceState(
             const std::string &deviceName, const std::shared_ptr<bootstrap::DiContainer> &dic

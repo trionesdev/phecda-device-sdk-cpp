@@ -8,10 +8,10 @@
 #include "phecda/sdk/config.h"
 #include "phecda/sdk/auto_event.h"
 #include "phecda/bootstrap/di-container.h"
-//#include "ProtocolDriver.h"
+#include <phecda/sdk/ProtocolDriver.h>
 
 namespace phecda::sdk::container {
-    class ProtocolDriver;
+//    class ProtocolDriver;
 
     static std::string configurationName = "configurationStruct";
 

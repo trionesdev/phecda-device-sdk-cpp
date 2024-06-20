@@ -10,7 +10,9 @@ add_definitions( -D_WIN32_WINNT=0x0A00 )
 add_subdirectory(test)
 
 file(GLOB HEADERS "${PROJECT_SOURCE_DIR}/include/**/*")
-file(GLOB SOURCES "${PROJECT_SOURCE_DIR}/src/**/*" "${PROJECT_SOURCE_DIR}/src/*")
+#file(GLOB HEADERS "${PROJECT_SOURCE_DIR}/include/*.h")
+file(GLOB SOURCES "${PROJECT_SOURCE_DIR}/src/*/*/*" "${PROJECT_SOURCE_DIR}/src/**/*" "${PROJECT_SOURCE_DIR}/src/*")
+#file(GLOB SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 #include_directories(${PROJECT_SOURCE_DIR}/third-party/include)
