@@ -99,8 +99,26 @@ namespace phecda::contracts {
         AdminState adminState;
     };
 
-    struct Event{
+    struct BaseReading{
+        std::string id;
+        std::string origin;
+        std::string deviceName;
+        std::string resourceName;
+        std::string profileName;
+        std::string valueType;
+        std::string utils;
+        std::map<std::string, std::any> tags;
+        std::byte binaryValue ;
+    };
 
+    struct Event{
+        std::string id;
+        std::string deviceName;
+        std::string profileName;
+        std::string sourceName;
+        long origin;
+        std::list<BaseReading> readings;
+        std::map<std::string, std::any> tags;
     };
 
 }

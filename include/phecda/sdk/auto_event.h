@@ -5,6 +5,7 @@
 #ifndef PHECDA_DEVICE_AUTOEVENTMANAGER_H
 #define PHECDA_DEVICE_AUTOEVENTMANAGER_H
 
+#include <optional>
 #include "phecda/bootstrap/di-container.h"
 #include "phecda/bootstrap/bootstrap.h"
 #include <phecda/contracts/model.h>
@@ -27,7 +28,7 @@ namespace phecda::sdk {
         static std::shared_ptr<Executor>
         newExecutor(const std::string &deviceName, const contracts::AutoEvent &autoEvent);
 
-        static contracts::Event readResource(const Executor* executor, std::shared_ptr<bootstrap::DiContainer> dic);
+        static std::optional<contracts::Event> readResource(const Executor* executor, std::shared_ptr<bootstrap::DiContainer> dic);
 
         void run(const std::shared_ptr<bootstrap::DiContainer>& dic);
 

@@ -16,18 +16,18 @@ namespace phecda::contracts {
     }
 
     std::string CommonPhecdaException::error() {
-        return PhecdaException::error();
+        return "";
     }
 
     std::string CommonPhecdaException::debugMessages() {
-        return PhecdaException::debugMessages();
+        return "";
     }
 
     std::string CommonPhecdaException::message() {
-        return PhecdaException::message();
+        return "";
     }
 
     int CommonPhecdaException::code() {
-        return PhecdaException::code();
+        return 0;
     }
 }

@@ -394,7 +394,7 @@ namespace phecda::sdk::application {
         return std::nullopt;
     }
 
-    static std::optional<contracts::Event> getCommand(
+     std::optional<contracts::Event> getCommand(
             const std::string &deviceName, const std::string &commandName, const std::string &queryParams,
             bool regexCmd,
             const std::shared_ptr<bootstrap::DiContainer> &dic
@@ -422,7 +422,7 @@ namespace phecda::sdk::application {
         }
     }
 
-    static std::optional<contracts::Event> setCommand(
+    std::optional<contracts::Event> setCommand(
             const std::string &deviceName, const std::string &commandName, const std::string &queryParams,
             const std::map<std::string, std::any> &requests,
             const std::shared_ptr<bootstrap::DiContainer> &dic

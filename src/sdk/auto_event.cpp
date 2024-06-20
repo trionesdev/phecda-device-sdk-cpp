@@ -5,9 +5,16 @@
 #include <phecda/sdk/container.h>
 #include <phecda/sdk/cache.h>
 #include <phecda/contracts/constants.h>
+#include <phecda/sdk/application.h>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/uuid_generators.hpp>
 
 namespace phecda::sdk {
 
+    bool compareReadings(std::list<contracts::BaseReading> readings){
+        return true;
+    }
 
     std::shared_ptr<Executor>
     Executor::newExecutor(const std::string &deviceName, const contracts::AutoEvent &autoEvent) {
@@ -21,20 +28,29 @@ namespace phecda::sdk {
         return executor;
     }
 
-    contracts::Event Executor::readResource(const Executor *executor, std::shared_ptr<bootstrap::DiContainer> dic) {
+    std::optional<contracts::Event>
+    Executor::readResource(const Executor *executor, std::shared_ptr<bootstrap::DiContainer> dic) {
         std::map<std::string, std::string> vars = {};
         vars[phecda::contracts::constants::NAME] = executor->_deviceName;
         vars[phecda::contracts::constants::COMMAND] = executor->_sourceName;
-        return {};
+        return phecda::sdk::application::getCommand(executor->_deviceName, executor->_sourceName, "", false, dic);
     }
 
-    void Executor::run(const std::shared_ptr<bootstrap::DiContainer>& dic) {
+    void Executor::run(const std::shared_ptr<bootstrap::DiContainer> &dic) {
         std::chrono::milliseconds milliseconds = std::chrono::duration_cast<std::chrono::seconds>(_duration);
         function<void(void)> fun = [this, dic]() {
-            contracts::Event event;
+            std::optional<contracts::Event> event;
             try {
                 event = readResource(this, dic);
             } catch (std::exception &e) {
+            }
+            if(event.has_value()){
+                if(_onChange){
+                    if(!compareReadings(event.value().readings)){
+                        //TODO
+                    }
+                }
+                auto correlationId = boost::uuids::to_string(boost::uuids::random_generator()());
             }
 
         };

@@ -25,7 +25,7 @@ namespace phecda::contracts {
         std::string _callerInfo;
         std::string _kind;
         std::string _message;
-        int _code;
+        int _code{};
         std::exception _err;
 
     public:
