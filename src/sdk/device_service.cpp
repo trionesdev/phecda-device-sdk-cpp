@@ -9,6 +9,7 @@
 #include "phecda/bootstrap/bootstrap.h"
 #include "phecda/sdk/auto_event.h"
 #include "phecda/sdk/service.h"
+#include "phecda/sdk/constants.h"
 
 
 using namespace phecda::bootstrap;
@@ -37,55 +38,61 @@ namespace phecda::sdk {
         if (serviceVersion.empty()) {
             throw std::invalid_argument("please specify device service version");
         }
-        return {};
+        phecda::sdk::constants::ServiceVersion = serviceVersion;
+        DeviceServiceSDK deviceServiceSdk;
+        deviceServiceSdk.serviceKey_ = serviceKey;
+        deviceServiceSdk.driver = protocolDriver;
+        deviceServiceSdk.config = std::make_shared<phecda::sdk::ConfigurationStruct>();
+        return deviceServiceSdk;
     }
 
-    void DeviceServiceSDK::addDevice(const Device& device) {
+    void DeviceServiceSDK::addDevice(const Device &device) {
     }
 
     std::list<Device> DeviceServiceSDK::getDevices() {
         return {};
     }
 
-    Device DeviceServiceSDK::getDeviceByName(const std::string& name) {
+    Device DeviceServiceSDK::getDeviceByName(const std::string &name) {
         return {};
     }
 
-    void DeviceServiceSDK::updateDevice(const Device& device) {
+    void DeviceServiceSDK::updateDevice(const Device &device) {
     }
 
-    void DeviceServiceSDK::removeDeviceByName(const std::string& name) {
+    void DeviceServiceSDK::removeDeviceByName(const std::string &name) {
     }
 
-    void DeviceServiceSDK::addDeviceProfile(const DeviceProfile& profile) {
+    void DeviceServiceSDK::addDeviceProfile(const DeviceProfile &profile) {
     }
 
     std::list<DeviceProfile> DeviceServiceSDK::deviceProfiles() {
         return std::list<DeviceProfile>();
     }
 
-    DeviceProfile DeviceServiceSDK::getProfileByName(const std::string& name) {
+    DeviceProfile DeviceServiceSDK::getProfileByName(const std::string &name) {
         return DeviceProfile();
     }
 
-    void DeviceServiceSDK::updateDeviceProfile(const DeviceProfile& profile) {
+    void DeviceServiceSDK::updateDeviceProfile(const DeviceProfile &profile) {
     }
 
-    void DeviceServiceSDK::removeDeviceProfileByName(const std::string& name) {
+    void DeviceServiceSDK::removeDeviceProfileByName(const std::string &name) {
     }
 
-    DeviceResource DeviceServiceSDK::deviceResource(const std::string& deviceName, std::string resourceName) {
+    DeviceResource DeviceServiceSDK::deviceResource(const std::string &deviceName, std::string resourceName) {
         return DeviceResource();
     }
 
-    DeviceCommand DeviceServiceSDK::deviceCommand(const std::string& deviceName, std::string commandName) {
+    DeviceCommand DeviceServiceSDK::deviceCommand(const std::string &deviceName, std::string commandName) {
         return DeviceCommand();
     }
 
-    void DeviceServiceSDK::addDeviceAutoEvent(const std::string& deviceName, const std::string& sourceName, const AutoEvent& autoEvent) {
+    void DeviceServiceSDK::addDeviceAutoEvent(const std::string &deviceName, const std::string &sourceName,
+                                              const AutoEvent &autoEvent) {
     }
 
-    void DeviceServiceSDK::removeDeviceAutoEvent(const std::string& deviceName, const std::string& autoEventName) {
+    void DeviceServiceSDK::removeDeviceAutoEvent(const std::string &deviceName, const std::string &autoEventName) {
     }
 
     void DeviceServiceSDK::run() {

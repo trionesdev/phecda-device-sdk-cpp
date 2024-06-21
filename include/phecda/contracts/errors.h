@@ -38,6 +38,8 @@ namespace phecda::contracts {
 
         CommonPhecdaException() = default;
 
+        char const* what() const override;
+
         std::string error() override;
 
         std::string debugMessages() override;
@@ -45,6 +47,8 @@ namespace phecda::contracts {
         std::string message() override;
 
         int code() override;
+
+        std::string kind();
 
     };
     namespace error_kind{

@@ -9,10 +9,11 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
+#include <phecda/sdk/common_utils.h>
 
 namespace phecda::sdk {
 
-    bool compareReadings(std::list<contracts::BaseReading> readings){
+    bool compareReadings(std::list<contracts::BaseReading> readings) {
         return true;
     }
 
@@ -38,24 +39,26 @@ namespace phecda::sdk {
 
     void Executor::run(const std::shared_ptr<bootstrap::DiContainer> &dic) {
         std::chrono::milliseconds milliseconds = std::chrono::duration_cast<std::chrono::seconds>(_duration);
-        function<void(void)> fun = [this, dic]() {
+        function<void(void)> task = [this, dic]() {
             std::optional<contracts::Event> event;
             try {
                 event = readResource(this, dic);
             } catch (std::exception &e) {
+                std::cout << "readResource error:" << e.what() << std::endl;
             }
-            if(event.has_value()){
-                if(_onChange){
-                    if(!compareReadings(event.value().readings)){
+            if (event.has_value()) {
+                if (_onChange) {
+                    if (!compareReadings(event.value().readings)) {
                         //TODO
                     }
                 }
                 auto correlationId = boost::uuids::to_string(boost::uuids::random_generator()());
+                sendEvent(event.value(), correlationId, dic);
             }
 
         };
         _timer = std::make_shared<phecda::util::Timer>();
-        _timer->schedule(fun, milliseconds.count(), milliseconds.count());
+        _timer->schedule(task, milliseconds.count(), milliseconds.count());
     }
 
     void Executor::stop() {

@@ -25,6 +25,9 @@ namespace phecda::sdk {
         long origin = 0;
         std::map<std::string, std::any> tags;
 
+         std::string toString() {
+            return "";
+        }
     public:
         static CommandValue
         newCommandValue(const std::string &deviceResourceName, const std::string &valueType, const std::any &value) {
@@ -34,6 +37,9 @@ namespace phecda::sdk {
             cv.value = value;
             return cv;
         }
+
+
+
 
     };
 

@@ -8,7 +8,6 @@
 #include "phecda/contracts/constants.h"
 #include "phecda/sdk/constants.h"
 #include "phecda/sdk/cache.h"
-#include "phecda/sdk/model.h"
 #include "phecda/sdk/transformer.h"
 #include <boost/algorithm/string.hpp>
 #include <nlohmann/json.hpp>
@@ -377,21 +376,21 @@ namespace phecda::sdk::application {
             const std::string &deviceName, const std::shared_ptr<bootstrap::DiContainer> &dic
     ) {
         auto ds = phecda::contracts::container::deviceServiceFrom(dic);
-        if (ds->adminState == contracts::AdminState::LOCKED) {
+        if (ds->adminState == to_string(contracts::AdminState::LOCKED)) {
             throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVICE_LOCKED, "service locked");
         }
         auto device = cache::devices()->forName(deviceName);
         if (device.has_value()) {
-            if (device->adminState == contracts::AdminState::LOCKED) {
+            if (device->adminState == to_string(contracts::AdminState::LOCKED)) {
                 throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVICE_LOCKED,
                                                        "device " + deviceName + " locked");
             }
-            if (device->operatingState == contracts::OperatingState::DOWN) {
+            if (device->operatingState == to_string(contracts::OperatingState::DOWN)) {
                 throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVICE_LOCKED,
                                                        "device " + deviceName + " OperatingState is DOWN");
             }
         }
-        return std::nullopt;
+        return device;
     }
 
      std::optional<contracts::Event> getCommand(

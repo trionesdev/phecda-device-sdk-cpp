@@ -22,7 +22,7 @@ namespace phecda {
     std::list<sdk::CommandValue> sdk::ProtocolDriver::handleReadCommands(std::string deviceName,
                                                                std::map<std::string, std::map<std::string, std::any>> protocols,
                                                                list<CommandRequest> reqs) {
-        return list<CommandValue>();
+        return {{}};
     }
 
     void sdk::ProtocolDriver::handleWriteCommands(std::string deviceName,

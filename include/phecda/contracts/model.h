@@ -28,8 +28,8 @@ namespace phecda::contracts {
         std::string id;
         std::string name;
         std::string description;
-        AdminState adminState;
-        OperatingState operatingState;
+        std::string adminState;
+        std::string operatingState;
         std::map<std::string, std::map<std::string, std::any>> protocols;
         std::list<std::string> labels;
         std::any location;
@@ -96,10 +96,10 @@ namespace phecda::contracts {
         std::string name;
         std::string description;
         std::list<std::string> labels;
-        AdminState adminState;
+        std::string adminState;
     };
 
-    struct BaseReading{
+    struct BaseReading {
         std::string id;
         std::string origin;
         std::string deviceName;
@@ -108,10 +108,10 @@ namespace phecda::contracts {
         std::string valueType;
         std::string utils;
         std::map<std::string, std::any> tags;
-        std::byte binaryValue ;
+        std::byte binaryValue;
     };
 
-    struct Event{
+    struct Event {
         std::string id;
         std::string deviceName;
         std::string profileName;
@@ -119,6 +119,12 @@ namespace phecda::contracts {
         long origin;
         std::list<BaseReading> readings;
         std::map<std::string, std::any> tags;
+
+        static Event newEvent(std::string profileName, std::string deviceName, std::string sourceName) {
+            Event event;
+            return event;
+        }
+
     };
 
 }

@@ -15,6 +15,7 @@ namespace phecda::contracts {
         return ex;
     }
 
+
     std::string CommonPhecdaException::error() {
         return "";
     }
@@ -30,4 +31,14 @@ namespace phecda::contracts {
     int CommonPhecdaException::code() {
         return 0;
     }
+
+    char const *CommonPhecdaException::what() const {
+        return _message.c_str();
+    }
+
+    std::string CommonPhecdaException::kind() {
+        return _kind;
+    }
+
+
 }
