@@ -31,6 +31,7 @@ namespace phecda::contracts::constants {
     static std::string VALUE_TYPE_FLOAT_ARRAY = "FloatArray";
     static std::string VALUE_TYPE_DOUBLE_ARRAY = "DoubleArray";
     static std::string VALUE_TYPE_OBJECT_ARRAY = "ObjectArray";
+    static std::string VALUE_TYPE_BINARY = "Binary";
     //endregion
 
 }

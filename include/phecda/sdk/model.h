@@ -9,6 +9,7 @@
 #include <map>
 #include <any>
 #include <list>
+#include <vector>
 
 namespace phecda::sdk {
 
@@ -25,21 +26,15 @@ namespace phecda::sdk {
         long origin = 0;
         std::map<std::string, std::any> tags;
 
-         std::string toString() {
-            return "";
-        }
-    public:
         static CommandValue
-        newCommandValue(const std::string &deviceResourceName, const std::string &valueType, const std::any &value) {
-            CommandValue cv;
-            cv.deviceResourceName = deviceResourceName;
-            cv.type = valueType;
-            cv.value = value;
-            return cv;
-        }
-
-
-
+        newCommandValue(const std::string &deviceResourceName, const std::string &valueType, const std::any &value);
+        std::string toString();
+        std::string valueToString();
+        int intValue();
+        long longValue();
+        float floatValue();
+        double doubleValue();
+        std::vector<std::byte> binaryValue();
 
     };
 

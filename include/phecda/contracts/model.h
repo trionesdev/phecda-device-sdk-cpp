@@ -9,6 +9,7 @@
 #include <map>
 #include <any>
 #include <list>
+#include <vector>
 #include "enums.h"
 
 namespace phecda::contracts {
@@ -101,14 +102,35 @@ namespace phecda::contracts {
 
     struct BaseReading {
         std::string id;
-        std::string origin;
+        long long origin;
         std::string deviceName;
         std::string resourceName;
         std::string profileName;
         std::string valueType;
         std::string utils;
         std::map<std::string, std::any> tags;
+        std::vector<std::byte> binaryValue;
+        std::string mediaType;
+        std::any objectValue;
+        std::string value;
+
+        static BaseReading newBaseReading(const std::string& profileName, const std::string& deviceName, const std::string& resourceName,const std::string& valueType );
+
+    };
+
+    struct BinaryReading : BaseReading {
         std::byte binaryValue;
+        std::string mediaType;
+        static BaseReading newBinaryReading(const std::string& profileName, const std::string& deviceName, const std::string& resourceName,const std::vector<std::byte>& binaryValue, const std::string& mediaType );
+    };
+
+    struct ObjectReading : BaseReading {
+        std::any objectValue;
+        static BaseReading newObjectReading(const std::string& profileName, const std::string& deviceName, const std::string& resourceName,const std::any& objectValue );
+    };
+    struct SimpleReading : BaseReading {
+        std::string value;
+        static BaseReading newSimpleReading(const std::string& profileName, const std::string& deviceName, const std::string& resourceName,const std::string& valueType,std::any& value );
     };
 
     struct Event {
@@ -116,7 +138,7 @@ namespace phecda::contracts {
         std::string deviceName;
         std::string profileName;
         std::string sourceName;
-        long origin;
+        long long origin;
         std::list<BaseReading> readings;
         std::map<std::string, std::any> tags;
 

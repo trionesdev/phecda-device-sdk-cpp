@@ -3,6 +3,7 @@
 //
 #include "phecda/sdk/transformer.h"
 #include <iostream>
+#include <cmath>
 #include <chrono>
 #include "phecda/contracts/errors.h"
 #include "phecda/contracts/constants.h"
@@ -12,25 +13,325 @@
 
 namespace phecda::sdk::transformer {
 
-    long uniqueOrigin() {
+    long long uniqueOrigin() {
         auto currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()
         );
         return currentTime.count();
     }
 
-    void transformWriteParameter(const CommandValue &cv, const contracts::ResourceProperties &pv) {
-        std::cout << "sss" << std::endl;
+    bool isNan(CommandValue cv) {
+        if (cv.type == contracts::constants::VALUE_TYPE_FLOAT) {
+            auto v = cv.floatValue();
+            return std::isnan(v);
+        }
+        if (cv.type == contracts::constants::VALUE_TYPE_DOUBLE) {
+            auto v = cv.doubleValue();
+            return std::isnan(v);
+        }
+        return false;
     }
 
-    void validateWriteMaximum(std::any value, double maximum) {
-        std::cout << "sss" << std::endl;
+    bool isNumericValueType(CommandValue cv) {
+        if (cv.type == contracts::constants::VALUE_TYPE_INT || cv.type == contracts::constants::VALUE_TYPE_LONG
+            || cv.type == contracts::constants::VALUE_TYPE_FLOAT ||
+            cv.type == contracts::constants::VALUE_TYPE_DOUBLE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    bool checkTransformedValueInRange(std::any origin, double transformed) {
+        bool isRange = false;
+        int minValue = std::numeric_limits<int>::min();
+        int maxValue = std::numeric_limits<int>::max();
+        if (origin.type().name() == typeid(int).name()) {
+            if (transformed >= minValue || transformed <= maxValue) {
+                isRange = true;
+            }
+        }
+        return isRange;
+    }
+
+    std::any transformBase(std::any value, double base, bool read) {
+        double doubleValue = 0.0;
+        if (value.type().name() == typeid(int).name() || value.type().name() == typeid(long).name()
+            || value.type().name() == typeid(float).name() || value.type().name() == typeid(double).name()) {
+            doubleValue = std::any_cast<double>(value);
+        }
+        if (read) {
+            doubleValue = pow(base, doubleValue);
+        } else {
+            doubleValue = std::log(doubleValue) / std::log(base);
+        }
+        auto inRange = checkTransformedValueInRange(value, doubleValue);
+        if (!inRange) {
+            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_OVERFLOW_ERROR,
+                                                   "transformed value out of its original type (" +
+                                                   std::any_cast<std::string>(value) + ") range");
+        }
+        if (value.type().name() == typeid(int).name()) {
+            return static_cast<int>(doubleValue);
+        } else if (value.type().name() == typeid(long).name()) {
+            return static_cast<long>(doubleValue);
+        } else if (value.type().name() == typeid(float).name()) {
+            return static_cast<float>(doubleValue);
+        } else if (value.type().name() == typeid(double).name()) {
+            return doubleValue;
+        } else {
+            return value;
+        }
+    }
+
+    std::any transformScale(std::any value, double scale, bool read) {
+        double valueDouble;
+        if (value.type().name() == typeid(int).name()) {
+            valueDouble = std::any_cast<int>(value);
+        } else if (value.type().name() == typeid(long).name()) {
+            valueDouble = std::any_cast<long>(value);
+        } else if (value.type().name() == typeid(float).name()) {
+            valueDouble = std::any_cast<float>(value);
+        } else if (value.type().name() == typeid(double).name()) {
+            valueDouble = std::any_cast<double>(value);
+        } else {
+            return value;
+        }
+        if (read) {
+            return valueDouble * scale;
+        } else {
+            return valueDouble / scale;
+        }
+        auto inRange = checkTransformedValueInRange(value, valueDouble);
+        if (!inRange) {
+            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_OVERFLOW_ERROR,
+                                                   "transformed value out of its original type (" +
+                                                   std::any_cast<std::string>(value) + ") range");
+        }
+        if (value.type().name() == typeid(int).name()) {
+            if (read) {
+                return std::any_cast<int>(value) * scale;
+            } else {
+                return std::any_cast<int>(value) / scale;
+            }
+        }
+        if (value.type().name() == typeid(long).name()) {
+            if (read) {
+                return std::any_cast<long>(value) * scale;
+            } else {
+                return std::any_cast<long>(value) / scale;
+            }
+        }
+        if (value.type().name() == typeid(float).name()) {
+            if (read) {
+                return std::any_cast<float>(value) * scale;
+            } else {
+                return std::any_cast<float>(value) / scale;
+            }
+        }
+
+        if (value.type().name() == typeid(double).name()) {
+            if (read) {
+                return std::any_cast<double>(value) * scale;
+            } else {
+                return std::any_cast<double>(value) / scale;
+            }
+        }
+        return value;
+    }
+
+    std::any transformOffset(std::any value, double offset, bool read) {
+        auto valueDouble = std::any_cast<double>(value);
+        if (read) {
+            return valueDouble + offset;
+        } else {
+            return valueDouble - offset;
+        }
+        auto inRange = checkTransformedValueInRange(value, valueDouble);
+        if (!inRange) {
+            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_OVERFLOW_ERROR,
+                                                   "transformed value out of its original type (" +
+                                                   std::any_cast<std::string>(value) + ") range");
+        }
+        if (value.type().name() == typeid(int).name()) {
+            if (read) {
+                return std::any_cast<int>(value) + offset;
+            } else {
+                return std::any_cast<int>(value) - offset;
+            }
+        }
+        if (value.type().name() == typeid(long).name()) {
+            if (read) {
+                return std::any_cast<long>(value) + offset;
+            } else {
+                return std::any_cast<long>(value) - offset;
+            }
+        }
+        if (value.type().name() == typeid(float).name()) {
+            if (read) {
+                return std::any_cast<float>(value) + offset;
+            } else {
+                return std::any_cast<float>(value) - offset;
+            }
+        }
+        if (value.type().name() == typeid(double).name()) {
+            if (read) {
+                return std::any_cast<double>(value) + offset;
+            } else {
+                return std::any_cast<double>(value) - offset;
+            }
+        }
+        return value;
+    }
+
+    std::any transformReadMask(std::any value, long mask) {
+        if (value.type().name() == typeid(int).name()) {
+            return std::any_cast<int>(value) & mask;
+        } else if (value.type().name() == typeid(long).name()) {
+            return std::any_cast<long>(value) & mask;
+        }
+        return value;
+    }
+
+    std::any transformReadShift(std::any value, long shift) {
+        if (value.type().name() == typeid(int).name()) {
+            if (shift > 0) {
+                return std::any_cast<int>(value) >> shift;
+            } else {
+                return std::any_cast<int>(value) << -shift;
+            }
+        } else if (value.type().name() == typeid(long).name()) {
+            if (shift > 0) {
+                return std::any_cast<long>(value) >> shift;
+            } else {
+                return std::any_cast<long>(value) << -shift;
+            }
+        }
+        return value;
+    }
+
+    std::any commandValueForTransform(CommandValue cv) {
+        if (cv.type == contracts::constants::VALUE_TYPE_INT) {
+            return cv.intValue();
+        } else if (cv.type == contracts::constants::VALUE_TYPE_LONG) {
+            return cv.longValue();
+        } else if (cv.type == contracts::constants::VALUE_TYPE_FLOAT) {
+            return cv.floatValue();
+        } else if (cv.type == contracts::constants::VALUE_TYPE_DOUBLE) {
+            return cv.doubleValue();
+        } else {
+            return nullptr;
+        }
+    }
+
+    void validateWriteMaximum(const std::any &value, double maximum) {
+        if (value.type().name() == typeid(int).name()) {
+            if (std::any_cast<int>(value) > maximum) {
+                throw contracts::CommonPhecdaException(contracts::error_kind::KIND_CONTRACT_INVALID,
+                                                       "set command parameter out of maximum value" +
+                                                       std::to_string(maximum));
+            }
+        }
+        if (value.type().name() == typeid(long).name()) {
+            if (std::any_cast<long>(value) > maximum) {
+                throw contracts::CommonPhecdaException(contracts::error_kind::KIND_CONTRACT_INVALID,
+                                                       "set command parameter out of maximum value" +
+                                                       std::to_string(maximum));
+            }
+        }
     };
 
-    void transformReadResult(CommandValue cv, contracts::ResourceProperties pv) {}
+    void validateWriteMinimum(const std::any &value, double maximum) {
+        if (value.type().name() == typeid(int).name()) {
+            if (std::any_cast<int>(value) < maximum) {
+                throw contracts::CommonPhecdaException(contracts::error_kind::KIND_CONTRACT_INVALID,
+                                                       "set command parameter out of minimum value" +
+                                                       std::to_string(maximum));
+            }
+        }
+        if (value.type().name() == typeid(long).name()) {
+            if (std::any_cast<long>(value) < maximum) {
+                throw contracts::CommonPhecdaException(contracts::error_kind::KIND_CONTRACT_INVALID,
+                                                       "set command parameter out of minimum value" +
+                                                       std::to_string(maximum));
+            }
+        }
+    };
 
-    CommandValue mapCommandValue(CommandValue value, std::map<std::string, std::string> mappings) {
-        return value;
+    void transformWriteParameter(CommandValue cv, const contracts::ResourceProperties &pv) {
+        if (!isNumericValueType(cv)) {
+            return;
+        }
+        auto value = commandValueForTransform(cv);
+        auto newValue = value;
+        if (pv.maximum != 0) {
+            validateWriteMaximum(value, pv.maximum);
+        }
+        if (pv.minimum != 0) {
+            validateWriteMinimum(value, pv.minimum);
+        }
+        if (pv.offset != 0) {
+            if (pv.offset != defaultOffset) {
+                newValue = transformOffset(newValue, pv.offset, false);
+            }
+        }
+        if (pv.scale != 0) {
+            if (pv.scale != defaultScale) {
+                newValue = transformScale(newValue, pv.scale, false);
+            }
+        }
+        if (pv.base != 0) {
+            if (pv.base != defaultBase) {
+                newValue = transformBase(newValue, pv.base, false);
+            }
+        }
+        if (std::any_cast<std::string>(newValue) != std::any_cast<std::string>(value)) {
+            cv.value = newValue;
+        }
+    }
+
+
+    void transformReadResult(CommandValue cv, const contracts::ResourceProperties &pv) {
+        if (!isNumericValueType(cv)) {
+            return;
+        }
+        if (isNan(cv)) {
+            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_NAN_ERROR,
+                                                   "NaN error for DeviceResource " + cv.deviceResourceName);
+        }
+        auto value = commandValueForTransform(cv);
+        auto newValue = value;
+        if (pv.mask != 0l && pv.mask != defaultMask &&
+            (cv.type == contracts::constants::VALUE_TYPE_INT || cv.type == contracts::constants::VALUE_TYPE_LONG)) {
+            newValue = transformReadMask(newValue, pv.mask);
+        }
+        if (pv.shift != 0l && pv.shift != defaultShift &&
+            (cv.type == contracts::constants::VALUE_TYPE_INT || cv.type == contracts::constants::VALUE_TYPE_LONG)) {
+            newValue = transformReadShift(newValue, pv.shift);
+        }
+        if (pv.base != 0 && pv.base != defaultBase) {
+            newValue = transformBase(newValue, pv.base, false);
+        }
+        if (pv.scale != 0 && pv.scale != defaultScale) {
+            newValue = transformScale(newValue, pv.scale, false);
+        }
+        if (std::any_cast<std::string>(newValue) != std::any_cast<std::string>(value)) {
+            cv.value = newValue;
+        }
+    }
+
+    CommandValue mapCommandValue(CommandValue value, const std::map<std::string, std::string> &mappings) {
+        CommandValue result;
+        if (!mappings.empty()) {
+            if (mappings.find(value.valueToString()) != mappings.end()) {
+                auto newValue = mappings.at(value.valueToString());
+                if (!newValue.empty()) {
+                    result = CommandValue::newCommandValue(value.deviceResourceName,
+                                                           contracts::constants::VALUE_TYPE_STRING, newValue);
+                }
+            }
+        }
+        return result;
     }
 
     std::optional<phecda::contracts::Event> commandValuesToEvent(
@@ -47,7 +348,7 @@ namespace phecda::sdk::transformer {
                                                    "failed to find device " + deviceName);
         }
         bool transformsOk = true;
-        long origin = uniqueOrigin();
+        long long origin = uniqueOrigin();
         std::map<std::string, std::any> tags = {};
         std::list<contracts::BaseReading> readings = {};
 
@@ -105,9 +406,26 @@ namespace phecda::sdk::transformer {
     }
 
     contracts::BaseReading
-    commandValueToReading(CommandValue cv, std::string deviceName, std::string profileName, std::string mediaType,
+    commandValueToReading(CommandValue cv, const std::string &deviceName, const std::string &profileName,
+                          const std::string &mediaType,
                           long eventOrigin) {
-        return {};
+        contracts::BaseReading reading;
+        if (cv.type == contracts::constants::VALUE_TYPE_BINARY) {
+            reading = contracts::BinaryReading::newBinaryReading(profileName, deviceName, cv.deviceResourceName,
+                                                                 cv.binaryValue(), mediaType);
+        } else if (cv.type == contracts::constants::VALUE_TYPE_OBJECT) {
+            reading = contracts::ObjectReading::newObjectReading(profileName, deviceName, cv.deviceResourceName,
+                                                                 cv.value);
+        } else {
+            reading = contracts::SimpleReading::newSimpleReading(profileName, deviceName, cv.deviceResourceName,
+                                                                 cv.type, cv.value);
+        }
+        if (cv.origin > 0) {
+            reading.origin = cv.origin;
+        } else {
+            reading.origin = eventOrigin;
+        }
+        return reading;
     };
 
 }
