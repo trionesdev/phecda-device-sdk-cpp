@@ -23,14 +23,14 @@ namespace phecda::contracts::constants {
     static std::string VALUE_TYPE_LONG = "Long";
     static std::string VALUE_TYPE_FLOAT = "Float";
     static std::string VALUE_TYPE_DOUBLE = "Double";
-    static std::string VALUE_TYPE_OBJECT = "Object";
+    static std::string VALUE_TYPE_STRUCT = "Struct";
     static std::string VALUE_TYPE_BOOL_ARRAY = "BoolArray";
     static std::string VALUE_TYPE_STRING_ARRAY = "StringArray";
     static std::string VALUE_TYPE_INT_ARRAY = "IntArray";
     static std::string VALUE_TYPE_LONG_ARRAY = "LongArray";
     static std::string VALUE_TYPE_FLOAT_ARRAY = "FloatArray";
     static std::string VALUE_TYPE_DOUBLE_ARRAY = "DoubleArray";
-    static std::string VALUE_TYPE_OBJECT_ARRAY = "ObjectArray";
+    static std::string VALUE_TYPE_STRUCT_ARRAY = "ObjectArray";
     static std::string VALUE_TYPE_BINARY = "Binary";
     //endregion
 

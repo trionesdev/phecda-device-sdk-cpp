@@ -32,7 +32,7 @@ namespace phecda::contracts {
     BaseReading ObjectReading::newObjectReading(const std::string &profileName, const std::string &deviceName,
                                                 const std::string &resourceName, const std::any &objectValue) {
         auto baseReading = BaseReading::newBaseReading(profileName, deviceName, resourceName,
-                                                       contracts::constants::VALUE_TYPE_OBJECT);
+                                                       contracts::constants::VALUE_TYPE_STRUCT);
         baseReading.objectValue = objectValue;
         return baseReading;
     }

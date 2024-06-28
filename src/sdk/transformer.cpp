@@ -420,7 +420,7 @@ namespace phecda::sdk::transformer {
         if (cv.type == contracts::constants::VALUE_TYPE_BINARY) {
             reading = contracts::BinaryReading::newBinaryReading(profileName, deviceName, cv.deviceResourceName,
                                                                  cv.binaryValue(), mediaType);
-        } else if (cv.type == contracts::constants::VALUE_TYPE_OBJECT) {
+        } else if (cv.type == contracts::constants::VALUE_TYPE_STRUCT) {
             reading = contracts::ObjectReading::newObjectReading(profileName, deviceName, cv.deviceResourceName,
                                                                  cv.value);
         } else {
