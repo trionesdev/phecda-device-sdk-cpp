@@ -32,7 +32,7 @@ namespace phecda::sdk::transformer {
         return false;
     }
 
-    bool isNumericValueType(CommandValue cv) {
+    bool isNumericValueType(const CommandValue &cv) {
         if (cv.type == contracts::constants::VALUE_TYPE_INT || cv.type == contracts::constants::VALUE_TYPE_LONG
             || cv.type == contracts::constants::VALUE_TYPE_FLOAT ||
             cv.type == contracts::constants::VALUE_TYPE_DOUBLE) {
@@ -42,7 +42,7 @@ namespace phecda::sdk::transformer {
         }
     }
 
-    bool checkTransformedValueInRange(std::any origin, double transformed) {
+    bool checkTransformedValueInRange(const std::any &origin, double transformed) {
         bool isRange = false;
         int minValue = std::numeric_limits<int>::min();
         int maxValue = std::numeric_limits<int>::max();
@@ -56,8 +56,13 @@ namespace phecda::sdk::transformer {
 
     std::any transformBase(std::any value, double base, bool read) {
         double doubleValue = 0.0;
-        if (value.type().name() == typeid(int).name() || value.type().name() == typeid(long).name()
-            || value.type().name() == typeid(float).name() || value.type().name() == typeid(double).name()) {
+        if (value.type().name() == typeid(int).name()) {
+            doubleValue = static_cast<double>(std::any_cast<int>(value));
+        } else if (value.type().name() == typeid(long).name()) {
+            doubleValue = static_cast<double>(std::any_cast<long>(value));
+        } else if (value.type().name() == typeid(float).name()) {
+            doubleValue = static_cast<double>(std::any_cast<float>(value));
+        } else if (value.type().name() == typeid(double).name()) {
             doubleValue = std::any_cast<double>(value);
         }
         if (read) {
