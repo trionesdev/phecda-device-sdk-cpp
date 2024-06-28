@@ -76,11 +76,11 @@ namespace phecda::sdk::cache {
         return pc;
     }
 
-    contracts::DeviceProfile *ProfileCache::forName(const std::string &name) {
+    std::optional<contracts::DeviceProfile> ProfileCache::forName(const std::string &name) {
         if (deviceProfileMap.find(name) != deviceProfileMap.end()) {
-            return &deviceProfileMap[name];
+            return deviceProfileMap[name];
         } else {
-            return nullptr;
+            return std::nullopt;
         }
     }
 
@@ -183,7 +183,8 @@ namespace phecda::sdk::cache {
     }
 
 
-    void initCache(const std::string &instanceName, const std::string &baseServiceName, std::shared_ptr<bootstrap::DiContainer> dic) {
+    void initCache(const std::string &instanceName, const std::string &baseServiceName,
+                   std::shared_ptr<bootstrap::DiContainer> dic) {
         DeviceCache::newDeviceCache({});
         ProfileCache::newProfileCache({});
     }

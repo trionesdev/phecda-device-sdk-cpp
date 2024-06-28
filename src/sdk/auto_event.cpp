@@ -6,12 +6,13 @@
 #include <phecda/sdk/cache.h>
 #include <phecda/contracts/constants.h>
 #include <phecda/sdk/application.h>
-#include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <phecda/sdk/common_utils.h>
+#include "phecda/log/log.h"
 
 namespace phecda::sdk {
+    static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("auto_event"));
 
     bool compareReadings(std::list<contracts::BaseReading> readings) {
         return true;
@@ -44,7 +45,7 @@ namespace phecda::sdk {
             try {
                 event = readResource(this, dic);
             } catch (std::exception &e) {
-                std::cout << "readResource error:" << e.what() << std::endl;
+                LOG_ERROR(logger, e.what());
             }
             if (event.has_value()) {
                 if (_onChange) {
@@ -86,7 +87,7 @@ namespace phecda::sdk {
                     executors.push_back(executor);
                     executor->run(dic);
                 } catch (std::exception &e) {
-                    //TODO log
+                    LOG_ERROR(logger, e.what());
                     continue;
                 }
             }

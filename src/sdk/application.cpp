@@ -151,6 +151,7 @@ namespace phecda::sdk::application {
 
         auto results = container::protocolDriverFrom(dic)->handleReadCommands(device.name, device.protocols, reqs);
         auto configuration = container::configurationFrom(dic);
+
         return transformer::commandValuesToEvent(results, device.name, dr->name, configuration->device.dataTransform,
                                                  dic);
     }

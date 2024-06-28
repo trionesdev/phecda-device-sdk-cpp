@@ -1,6 +1,5 @@
 #include <iostream>
 #include <ostream>
-
 #include "phecda/sdk/PhecdaSdk.h"
 
 

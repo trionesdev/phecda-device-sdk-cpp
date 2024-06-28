@@ -373,6 +373,8 @@ namespace phecda::sdk::transformer {
                     } else {
                         transformsOk = false;
                     }
+                } catch (std::exception &e) {
+                    transformsOk = false;
                 }
             }
             if (!cv.tags.empty()) {

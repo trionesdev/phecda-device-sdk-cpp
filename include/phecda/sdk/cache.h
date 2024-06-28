@@ -37,7 +37,7 @@ namespace phecda::sdk::cache {
     public:
         static std::shared_ptr<ProfileCache> newProfileCache(const std::list<contracts::DeviceProfile> &profiles);
 
-        contracts::DeviceProfile *forName(const std::string &name);
+        std::optional<contracts::DeviceProfile> forName(const std::string &name);
 
         std::list<contracts::DeviceProfile> all();
 

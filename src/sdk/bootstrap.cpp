@@ -1,13 +1,16 @@
 //
 // Created by fengxiaotx on 2024/5/21.
 //
-#include <iostream>
 #include "phecda/sdk/ProtocolDriver.h"
 
+#include <phecda/log/log.h>
+
 namespace phecda::sdk {
+    static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("sdk/bootstrap"));
+
     void bootstrap(std::string args[], const std::string &serviceKey, const std::string &serviceVersion,
                    ProtocolDriver *protocolDriver) {
-        std::cout << "Hello, World! bootstrap1" << std::endl;
+        LOG_INFO(logger, "Phecda Device Driver starting .....");
         DeviceServiceSDK deviceService = DeviceServiceSDK::newDeviceService(serviceKey, serviceVersion, protocolDriver);
         deviceService.run();
     }
