@@ -6,7 +6,7 @@
 #define PHECDA_DEVICE_AUTOEVENTMANAGER_H
 
 #include <optional>
-#include "phecda/bootstrap/di-container.h"
+#include "phecda/bootstrap/di_container.h"
 #include "phecda/bootstrap/bootstrap.h"
 #include <phecda/contracts/model.h>
 #include <phecda/util/DurationUtils.h>

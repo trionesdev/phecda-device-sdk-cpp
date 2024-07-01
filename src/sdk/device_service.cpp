@@ -8,7 +8,7 @@
 #include "phecda/bootstrap/startup.h"
 #include "phecda/bootstrap/bootstrap.h"
 #include "phecda/sdk/auto_event.h"
-#include "phecda/sdk/service.h"
+#include "phecda/sdk/service_init.h"
 #include "phecda/sdk/constants.h"
 
 

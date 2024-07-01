@@ -10,7 +10,7 @@
 #include "startup.h"
 #include "flags.h"
 #include "phecda/sdk/config.h"
-#include "phecda/bootstrap/di-container.h"
+#include "phecda/bootstrap/di_container.h"
 
 
 namespace phecda::bootstrap {

@@ -2,8 +2,8 @@
 // Created by fengxiaotx on 2024/6/4.
 //
 
-#ifndef PHECDA_DEVICE_SDK_SERVICE_H
-#define PHECDA_DEVICE_SDK_SERVICE_H
+#ifndef PHECDA_DEVICE_SDK_SERVICE_INIT_H
+#define PHECDA_DEVICE_SDK_SERVICE_INIT_H
 
 #include "DeviceServiceSDK.h"
 #include "phecda/bootstrap/bootstrap.h"
@@ -25,7 +25,7 @@ namespace phecda::sdk {
 
         static std::shared_ptr<MessagingBootstrap> newMessagingBootstrap(const std::string& baseServiceName);
 
-        bool bootstrapHandler(bootstrap::BootstrapHandlerArgs args);
+        bool bootstrapHandler(const bootstrap::BootstrapHandlerArgs& args);
     };
 }
-#endif //PHECDA_DEVICE_SDK_SERVICE_H
+#endif //PHECDA_DEVICE_SDK_SERVICE_INIT_H

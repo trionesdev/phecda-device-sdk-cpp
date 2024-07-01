@@ -7,8 +7,9 @@
 #include <string>
 #include "phecda/sdk/config.h"
 #include "phecda/sdk/auto_event.h"
-#include "phecda/bootstrap/di-container.h"
+#include "phecda/bootstrap/di_container.h"
 #include <phecda/sdk/ProtocolDriver.h>
+#include <phecda/sdk/messaging.h>
 
 namespace phecda::sdk::container {
 //    class ProtocolDriver;
@@ -31,6 +32,11 @@ namespace phecda::sdk::container {
         return dic->get<std::shared_ptr<AutoEventManager>>(autoEventManagerName);
     };
 
+    static std::string messagingClientName = "messagingClient";
+
+    static std::shared_ptr<MessagingClient> messagingClientFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
+        return dic->get<std::shared_ptr<MessagingClient>>(messagingClientName);
+    };
 }
 
 #endif //PHECDA_DEVICE_SDK_CONTAINER_H

@@ -31,23 +31,20 @@ namespace phecda::sdk::application {
         } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_STRING) {
             result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRING,
                                                    std::any_cast<std::string>(v));
-        } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_STRING) {
-            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRING,
-                                                   v);
-        } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_INT) {
-            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRING,
+        }  else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_INT) {
+            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_INT,
                                                    std::any_cast<int>(v));
         } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_LONG) {
             result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRING,
                                                    std::any_cast<long>(v));
         } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_FLOAT) {
-            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRING,
+            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_LONG,
                                                    std::any_cast<float>(v));
         } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_DOUBLE) {
-            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRING,
+            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_DOUBLE,
                                                    std::any_cast<double>(v));
-        } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_OBJECT) {
-            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRING,
+        } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_STRUCT) {
+            result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRUCT,
                                                    v);
         } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_BOOL_ARRAY) {
             try {
@@ -109,10 +106,10 @@ namespace phecda::sdk::application {
                                                        "failed to convert set parameter " + dr.properties.valueType +
                                                        " to ValueType " + dr.properties.valueType);
             }
-        } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_OBJECT_ARRAY) {
+        } else if (dr.properties.valueType == contracts::constants::VALUE_TYPE_STRUCT_ARRAY) {
             try {
                 nlohmann::json json = nlohmann::json::parse(v);
-                result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_OBJECT_ARRAY,
+                result = CommandValue::newCommandValue(dr.name, contracts::constants::VALUE_TYPE_STRUCT_ARRAY,
                                                        json);
             } catch (nlohmann::json::exception &e) {
                 throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,

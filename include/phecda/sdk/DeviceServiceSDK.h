@@ -9,7 +9,7 @@
 #include "phecda/contracts/model.h"
 #include "phecda/bootstrap/flags.h"
 #include "config.h"
-#include "phecda/bootstrap/di-container.h"
+#include "phecda/bootstrap/di_container.h"
 #include "phecda/sdk/auto_event.h"
 
 using namespace phecda::bootstrap;

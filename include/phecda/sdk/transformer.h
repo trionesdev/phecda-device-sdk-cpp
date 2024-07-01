@@ -8,7 +8,7 @@
 #include <optional>
 #include <phecda/sdk/model.h>
 #include <phecda/contracts/model.h>
-#include <phecda/bootstrap/di-container.h>
+#include <phecda/bootstrap/di_container.h>
 
 namespace phecda::sdk::transformer {
     const double defaultBase = 0.0;

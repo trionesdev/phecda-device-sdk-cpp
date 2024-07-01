@@ -7,7 +7,7 @@
 
 #include <string>
 #include <memory>
-#include <phecda/bootstrap/di-container.h>
+#include <phecda/bootstrap/di_container.h>
 
 namespace phecda::sdk::provision {
 

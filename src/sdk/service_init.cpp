@@ -1,10 +1,10 @@
 //
 // Created by fengxiaotx on 2024/6/4.
 //
-#include <phecda/sdk/service.h>
+#include <phecda/sdk/service_init.h>
 #include <phecda/sdk/cache.h>
-#include <phecda/sdk/ProtocolDriver.h>
 #include <phecda/sdk/provision.h>
+#include <phecda/sdk/messaging.h>
 
 namespace phecda::sdk {
 
@@ -14,7 +14,7 @@ namespace phecda::sdk {
         return bootstrap;
     }
 
-    bool Bootstrap::bootstrapHandler(const bootstrap::BootstrapHandlerArgs& args) {
+    bool Bootstrap::bootstrapHandler(const bootstrap::BootstrapHandlerArgs &args) {
         auto dic = args.dic;
         ds->autoEventManager_ = container::autoEventManagerFrom(dic);
 
@@ -35,13 +35,16 @@ namespace phecda::sdk {
         return true;
     }
 
-    std::shared_ptr<MessagingBootstrap> MessagingBootstrap::newMessagingBootstrap(const std::string& baseServiceName) {
+    std::shared_ptr<MessagingBootstrap> MessagingBootstrap::newMessagingBootstrap(const std::string &baseServiceName) {
         auto bootstrap = std::make_shared<MessagingBootstrap>();
         bootstrap->baseServiceName = baseServiceName;
         return bootstrap;
     }
 
-    bool MessagingBootstrap::bootstrapHandler(bootstrap::BootstrapHandlerArgs args) {
+    bool MessagingBootstrap::bootstrapHandler(const bootstrap::BootstrapHandlerArgs &args) {
+        if (!messagingBootstrapHandler(args)) {
+            return false;
+        }
         return true;
     }
 }

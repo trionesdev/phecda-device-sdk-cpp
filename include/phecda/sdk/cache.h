@@ -4,7 +4,7 @@
 #include <string>
 #include <optional>
 #include <regex>
-#include <phecda/bootstrap/di-container.h>
+#include <phecda/bootstrap/di_container.h>
 #include <phecda/contracts/model.h>
 
 namespace phecda::sdk::cache {

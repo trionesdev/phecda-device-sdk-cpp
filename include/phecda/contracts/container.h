@@ -7,7 +7,7 @@
 
 #include <string>
 #include <phecda/contracts/model.h>
-#include "phecda/bootstrap/di-container.h"
+#include "phecda/bootstrap/di_container.h"
 
 namespace phecda::contracts::container {
     static std::string deviceServiceName = "deviceServiceName";
