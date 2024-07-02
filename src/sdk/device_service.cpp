@@ -1,6 +1,7 @@
 //
 // Created by fengxiaotx on 2024/5/21.
 //
+#include <nlohmann/json.hpp>
 #include "phecda/sdk/DeviceServiceSDK.h"
 #include "phecda/sdk/ProtocolDriver.h"
 #include "phecda/sdk/container.h"
@@ -10,6 +11,9 @@
 #include "phecda/sdk/auto_event.h"
 #include "phecda/sdk/service_init.h"
 #include "phecda/sdk/constants.h"
+#include "phecda/sdk/cache.h"
+#include "phecda/contracts/errors.h"
+#include <nlohmann/json.hpp>
 
 
 using namespace phecda::bootstrap;
@@ -46,46 +50,71 @@ namespace phecda::sdk {
         return deviceServiceSdk;
     }
 
-    void DeviceServiceSDK::addDevice(const Device &device) {
+    void DeviceServiceSDK::addDevice(Device device) {
+        auto deviceCache = cache::devices()->forName(device.name);
+        if (deviceCache.has_value()) {
+            throw CommonPhecdaException(error_kind::KIND_DUPLICATE_NAME,
+                                        "name conflicted, Device " + device.name + " exists");
+        }
+        device.serviceName = _serviceKey;
     }
 
     std::list<Device> DeviceServiceSDK::getDevices() {
-        return {};
+        return cache::devices()->all();
     }
 
-    Device DeviceServiceSDK::getDeviceByName(const std::string &name) {
-        return {};
+    std::optional<Device> DeviceServiceSDK::getDeviceByName(const std::string &name) {
+        return cache::devices()->forName(name);
     }
 
     void DeviceServiceSDK::updateDevice(const Device &device) {
+        cache::devices()->update(device);
     }
 
     void DeviceServiceSDK::removeDeviceByName(const std::string &name) {
+        cache::devices()->removeByName(name);
     }
 
     void DeviceServiceSDK::addDeviceProfile(const DeviceProfile &profile) {
+        cache::profiles()->add(profile);
     }
 
     std::list<DeviceProfile> DeviceServiceSDK::deviceProfiles() {
-        return std::list<DeviceProfile>();
+        return cache::profiles()->all();
     }
 
-    DeviceProfile DeviceServiceSDK::getProfileByName(const std::string &name) {
-        return DeviceProfile();
+    std::optional<DeviceProfile> DeviceServiceSDK::getProfileByName(const std::string &name) {
+        return cache::profiles()->forName(name);
     }
 
     void DeviceServiceSDK::updateDeviceProfile(const DeviceProfile &profile) {
+        cache::profiles()->update(profile);
     }
 
     void DeviceServiceSDK::removeDeviceProfileByName(const std::string &name) {
+        cache::profiles()->removeByName(name);
     }
 
-    DeviceResource DeviceServiceSDK::deviceResource(const std::string &deviceName, std::string resourceName) {
-        return DeviceResource();
+    std::optional<DeviceResource>
+    DeviceServiceSDK::deviceResource(const std::string &deviceName, const std::string &resourceName) {
+        auto device = cache::devices()->forName(deviceName);
+        if (device.has_value()) {
+            if (device->profileName.empty()) {
+                return cache::profiles()->deviceResource(device->profileName, resourceName);
+            }
+        }
+        return std::nullopt;
     }
 
-    DeviceCommand DeviceServiceSDK::deviceCommand(const std::string &deviceName, std::string commandName) {
-        return DeviceCommand();
+    std::optional<DeviceCommand>
+    DeviceServiceSDK::deviceCommand(const std::string &deviceName, const std::string &commandName) {
+        auto device = cache::devices()->forName(deviceName);
+        if (device.has_value()) {
+            if (device->profileName.empty()) {
+                return cache::profiles()->deviceCommand(device->profileName, commandName);
+            }
+        }
+        return std::nullopt;
     }
 
     void DeviceServiceSDK::addDeviceAutoEvent(const std::string &deviceName, const std::string &sourceName,
@@ -120,10 +149,10 @@ namespace phecda::sdk {
         _deviceService->name = _serviceKey;
 
         this->_dic = DiContainer::newContainer({
-                                                      {sdk::container::configurationName,               _config},
-                                                      {phecda::contracts::container::deviceServiceName, _deviceService},
-                                                      {sdk::container::protocolDriverName,              driver}
-                                              });
+                                                       {sdk::container::configurationName,               _config},
+                                                       {phecda::contracts::container::deviceServiceName, _deviceService},
+                                                       {sdk::container::protocolDriverName,              driver}
+                                               });
 
         auto wg = runAndReturnWaitGroup(_args,
                                         _serviceKey,
@@ -147,24 +176,36 @@ namespace phecda::sdk {
     }
 
 
-    std::string DeviceServiceSDK::name() {
+    std::string DeviceServiceSDK::name() const {
         return _serviceKey;
     }
 
-    bool DeviceServiceSDK::asyncReadingsEnabled() {
-        return false;
+    bool DeviceServiceSDK::asyncReadingsEnabled() const {
+        return _config->device.enableAsyncReadings;
     }
 
     std::shared_ptr<MessagingClient> DeviceServiceSDK::messagingClient() {
-        return std::shared_ptr<MessagingClient>();
+        return container::messagingClientFrom(_dic);
     }
 
-    void DeviceServiceSDK::sendEvent(const Event &event) {
+    void DeviceServiceSDK::sendEvent( const Event& event) {
+        auto messagingClient = container::messagingClientFrom(_dic);
 
+        nlohmann::json json;
+        json["id"] = event.id;
+        json["deviceName"] = event.deviceName;
+        json["profileName"] = event.profileName;
+        json["sourceName"] = event.sourceName;
+        json["origin"] = event.origin;
+//        json["tags"] = event.tags;
+
+
+
+//        std::string data
     }
 
-    void DeviceServiceSDK::senProperty(const Event &event) {
-
+    void DeviceServiceSDK::sendProperty(const Event &event) {
+        auto messagingClient = container::messagingClientFrom(_dic);
     }
 
 }

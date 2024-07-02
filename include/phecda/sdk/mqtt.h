@@ -32,6 +32,8 @@ namespace phecda::sdk {
 
         void publish(std::string topic, std::vector<std::byte> message) override;
 
+        void publish(std::string topic, string message) override;
+
         void subscribe(std::string topic, std::function<void(std::string, std::vector<std::byte>)> callback) override;
 
         ~MqttMessagingClient();

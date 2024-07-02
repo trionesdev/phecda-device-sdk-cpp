@@ -84,5 +84,25 @@ namespace phecda::contracts {
         baseReading.value = stringValue;
         return baseReading;
     }
+
+    Event Event::newEvent(std::string profileName, std::string deviceName, std::string sourceName) {
+        Event event;
+        event.id = util::StringUtils::uuid();
+        event.origin = util::TimeUtils::timestamp();
+        event.profileName = profileName;
+        event.deviceName = deviceName;
+        event.sourceName = sourceName;
+        return event;
+    }
+
+    std::string Event::toJsonString() {
+        nlohmann::json json;
+        json["id"] = id;
+        json["deviceName"] = deviceName;
+        json["profileName"] = profileName;
+        json["sourceName"] = sourceName;
+        json["origin"] = origin;
+        return json.dump();
+    }
 }
 

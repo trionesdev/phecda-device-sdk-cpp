@@ -16,25 +16,25 @@ namespace phecda::sdk::container {
 
     static std::string configurationName = "configurationStruct";
 
-    static std::shared_ptr<ConfigurationStruct> configurationFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
+    static std::shared_ptr<ConfigurationStruct> configurationFrom(const std::shared_ptr<bootstrap::DiContainer>& dic) {
         return dic->get<std::shared_ptr<ConfigurationStruct>>(configurationName);
     };
 
     static std::string protocolDriverName = "protocolDriver";
 
-    static ProtocolDriver *protocolDriverFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
+    static ProtocolDriver *protocolDriverFrom(const std::shared_ptr<bootstrap::DiContainer>& dic) {
         return dic->get<ProtocolDriver *>(protocolDriverName);
     };
 
     static std::string autoEventManagerName = "autoEventManager";
 
-    static std::shared_ptr<AutoEventManager> autoEventManagerFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
+    static std::shared_ptr<AutoEventManager> autoEventManagerFrom(const std::shared_ptr<bootstrap::DiContainer>& dic) {
         return dic->get<std::shared_ptr<AutoEventManager>>(autoEventManagerName);
     };
 
     static std::string messagingClientName = "messagingClient";
 
-    static std::shared_ptr<MessagingClient> messagingClientFrom(std::shared_ptr<bootstrap::DiContainer> dic) {
+    static std::shared_ptr<MessagingClient> messagingClientFrom(const std::shared_ptr<bootstrap::DiContainer>& dic) {
         return dic->get<std::shared_ptr<MessagingClient>>(messagingClientName);
     };
 }

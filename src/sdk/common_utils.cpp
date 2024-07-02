@@ -4,13 +4,18 @@
 
 #include "phecda/sdk/common_utils.h"
 #include "phecda/sdk/cache.h"
+#include "phecda/sdk/container.h"
 #include <log4cxx/logger.h>
 
 namespace phecda::sdk {
     static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("auto_event"));
 
-    void sendEvent(contracts::Event event, std::string correlationID, std::shared_ptr<bootstrap::DiContainer> dic) {
-        LOG4CXX_INFO(logger, "send event: sss");
+    void
+    sendEvent(contracts::Event event, const std::string &correlationID,
+              const std::shared_ptr<bootstrap::DiContainer> &dic) {
+        LOG4CXX_INFO(logger, "send event: event");
+        sdk::container::messagingClientFrom(dic)->publish(
+                event.profileName + "/" + event.deviceName + "/thing/event/post", event.toJsonString());
     };
 
     void addEventTags(contracts::Event event) {

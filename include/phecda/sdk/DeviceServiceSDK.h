@@ -38,11 +38,11 @@ namespace phecda::sdk {
         static DeviceServiceSDK newDeviceService(const std::string &serviceKey, const std::string &serviceVersion,
                                                  ProtocolDriver *protocolDriver);
 
-        void addDevice(const Device &device);
+        void addDevice(Device device);
 
         std::list<Device> getDevices();
 
-        Device getDeviceByName(const std::string &name);
+        std::optional<Device> getDeviceByName(const std::string &name);
 
         void updateDevice(const Device &device);
 
@@ -52,15 +52,15 @@ namespace phecda::sdk {
 
         std::list<DeviceProfile> deviceProfiles();
 
-        DeviceProfile getProfileByName(const std::string &name);
+        std::optional<DeviceProfile> getProfileByName(const std::string &name);
 
         void updateDeviceProfile(const DeviceProfile &profile);
 
         void removeDeviceProfileByName(const std::string &name);
 
-        DeviceResource deviceResource(const std::string &deviceName, std::string resourceName);
+        std::optional<DeviceResource> deviceResource(const std::string &deviceName, const std::string &resourceName);
 
-        DeviceCommand deviceCommand(const std::string &deviceName, std::string commandName);
+        std::optional<DeviceCommand> deviceCommand(const std::string &deviceName, const std::string &commandName);
 
         void
         addDeviceAutoEvent(const std::string &deviceName, const std::string &sourceName, const AutoEvent &autoEvent);
@@ -69,15 +69,15 @@ namespace phecda::sdk {
 
         void run();
 
-        std::string name();
+        std::string name() const;
 
-        bool asyncReadingsEnabled();
+        bool asyncReadingsEnabled() const;
 
         std::shared_ptr<MessagingClient> messagingClient();
 
-        void sendEvent(const Event &event);
+        void sendEvent( const Event& event);
 
-        void senProperty(const Event &event);
+        void sendProperty(const Event &event);
     };
 
 

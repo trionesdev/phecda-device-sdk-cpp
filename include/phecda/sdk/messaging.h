@@ -16,6 +16,7 @@ namespace phecda::sdk {
         virtual void connect() = 0;
 
         virtual void publish(std::string topic, std::vector<std::byte> message) = 0;
+        virtual void publish(std::string topic, string message) = 0;
 
         virtual void subscribeDefault() = 0;
 

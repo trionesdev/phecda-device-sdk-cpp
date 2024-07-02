@@ -51,8 +51,8 @@ namespace phecda::sdk {
         _mqttClient->set_callback(cb);
         try {
             _mqttClient->connect(_connOpts)->wait();
-            mqtt::message_ptr message = mqtt::make_message("test", "12121");
-            _mqttClient->publish(message)->wait();
+//            mqtt::message_ptr message = mqtt::make_message("test", "12121");
+//            _mqttClient->publish(message)->wait();
         } catch (const mqtt::exception &exc) {
             LOG_ERROR(logger, "[mqtt.cpp] mqtt connect failed" << exc.what());
         }
@@ -63,7 +63,10 @@ namespace phecda::sdk {
     }
 
     void MqttMessagingClient::publish(std::string topic, std::vector<std::byte> message) {
-
+//        mqtt::message msg("test", message.data(), message.size(), 0, false);
+        auto msg = mqtt::make_message(topic,
+                                      std::string(reinterpret_cast<const char *>(message.data()), message.size()));
+        _mqttClient->publish(msg);
     }
 
     void MqttMessagingClient::subscribe(std::string topic,
@@ -75,6 +78,11 @@ namespace phecda::sdk {
         if (_mqttClient->is_connected()) {
             _mqttClient->disconnect();
         }
+    }
+
+    void MqttMessagingClient::publish(std::string topic, string message) {
+        auto msg = mqtt::make_message(topic, message);
+        _mqttClient->publish(msg);
     }
 
 
