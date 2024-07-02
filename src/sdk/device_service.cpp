@@ -22,9 +22,9 @@ namespace phecda::sdk {
         if (!boost::trim_copy(envValue).empty()) {
             instanceName = envValue;
         }
-        this->baseServiceName_ = serviceKey_;
+        this->_baseServiceName = _serviceKey;
         if (!boost::trim_copy(instanceName).empty()) {
-            serviceKey_ = serviceKey_ + "_" + instanceName;
+            _serviceKey = _serviceKey + "_" + instanceName;
         }
     }
 
@@ -40,9 +40,9 @@ namespace phecda::sdk {
         }
         phecda::sdk::constants::ServiceVersion = serviceVersion;
         DeviceServiceSDK deviceServiceSdk;
-        deviceServiceSdk.serviceKey_ = serviceKey;
+        deviceServiceSdk._serviceKey = serviceKey;
         deviceServiceSdk.driver = protocolDriver;
-        deviceServiceSdk.config = std::make_shared<phecda::sdk::ConfigurationStruct>();
+        deviceServiceSdk._config = std::make_shared<phecda::sdk::ConfigurationStruct>();
         return deviceServiceSdk;
     }
 
@@ -98,12 +98,12 @@ namespace phecda::sdk {
     void DeviceServiceSDK::run() {
         std::cout << "Hello, World! run" << std::endl;
         std::string instanceName;
-        auto startupTimer = Timer::newStartUpTimer(serviceKey_);
+        auto startupTimer = Timer::newStartUpTimer(_serviceKey);
         std::string additionalUsage =
                 " -i, --instance  Provides a service name suffix which allows unique instance to be created"
                 "If the option is provided, service name will be replaced with \"<name>_<instance>\"";
-        args_ = CommonArgs::withUsage(additionalUsage);
-        args_->parse(Variables::args);
+        _args = CommonArgs::withUsage(additionalUsage);
+        _args->parse(Variables::args);
 
 
         auto instance = Variables::envVars.find("instance");
@@ -115,21 +115,21 @@ namespace phecda::sdk {
             instanceName = Variables::envVars["i"];
         }
         setServiceName(instanceName);
-        config = std::make_shared<ConfigurationStruct>();
-        deviceService = std::make_shared<DeviceService>();
-        deviceService->name = serviceKey_;
+        _config = std::make_shared<ConfigurationStruct>();
+        _deviceService = std::make_shared<DeviceService>();
+        _deviceService->name = _serviceKey;
 
-        this->dic = DiContainer::newContainer({
-                                                      {sdk::container::configurationName,               config},
-                                                      {phecda::contracts::container::deviceServiceName, deviceService},
+        this->_dic = DiContainer::newContainer({
+                                                      {sdk::container::configurationName,               _config},
+                                                      {phecda::contracts::container::deviceServiceName, _deviceService},
                                                       {sdk::container::protocolDriverName,              driver}
                                               });
 
-        auto wg = runAndReturnWaitGroup(args_,
-                                        serviceKey_,
-                                        config,
+        auto wg = runAndReturnWaitGroup(_args,
+                                        _serviceKey,
+                                        _config,
                                         startupTimer,
-                                        dic,
+                                        _dic,
                                         {
                                                 AutoEventManager::bootstrapHandler,
                                                 [bootStrap = Bootstrap::newBootstrap(this)](auto args) {
@@ -137,7 +137,7 @@ namespace phecda::sdk {
                                                             std::forward<decltype(args)>(args));
                                                 },
                                                 [bootstrap = MessagingBootstrap::newMessagingBootstrap(
-                                                        baseServiceName_)](auto args) {
+                                                        _baseServiceName)](auto args) {
                                                     return bootstrap->bootstrapHandler(
                                                             std::forward<decltype(args)>(args));
                                                 }
@@ -148,11 +148,23 @@ namespace phecda::sdk {
 
 
     std::string DeviceServiceSDK::name() {
-        return std::string();
+        return _serviceKey;
     }
 
     bool DeviceServiceSDK::asyncReadingsEnabled() {
         return false;
+    }
+
+    std::shared_ptr<MessagingClient> DeviceServiceSDK::messagingClient() {
+        return std::shared_ptr<MessagingClient>();
+    }
+
+    void DeviceServiceSDK::sendEvent(const Event &event) {
+
+    }
+
+    void DeviceServiceSDK::senProperty(const Event &event) {
+
     }
 
 }

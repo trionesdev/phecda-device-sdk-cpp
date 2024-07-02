@@ -26,7 +26,19 @@ namespace phecda::sdk {
             return false;
         }
         args.dic->update({{container::messagingClientName, messagingClient}});
-        messagingClient->connect();
+//        messagingClient->connect();
+        while (args.startupTimer->hasNotElapsed()) {
+            try {
+                messagingClient->connect();
+            } catch (std::exception &e) {
+                LOG_WARN(logger, "Failed to connect to server:" << e.what());
+                args.startupTimer->sleepForInterval();
+                continue;
+            }
+            args.dic->update({{container::messagingClientName, messagingClient}});
+            return true;
+        }
+        LOG_ERROR(logger, "Connecting to ChannelClient timeout");
         return true;
     };
 } // sdk

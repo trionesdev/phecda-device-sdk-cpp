@@ -16,9 +16,9 @@ namespace phecda::sdk {
 
     bool Bootstrap::bootstrapHandler(const bootstrap::BootstrapHandlerArgs &args) {
         auto dic = args.dic;
-        ds->autoEventManager_ = container::autoEventManagerFrom(dic);
+        ds->_autoEventManager = container::autoEventManagerFrom(dic);
 
-        cache::initCache(ds->serviceKey_, ds->baseServiceName_, dic);
+        cache::initCache(ds->_serviceKey, ds->_baseServiceName, dic);
 
         if (ds->asyncReadingsEnabled()) {
 
@@ -28,10 +28,10 @@ namespace phecda::sdk {
         ds->driver->initialize(ds);
         //endregion
 
-        phecda::sdk::provision::loadProfiles(ds->config->device.profilesDir, dic);
-        phecda::sdk::provision::loadDevices(ds->config->device.devicesDir, dic);
+        phecda::sdk::provision::loadProfiles(ds->_config->device.profilesDir, dic);
+        phecda::sdk::provision::loadDevices(ds->_config->device.devicesDir, dic);
 
-        ds->autoEventManager_->startAutoEvents();
+        ds->_autoEventManager->startAutoEvents();
         return true;
     }
 

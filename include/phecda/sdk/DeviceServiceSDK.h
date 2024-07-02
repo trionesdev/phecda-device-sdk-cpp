@@ -11,6 +11,7 @@
 #include "config.h"
 #include "phecda/bootstrap/di_container.h"
 #include "phecda/sdk/auto_event.h"
+#include "phecda/sdk/messaging.h"
 
 using namespace phecda::bootstrap;
 using namespace phecda::contracts;
@@ -20,19 +21,19 @@ namespace phecda::sdk {
     class DeviceServiceSDK {
     private:
         std::string _serviceVersion;
-        CommonArgs *args_;
-        std::shared_ptr<DeviceService> deviceService;
+        CommonArgs *_args;
+        std::shared_ptr<DeviceService> _deviceService;
 
-        std::shared_ptr<DiContainer> dic;
+        std::shared_ptr<DiContainer> _dic;
 
         void setServiceName(std::string instanceName);
 
     public:
-        std::string serviceKey_;
-        std::string baseServiceName_;
+        std::string _serviceKey;
+        std::string _baseServiceName;
         ProtocolDriver *driver;
-        std::shared_ptr<AutoEventManager> autoEventManager_;
-        std::shared_ptr<ConfigurationStruct> config;
+        std::shared_ptr<AutoEventManager> _autoEventManager;
+        std::shared_ptr<ConfigurationStruct> _config;
 
         static DeviceServiceSDK newDeviceService(const std::string &serviceKey, const std::string &serviceVersion,
                                                  ProtocolDriver *protocolDriver);
@@ -72,6 +73,11 @@ namespace phecda::sdk {
 
         bool asyncReadingsEnabled();
 
+        std::shared_ptr<MessagingClient> messagingClient();
+
+        void sendEvent(const Event &event);
+
+        void senProperty(const Event &event);
     };
 
 
