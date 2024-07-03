@@ -154,7 +154,7 @@ namespace phecda::contracts {
         std::list<BaseReading> readings;
         std::map<std::string, std::any> tags;
 
-        static Event newEvent(std::string profileName, std::string deviceName, std::string sourceName);
+        static Event newEvent(const std::string& profileName, const std::string& deviceName,const std::string& sourceName);
 
     };
 

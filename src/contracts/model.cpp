@@ -78,13 +78,12 @@ namespace phecda::contracts {
                                                 const std::string &resourceName, const std::string &valueType,
                                                 std::any &value) {
         auto stringValue = convertInterfaceValue(valueType, value);
-        auto baseReading = BaseReading::newBaseReading(profileName, deviceName, resourceName,
-                                                       contracts::constants::VALUE_TYPE_BINARY);
+        auto baseReading = BaseReading::newBaseReading(profileName, deviceName, resourceName, valueType);
         baseReading.value = stringValue;
         return baseReading;
     }
 
-    Event Event::newEvent(std::string profileName, std::string deviceName, std::string sourceName) {
+    Event Event::newEvent(const std::string& profileName,const std::string& deviceName, const std::string& sourceName) {
         Event event;
         event.id = util::StringUtils::uuid();
         event.origin = util::TimeUtils::timestamp();
@@ -93,6 +92,6 @@ namespace phecda::contracts {
         event.sourceName = sourceName;
         return event;
     }
-    
+
 }
 
