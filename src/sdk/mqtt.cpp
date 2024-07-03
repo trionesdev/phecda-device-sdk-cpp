@@ -16,15 +16,15 @@ namespace phecda::sdk {
         }
 
         void connection_lost(const std::string &cause) override {
-            std::cout << "Connection lost" << std::endl;
-            if (!cause.empty())
-                std::cout << "\tcause: " << cause << std::endl;
+            LOG_INFO(logger, cause);
+
         }
 
         void delivery_complete(mqtt::delivery_token_ptr token) override {
-            std::cout << "Delivery complete for token: "
-                      << (token ? token->get_message_id() : -1)
-                      << std::endl;
+            LOG_INFO(logger, "Delivery complete for token: "
+                    << (token ? token->get_message_id() : -1)
+                    << std::endl);
+
         }
     };
 
@@ -43,6 +43,7 @@ namespace phecda::sdk {
 
         auto mqttClient = std::make_shared<MqttMessagingClient>(client);
         mqttClient->_connOpts = connOpts;
+        mqttClient->_topicPrefix = mqttInfo.topicPrefix;
         return mqttClient;
     }
 
@@ -51,8 +52,6 @@ namespace phecda::sdk {
         _mqttClient->set_callback(cb);
         try {
             _mqttClient->connect(_connOpts)->wait();
-//            mqtt::message_ptr message = mqtt::make_message("test", "12121");
-//            _mqttClient->publish(message)->wait();
         } catch (const mqtt::exception &exc) {
             LOG_ERROR(logger, "[mqtt.cpp] mqtt connect failed" << exc.what());
         }
@@ -64,7 +63,7 @@ namespace phecda::sdk {
 
     void MqttMessagingClient::publish(std::string topic, std::vector<std::byte> message) {
 //        mqtt::message msg("test", message.data(), message.size(), 0, false);
-        auto msg = mqtt::make_message(topic,
+        auto msg = mqtt::make_message(_topicPrefix + "/" + topic,
                                       std::string(reinterpret_cast<const char *>(message.data()), message.size()));
         _mqttClient->publish(msg);
     }
@@ -81,7 +80,7 @@ namespace phecda::sdk {
     }
 
     void MqttMessagingClient::publish(std::string topic, string message) {
-        auto msg = mqtt::make_message(topic, message);
+        auto msg = mqtt::make_message(_topicPrefix + "/" + topic, message);
         _mqttClient->publish(msg);
     }
 

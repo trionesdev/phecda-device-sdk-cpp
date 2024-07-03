@@ -156,7 +156,6 @@ namespace phecda::contracts {
 
         static Event newEvent(std::string profileName, std::string deviceName, std::string sourceName);
 
-        std::string toJsonString();
     };
 
 }

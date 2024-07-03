@@ -10,6 +10,7 @@
 #include <any>
 #include <list>
 #include <vector>
+#include <phecda/contracts/model.h>
 
 namespace phecda::sdk {
 
@@ -28,12 +29,19 @@ namespace phecda::sdk {
 
         static CommandValue
         newCommandValue(const std::string &deviceResourceName, const std::string &valueType, const std::any &value);
+
         std::string toString();
+
         std::string valueToString();
+
         int intValue();
+
         long longValue();
+
         float floatValue();
+
         double doubleValue();
+
         std::vector<std::byte> binaryValue();
 
     };
@@ -44,5 +52,38 @@ namespace phecda::sdk {
         std::list<CommandRequest> commandValues;
     };
 
+
+    struct Reading {
+        std::string identifier;
+        std::string valueType;
+        std::string utils;
+        std::vector<std::byte> binaryValue;
+        std::string mediaType;
+        std::any objectValue;
+        std::string value;
+        long long ts;
+
+        static Reading fromBaseReading(const contracts::BaseReading &baseReading);
+
+        static std::list<Reading> fromBaseReadings(const std::list<contracts::BaseReading> &baseReadings);
+
+        static std::map<std::string, Reading>
+        fromBaseReadingsToMap(const std::list<contracts::BaseReading> &baseReadings);
+    };
+
+    struct PhecdaEvent {
+        std::string version;
+        std::string id;
+        std::string deviceName;
+        std::string productKey;
+        std::string sourceName;
+        long long ts;
+        std::map<std::string, Reading> readings;
+        std::map<std::string, std::any> tags;
+
+        static PhecdaEvent newPhecdaEvent(const contracts::Event &event);
+
+        std::string toJsonString();
+    };
 }
 #endif //PHECDA_DEVICE_MODULE_H

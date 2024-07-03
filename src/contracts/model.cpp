@@ -6,7 +6,6 @@
 #include <phecda/util/TimeUtils.h>
 #include <phecda/contracts/constants.h>
 #include <nlohmann/json.hpp>
-#include "phecda/sdk/model.h"
 #include "phecda/log/log.h"
 
 
@@ -94,53 +93,6 @@ namespace phecda::contracts {
         event.sourceName = sourceName;
         return event;
     }
-
-    std::string Event::toJsonString() {
-        nlohmann::json json;
-        json["id"] = id;
-        json["deviceName"] = deviceName;
-        json["profileName"] = profileName;
-        json["sourceName"] = sourceName;
-        json["origin"] = origin;
-
-        for (auto &reading: readings) {
-
-            nlohmann::json objectValue;
-            if (reading.objectValue.has_value()) {
-                if (reading.objectValue.type().name() == typeid(int).name()) {
-                    objectValue = std::any_cast<int>(reading.objectValue);
-                }
-                if (reading.objectValue.type().name() == typeid(long).name()) {
-                    objectValue = std::any_cast<long>(reading.objectValue);
-                }
-                if (reading.objectValue.type().name() == typeid(float).name()) {
-                    objectValue = std::any_cast<float>(reading.objectValue);
-                }
-                if (reading.objectValue.type().name() == typeid(double).name()) {
-                    objectValue = std::any_cast<double>(reading.objectValue);
-                }
-                if (reading.objectValue.type().name() == typeid(std::string).name()) {
-                    objectValue = std::any_cast<std::string>(reading.objectValue);
-                }
-            }
-
-            nlohmann::json readingJson;
-            readingJson["id"] = reading.id;
-            readingJson["origin"] = reading.origin;
-            readingJson["deviceName"] = reading.deviceName;
-            readingJson["resourceName"] = reading.resourceName;
-            readingJson["profileName"] = reading.profileName;
-            readingJson["valueType"] = reading.valueType;
-            readingJson["utils"] = reading.utils;
-            readingJson["binaryValue"] = reading.binaryValue;
-            readingJson["mediaType"] = reading.mediaType;
-            readingJson["objectValue"] = objectValue;
-            readingJson["value"] = reading.value;
-
-            json["readings"].push_back(readingJson);
-        }
-
-        return json.dump();
-    }
+    
 }
 

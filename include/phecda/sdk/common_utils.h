@@ -11,7 +11,7 @@
 
 namespace phecda::sdk {
 
-    void sendEvent(contracts::Event event, const std::string &correlationID,
+    void sendEvent(const contracts::Event& event, const std::string &correlationID,
                    const std::shared_ptr<bootstrap::DiContainer> &dic);
 
     void addEventTags(contracts::Event event);

@@ -190,18 +190,7 @@ namespace phecda::sdk {
 
     void DeviceServiceSDK::sendEvent( const Event& event) {
         auto messagingClient = container::messagingClientFrom(_dic);
-
-        nlohmann::json json;
-        json["id"] = event.id;
-        json["deviceName"] = event.deviceName;
-        json["profileName"] = event.profileName;
-        json["sourceName"] = event.sourceName;
-        json["origin"] = event.origin;
-//        json["tags"] = event.tags;
-
-
-
-//        std::string data
+        auto phecdaEvent  = PhecdaEvent::newPhecdaEvent(event);
     }
 
     void DeviceServiceSDK::sendProperty(const Event &event) {
