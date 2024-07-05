@@ -16,6 +16,8 @@ namespace phecda::contracts::constants {
     static std::string READ_WRITE_RW = "RW";
     static std::string READ_WRITE_WR = "WR";
 
+    static std::string API_VERSION = "v1";
+
     //region Constants related to Reading ValueTypes
     static std::string VALUE_TYPE_BOOL = "Bool";
     static std::string VALUE_TYPE_STRING = "String";
@@ -30,7 +32,7 @@ namespace phecda::contracts::constants {
     static std::string VALUE_TYPE_LONG_ARRAY = "LongArray";
     static std::string VALUE_TYPE_FLOAT_ARRAY = "FloatArray";
     static std::string VALUE_TYPE_DOUBLE_ARRAY = "DoubleArray";
-    static std::string VALUE_TYPE_STRUCT_ARRAY = "ObjectArray";
+    static std::string VALUE_TYPE_STRUCT_ARRAY = "StructArray";
     static std::string VALUE_TYPE_BINARY = "Binary";
     //endregion
 

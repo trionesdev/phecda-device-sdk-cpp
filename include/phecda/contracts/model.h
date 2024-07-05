@@ -14,6 +14,12 @@
 
 namespace phecda::contracts {
 
+    struct Versionable {
+        std::string apiVersion;
+
+        static Versionable newVersionable();
+    };
+
     struct DBTimestamp {
         long created;
         long modified;
@@ -154,7 +160,8 @@ namespace phecda::contracts {
         std::list<BaseReading> readings;
         std::map<std::string, std::any> tags;
 
-        static Event newEvent(const std::string& profileName, const std::string& deviceName,const std::string& sourceName);
+        static Event
+        newEvent(const std::string &profileName, const std::string &deviceName, const std::string &sourceName);
 
     };
 

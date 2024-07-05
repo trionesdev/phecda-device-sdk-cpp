@@ -12,6 +12,12 @@
 namespace phecda::contracts {
     static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("contracts.model"));
 
+    Versionable Versionable::newVersionable() {
+        Versionable versionable;
+        versionable.apiVersion = constants::API_VERSION;
+        return versionable;
+    }
+
     BaseReading BaseReading::newBaseReading(
             const std::string &profileName,
             const std::string &deviceName,
@@ -83,7 +89,8 @@ namespace phecda::contracts {
         return baseReading;
     }
 
-    Event Event::newEvent(const std::string& profileName,const std::string& deviceName, const std::string& sourceName) {
+    Event
+    Event::newEvent(const std::string &profileName, const std::string &deviceName, const std::string &sourceName) {
         Event event;
         event.id = util::StringUtils::uuid();
         event.origin = util::TimeUtils::timestamp();
@@ -92,6 +99,7 @@ namespace phecda::contracts {
         event.sourceName = sourceName;
         return event;
     }
+
 
 }
 

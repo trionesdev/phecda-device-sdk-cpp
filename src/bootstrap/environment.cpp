@@ -15,55 +15,64 @@ namespace phecda::bootstrap {
 
     StartupInfo Variables::getStartupInfo(std::string serviceKey) {
         StartupInfo startupInfo{};
-        startupInfo.duration = bootTimeoutSecondsDefault;
-        startupInfo.interval = bootRetrySecondsDefault;
-        auto durationValue = util::SystemUtils::getEnv(envKeyStartupDuration);
+        startupInfo.duration = _bootTimeoutSecondsDefault;
+        startupInfo.interval = _bootRetrySecondsDefault;
+        auto durationValue = util::SystemUtils::getEnv(_envKeyStartupDuration);
         if (!durationValue.empty()) {
-            logEnvironmentOverride("Startup Duration", envKeyStartupDuration, durationValue);
+            logEnvironmentOverride("Startup Duration", _envKeyStartupDuration, durationValue);
             startupInfo.duration = std::stoi(durationValue);
         }
-        auto intervalValue = util::SystemUtils::getEnv(envKeyStartupInterval);
+        auto intervalValue = util::SystemUtils::getEnv(_envKeyStartupInterval);
         if (!intervalValue.empty()) {
-            logEnvironmentOverride("Startup Interval", envKeyStartupInterval, intervalValue);
+            logEnvironmentOverride("Startup Interval", _envKeyStartupInterval, intervalValue);
             startupInfo.interval = std::stoi(intervalValue);
         }
         return startupInfo;
     }
 
     std::string Variables::getConfigDir(std::string configDir) {
-        auto envValue = util::SystemUtils::getEnv(envKeyConfigDir);
+        auto envValue = util::SystemUtils::getEnv(_envKeyConfigDir);
         if (!envValue.empty()) {
             configDir = envValue;
-            logEnvironmentOverride("-cf/--configDir", envKeyConfigDir, envValue);
+            logEnvironmentOverride("-cf/--configDir", _envKeyConfigDir, envValue);
 
         }
         return configDir;
     }
 
     std::string Variables::getProfileDir(std::string profileDir) {
-        auto envValue = util::SystemUtils::getEnv(envKeyProfile);
+        auto envValue = util::SystemUtils::getEnv(_envKeyProfile);
         if (!envValue.empty()) {
             profileDir = envValue;
-            logEnvironmentOverride("-pf/--profileDir", envKeyProfile, envValue);
+            logEnvironmentOverride("-pf/--profileDir", _envKeyProfile, envValue);
         }
         return profileDir;
     }
 
     std::string Variables::getConfigFileName(std::string configFileName) {
-        auto envValue = util::SystemUtils::getEnv(envKeyConfigFile);
+        auto envValue = util::SystemUtils::getEnv(_envKeyConfigFile);
         if (!envValue.empty()) {
             configFileName = envValue;
-            logEnvironmentOverride("-cf/--configDir", envKeyConfigFile, envValue);
+            logEnvironmentOverride("-cf/--configDir", _envKeyConfigFile, envValue);
         }
         return configFileName;
     }
 
     std::string Variables::getCommonConfigFileName(std::string commonConfigFileName) {
-        return std::string();
+        auto envValue = util::SystemUtils::getEnv(_envKeyCommonConfig);
+        if (!envValue.empty()) {
+            commonConfigFileName = envValue;
+            logEnvironmentOverride("-cf/--commonConfig", _envKeyCommonConfig, envValue);
+        }
+        return commonConfigFileName;
     }
 
+    /*
+     * 对于配置的重写，暂时用不到
+     */
     int Variables::overrideConfigMapValues(std::map<std::string, std::any> configMap) {
-        return 0;
+        int _overrideCount = 0;
+        return _overrideCount;
     }
 
     std::any Variables::getConfigMapValue(std::string path, std::map<std::string, std::any> configMap) {

@@ -21,14 +21,14 @@ namespace phecda::bootstrap {
 
     class Variables {
     private:
-        static const int bootTimeoutSecondsDefault = 60;
-        static const int bootRetrySecondsDefault = 1;
-        std::string envKeyCommonConfig = "PECDA_COMMON_CONFIG";
-        inline static const std::string envKeyStartupDuration = "PHECDA_STARTUP_DURATION";
-        inline static std::string envKeyStartupInterval = "PHECDA_STARTUP_INTERVAL";
-        inline static std::string envKeyConfigDir = "PHECDA_CONFIG_DIR";
-        inline static std::string envKeyProfile = "PHECDA_PROFILE";
-        inline static std::string envKeyConfigFile = "PHECDA_CONFIG_FILE";
+        static const int _bootTimeoutSecondsDefault = 60;
+        static const int _bootRetrySecondsDefault = 1;
+        inline static std::string _envKeyCommonConfig = "PECDA_COMMON_CONFIG";
+        inline static const std::string _envKeyStartupDuration = "PHECDA_STARTUP_DURATION";
+        inline static std::string _envKeyStartupInterval = "PHECDA_STARTUP_INTERVAL";
+        inline static std::string _envKeyConfigDir = "PHECDA_CONFIG_DIR";
+        inline static std::string _envKeyProfile = "PHECDA_PROFILE";
+        inline static std::string _envKeyConfigFile = "PHECDA_CONFIG_FILE";
         std::string configPathSeparator = "/";
         std::string configNameSeparator = "-";
         std::string envNameSeparator = "_";
