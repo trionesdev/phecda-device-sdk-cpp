@@ -2,8 +2,8 @@
 // Created by fengxiaotx on 2024/5/21.
 //
 #include "phecda/sdk/ProtocolDriver.h"
-#include <log4cxx/basicconfigurator.h>
-#include <log4cxx/logmanager.h>
+// #include <log4cxx/basicconfigurator.h>
+// #include <log4cxx/logmanager.h>
 #include <phecda/log/log.h>
 
 namespace phecda::sdk
