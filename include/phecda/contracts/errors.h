@@ -8,8 +8,10 @@
 #include <string>
 #include <utility>
 
-namespace phecda::contracts {
-    class PhecdaException {
+namespace phecda::contracts
+{
+    class PhecdaException
+    {
     public:
         virtual std::string error() = 0;
 
@@ -20,7 +22,8 @@ namespace phecda::contracts {
         virtual int code() = 0;
     };
 
-    class CommonPhecdaException : public PhecdaException, public std::exception {
+    class CommonPhecdaException : public PhecdaException, public std::runtime_error
+    {
     private:
         std::string _callerInfo;
         std::string _kind;
@@ -29,16 +32,21 @@ namespace phecda::contracts {
         std::exception _err;
 
     public:
-        static CommonPhecdaException newCommandPhecdaException(const std::string &kind, const std::string &message,
-                                                               const std::exception &wrappedErr);
+        static CommonPhecdaException newCommandPhecdaException(const std::string& kind, const std::string& message,
+                                                               const std::exception& wrappedErr);
 
-        CommonPhecdaException(std::string kind, std::string message) : _kind(std::move(kind)), _message(std::move(message)) {};
+        CommonPhecdaException(std::string kind, std::string message) : runtime_error(message), _kind(std::move(kind)),
+                                                                       _message(std::move(message))
+        {
+        };
 
-        CommonPhecdaException(std::string message) : _message(std::move(message)) {};
+        CommonPhecdaException(std::string message) : runtime_error(message), _message(std::move(message))
+        {
+        };
 
-        CommonPhecdaException() = default;
+        CommonPhecdaException() = delete;
 
-        char const* what() const override;
+        const char* what() const noexcept override;
 
         std::string error() override;
 
@@ -49,9 +57,10 @@ namespace phecda::contracts {
         int code() override;
 
         std::string kind();
-
     };
-    namespace error_kind{
+
+    namespace error_kind
+    {
         const std::string KIND_UN_KNOW = "Unknown";
         const std::string KIND_DATABASE_ERROR = "Database";
         const std::string KIND_COMMUNICATION_ERROR = "Communication";

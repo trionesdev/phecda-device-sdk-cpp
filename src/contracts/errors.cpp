@@ -6,9 +6,9 @@
 namespace phecda::contracts {
 
     CommonPhecdaException
-    contracts::CommonPhecdaException::newCommandPhecdaException(const std::string &kind, const std::string &message,
+    CommonPhecdaException::newCommandPhecdaException(const std::string &kind, const std::string &message,
                                                                 const std::exception &wrappedErr) {
-        CommonPhecdaException ex;
+        CommonPhecdaException ex(message);
         ex._kind = kind;
         ex._message = message;
         ex._err = wrappedErr;
@@ -32,9 +32,10 @@ namespace phecda::contracts {
         return 0;
     }
 
-    char const *CommonPhecdaException::what() const {
+    const char* CommonPhecdaException::what() const noexcept
+    {
         return _message.c_str();
-    }
+    };
 
     std::string CommonPhecdaException::kind() {
         return _kind;
