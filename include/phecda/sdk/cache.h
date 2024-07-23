@@ -39,7 +39,7 @@ namespace phecda::sdk::cache {
     public:
         static std::shared_ptr<ProfileCache> newProfileCache(const std::list<contracts::DeviceProfile> &profiles);
 
-        std::optional<contracts::DeviceProfile> forName(const std::string &name);
+        std::optional<contracts::DeviceProfile> forProductKey(const std::string &productKey);
 
         std::list<contracts::DeviceProfile> all();
 
@@ -47,7 +47,7 @@ namespace phecda::sdk::cache {
 
         void update(const contracts::DeviceProfile &profile);
 
-        void removeByName(const std::string &name);
+        void removeByProductKey(const std::string &productKey);
 
         std::optional<contracts::DeviceProperty>
         deviceProperty(const std::string &productKey, const std::string &identifier);

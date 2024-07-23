@@ -83,9 +83,9 @@ namespace phecda::sdk::cache {
         return pc;
     }
 
-    std::optional<contracts::DeviceProfile> ProfileCache::forName(const std::string &name) {
-        if (deviceProfileMap.find(name) != deviceProfileMap.end()) {
-            return deviceProfileMap[name];
+    std::optional<contracts::DeviceProfile> ProfileCache::forProductKey(const std::string &productKey) {
+        if (deviceProfileMap.find(productKey) != deviceProfileMap.end()) {
+            return deviceProfileMap[productKey];
         } else {
             return std::nullopt;
         }
@@ -124,11 +124,11 @@ namespace phecda::sdk::cache {
     }
 
     void ProfileCache::update(const contracts::DeviceProfile &profile) {
-        removeByName(profile.name);
+        removeByProductKey(profile.productKey);
         add(profile);
     }
 
-    void ProfileCache::removeByName(const std::string &productKey) {
+    void ProfileCache::removeByProductKey(const std::string &productKey) {
         auto it = deviceProfileMap.find(productKey);
         if (it != deviceProfileMap.end()) {
             deviceProfileMap.erase(productKey);

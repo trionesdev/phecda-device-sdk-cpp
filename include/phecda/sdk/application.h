@@ -13,7 +13,6 @@ namespace phecda::sdk::application {
 
     std::optional<contracts::Event> getCommand(
             const std::string &deviceName, const std::string &commandName, const std::string &queryParams,
-            bool regexCmd,
             const std::shared_ptr<bootstrap::DiContainer> &dic
     );
 

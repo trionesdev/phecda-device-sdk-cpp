@@ -52,13 +52,13 @@ namespace phecda::sdk {
 
         std::list<DeviceProfile> deviceProfiles();
 
-        std::optional<DeviceProfile> getProfileByName(const std::string &name);
+        std::optional<DeviceProfile> getProfileByProductKey(const std::string &productKey);
 
         void updateDeviceProfile(const DeviceProfile &profile);
 
-        void removeDeviceProfileByName(const std::string &name);
+        void removeDeviceProfileByProductKey(const std::string &productKey);
 
-        std::optional<DeviceProperty> deviceResource(const std::string &deviceName, const std::string &resourceName);
+        std::optional<DeviceProperty> deviceProperty(const std::string &deviceName, const std::string &identifier);
 
         std::optional<DeviceCommand> deviceCommand(const std::string &deviceName, const std::string &commandName);
 

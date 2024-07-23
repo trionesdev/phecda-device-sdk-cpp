@@ -35,7 +35,7 @@ namespace phecda::sdk {
         std::map<std::string, std::string> vars = {};
         vars[phecda::contracts::constants::NAME] = executor->_deviceName;
         vars[phecda::contracts::constants::COMMAND] = executor->_identifier;
-        return phecda::sdk::application::getCommand(executor->_deviceName, executor->_identifier, "", false, dic);
+        return phecda::sdk::application::getCommand(executor->_deviceName, executor->_identifier, "", dic);
     }
 
     void Executor::run(const std::shared_ptr<bootstrap::DiContainer> &dic) {
