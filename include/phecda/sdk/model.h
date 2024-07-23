@@ -15,20 +15,20 @@
 namespace phecda::sdk {
 
     struct CommandRequest {
-        std::string deviceResourceName;
+        std::string identifier;
         std::map<std::string, std::any> attributes;
         std::string type;
     };
 
     struct CommandValue {
-        std::string deviceResourceName;
+        std::string identifier;
         std::string type;
         std::any value;
         long origin = 0;
         std::map<std::string, std::any> tags;
 
         static CommandValue
-        newCommandValue(const std::string &deviceResourceName, const std::string &valueType, const std::any &value);
+        newCommandValue(const std::string &identifier, const std::string &valueType, const std::any &value);
 
         std::string toString();
 
@@ -48,7 +48,7 @@ namespace phecda::sdk {
 
     struct AsyncValues {
         std::string deviceName;
-        std::string sourceName;
+        std::string identifier;
         std::list<CommandRequest> commandValues;
     };
 
@@ -76,7 +76,7 @@ namespace phecda::sdk {
         std::string id;
         std::string deviceName;
         std::string productKey;
-        std::string sourceName;
+        std::string identifier;
         long long ts;
         std::map<std::string, Reading> readings;
         std::map<std::string, std::any> tags;

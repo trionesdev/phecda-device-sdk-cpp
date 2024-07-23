@@ -18,7 +18,7 @@ namespace phecda::sdk {
     class Executor {
     private:
         std::string _deviceName;
-        std::string _sourceName;
+        std::string _identifier;
         bool _onChange = false;
         std::map<std::string, std::any> _lastReadings;
         std::chrono::duration<int> _duration;

@@ -95,12 +95,12 @@ namespace phecda::sdk {
         cache::profiles()->removeByName(name);
     }
 
-    std::optional<DeviceResource>
+    std::optional<DeviceProperty>
     DeviceServiceSDK::deviceResource(const std::string &deviceName, const std::string &resourceName) {
         auto device = cache::devices()->forName(deviceName);
         if (device.has_value()) {
-            if (device->profileName.empty()) {
-                return cache::profiles()->deviceResource(device->profileName, resourceName);
+            if (device->productKey.empty()) {
+                return cache::profiles()->deviceProperty(device->productKey, resourceName);
             }
         }
         return std::nullopt;
@@ -110,8 +110,8 @@ namespace phecda::sdk {
     DeviceServiceSDK::deviceCommand(const std::string &deviceName, const std::string &commandName) {
         auto device = cache::devices()->forName(deviceName);
         if (device.has_value()) {
-            if (device->profileName.empty()) {
-                return cache::profiles()->deviceCommand(device->profileName, commandName);
+            if (device->productKey.empty()) {
+                return cache::profiles()->deviceCommand(device->productKey, commandName);
             }
         }
         return std::nullopt;

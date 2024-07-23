@@ -26,6 +26,10 @@ namespace phecda::sdk::provision {
     contracts::DeviceProfile deviceProfileFromYamlFile(const fs::path &path) {
         auto deviceProfile = contracts::DeviceProfile();
         YAML::Node config = YAML::LoadFile(path.string());
+        auto productKey = config["productKey"];
+        if (productKey.IsDefined()) {
+            deviceProfile.productKey = productKey.as<std::string>();
+        }
         auto name = config["name"];
         if (name.IsDefined()) {
             deviceProfile.name = name.as<std::string>();
@@ -33,10 +37,6 @@ namespace phecda::sdk::provision {
         auto manufacturer = config["manufacturer"];
         if (manufacturer.IsDefined()) {
             deviceProfile.manufacturer = manufacturer.as<std::string>();
-        }
-        auto model = config["model"];
-        if (model.IsDefined()) {
-            deviceProfile.model = model.as<std::string>();
         }
         auto labels = config["labels"];
         if (labels.IsDefined()) {
@@ -48,19 +48,23 @@ namespace phecda::sdk::provision {
         if (description.IsDefined()) {
             deviceProfile.description = description.as<std::string>();
         }
-        auto deviceResources = config["deviceResources"];
-        if (deviceResources.IsDefined()) {
-            for (auto deviceResource: deviceResources) {
-                auto deviceResourceStruct = contracts::DeviceResource();
-                auto resourceName = deviceResource["name"];
+        auto deviceProperties = config["deviceProperties"];
+        if (deviceProperties.IsDefined()) {
+            for (auto deviceProperty: deviceProperties) {
+                auto devicePropertyStruct = contracts::DeviceProperty();
+                auto identifier = deviceProperty["identifier"];
+                if (identifier.IsDefined()) {
+                    devicePropertyStruct.identifier = identifier.as<std::string>();
+                }
+                auto resourceName = deviceProperty["name"];
                 if (resourceName.IsDefined()) {
-                    deviceResourceStruct.name = resourceName.as<std::string>();
+                    devicePropertyStruct.name = resourceName.as<std::string>();
                 }
-                auto resDescription = deviceResource["description"];
+                auto resDescription = deviceProperty["description"];
                 if (resDescription.IsDefined()) {
-                    deviceResourceStruct.description = resDescription.as<std::string>();
+                    devicePropertyStruct.description = resDescription.as<std::string>();
                 }
-                auto resProperties = deviceResource["properties"];
+                auto resProperties = deviceProperty["properties"];
                 if (resProperties.IsDefined()) {
                     auto resourceProperties = contracts::ResourceProperties();
                     auto valueType = resProperties["valueType"];
@@ -75,9 +79,86 @@ namespace phecda::sdk::provision {
                     if (mediaType.IsDefined()) {
                         resourceProperties.mediaType = mediaType.as<std::string>();
                     }
-                    deviceResourceStruct.properties = resourceProperties;
+                    devicePropertyStruct.properties = resourceProperties;
                 }
-                deviceProfile.deviceResources.push_back(deviceResourceStruct);
+                deviceProfile.deviceProperties.push_back(devicePropertyStruct);
+            }
+        }
+
+        auto deviceCommands = config["deviceCommands"];
+        if (deviceCommands.IsDefined()){
+            for (auto deviceCommand: deviceCommands) {
+                auto deviceCommandStruct = contracts::DeviceCommand();
+                auto identifier = deviceCommand["identifier"];
+                if (identifier.IsDefined()) {
+                    deviceCommandStruct.identifier = identifier.as<std::string>();
+                }
+                auto resourceName = deviceCommand["name"];
+                if (resourceName.IsDefined()) {
+                    deviceCommandStruct.name = resourceName.as<std::string>();
+                }
+                auto callType = deviceCommand["callType"];
+                if (callType.IsDefined()) {
+                    deviceCommandStruct.callType = resourceName.as<std::string>();
+                }
+                auto inputData = deviceCommand["inputData"];
+                if (inputData.IsDefined()){
+                    for (auto inputItem: inputData) {
+                        auto inputItemStruct = contracts::InputItem();
+                        auto identifier = inputItem["identifier"];
+                        if (identifier.IsDefined()) {
+                            inputItemStruct.identifier = identifier.as<std::string>();
+                        }
+                        auto name = inputItem["name"];
+                        if (name.IsDefined()) {
+                            inputItemStruct.name = name.as<std::string>();
+                        }
+                        auto properties = inputItem["properties"];
+                        if (properties.IsDefined()){
+                            auto resourceProperties = contracts::ResourceProperties();
+                            auto valueType = properties["valueType"];
+                            if (valueType.IsDefined()) {
+                                resourceProperties.valueType = valueType.as<std::string>();
+                            }
+                            auto readWrite = properties["readWrite"];
+                            if (readWrite.IsDefined()) {
+                                resourceProperties.readWrite = readWrite.as<std::string>();
+                           }
+                            inputItemStruct.properties = resourceProperties;
+                        }
+                        deviceCommandStruct.inputData.push_back(inputItemStruct);
+                    }
+                }
+
+                auto outputData = deviceCommand["outputData"];
+                if (outputData.IsDefined()){
+                    for (auto outputItem: outputData) {
+                        auto outputItemStruct = contracts::OutputItem();
+                        auto identifier = outputItem["identifier"];
+                        if (identifier.IsDefined()) {
+                            outputItemStruct.identifier = identifier.as<std::string>();
+                        }
+                        auto name = outputItem["name"];
+                        if (name.IsDefined()) {
+                            outputItemStruct.name = name.as<std::string>();
+                        }
+                        auto properties = outputItem["properties"];
+                        if (properties.IsDefined()){
+                            auto resourceProperties = contracts::ResourceProperties();
+                            auto valueType = properties["valueType"];
+                            if (valueType.IsDefined()) {
+                                resourceProperties.valueType = valueType.as<std::string>();
+                            }
+                            auto readWrite = properties["readWrite"];
+                            if (readWrite.IsDefined()) {
+                                resourceProperties.readWrite = readWrite.as<std::string>();
+                            }
+                            outputItemStruct.properties = resourceProperties;
+                        }
+                        deviceCommandStruct.outputData.push_back(outputItemStruct);
+                    }
+                }
+                deviceProfile.deviceCommands.push_back(deviceCommandStruct);
             }
         }
         return deviceProfile;
@@ -130,9 +211,9 @@ namespace phecda::sdk::provision {
                 if (name.IsDefined() && !name.IsNull()) {
                     deviceStruct.name = name.as<std::string>();
                 }
-                auto profileName = device["profileName"];
+                auto profileName = device["productKey"];
                 if (profileName.IsDefined() && !profileName.IsNull()) {
-                    deviceStruct.profileName = profileName.as<std::string>();
+                    deviceStruct.productKey = profileName.as<std::string>();
                 }
                 auto description = device["description"];
                 if (description.IsDefined() && !description.IsNull()) {
@@ -174,9 +255,9 @@ namespace phecda::sdk::provision {
                         if (onChange.IsDefined() && !onChange.IsNull()) {
                             autoEventStruct.onChange = onChange.as<bool>();
                         }
-                        auto sourceName = autoEvent["sourceName"];
+                        auto sourceName = autoEvent["identifier"];
                         if (sourceName.IsDefined() && !sourceName.IsNull()) {
-                            autoEventStruct.sourceName = sourceName.as<std::string>();
+                            autoEventStruct.identifier = sourceName.as<std::string>();
                         }
                         deviceStruct.autoEvents.push_back(autoEventStruct);
                     }

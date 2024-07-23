@@ -58,7 +58,7 @@ namespace phecda::sdk {
 
         void removeDeviceProfileByName(const std::string &name);
 
-        std::optional<DeviceResource> deviceResource(const std::string &deviceName, const std::string &resourceName);
+        std::optional<DeviceProperty> deviceResource(const std::string &deviceName, const std::string &resourceName);
 
         std::optional<DeviceCommand> deviceCommand(const std::string &deviceName, const std::string &commandName);
 

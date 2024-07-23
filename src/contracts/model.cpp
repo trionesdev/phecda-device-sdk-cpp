@@ -19,17 +19,17 @@ namespace phecda::contracts {
     }
 
     BaseReading BaseReading::newBaseReading(
-            const std::string &profileName,
+            const std::string &productKey,
             const std::string &deviceName,
-            const std::string &resourceName,
+            const std::string &identifier,
             const std::string &valueType
     ) {
         auto baseReading = BaseReading();
         baseReading.id = util::StringUtils::uuid();
         baseReading.origin = util::TimeUtils::timestamp();
         baseReading.deviceName = deviceName;
-        baseReading.resourceName = resourceName;
-        baseReading.profileName = profileName;
+        baseReading.productKey = productKey;
+        baseReading.identifier = identifier;
         baseReading.valueType = valueType;
         return baseReading;
     }
@@ -90,13 +90,13 @@ namespace phecda::contracts {
     }
 
     Event
-    Event::newEvent(const std::string &profileName, const std::string &deviceName, const std::string &sourceName) {
+    Event::newEvent(const std::string &productKey, const std::string &deviceName, const std::string &identifier) {
         Event event;
         event.id = util::StringUtils::uuid();
         event.origin = util::TimeUtils::timestamp();
-        event.profileName = profileName;
+        event.productKey = productKey;
         event.deviceName = deviceName;
-        event.sourceName = sourceName;
+        event.identifier = identifier;
         return event;
     }
 

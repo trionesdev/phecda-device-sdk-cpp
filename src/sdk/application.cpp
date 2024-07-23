@@ -15,7 +15,7 @@
 
 namespace phecda::sdk::application {
 
-    CommandValue createCommandValueFromDeviceResource(const contracts::DeviceResource &dr, std::any value) {
+    CommandValue createCommandValueFromDeviceResource(const contracts::DeviceProperty &dr, std::any value) {
         auto result = CommandValue();
         std::string v = std::any_cast<std::string>(value);
 
@@ -124,7 +124,7 @@ namespace phecda::sdk::application {
             const contracts::Device &device, const std::string &resourceName, const std::string &attributes,
             const std::shared_ptr<bootstrap::DiContainer> &dic
     ) {
-        auto dr = cache::profiles()->deviceResource(device.profileName, resourceName);
+        auto dr = cache::profiles()->deviceProperty(device.productKey, resourceName);
         if (!dr.has_value()) {
             throw contracts::CommonPhecdaException(contracts::error_kind::KIND_ENTITY_DOSE_NOT_EXIST,
                                                    "DeviceResource " + resourceName + " not found");
@@ -135,7 +135,7 @@ namespace phecda::sdk::application {
         }
         auto reqs = std::list<CommandRequest>();
         auto req = CommandRequest();
-        req.deviceResourceName = dr->name;
+        req.identifier = dr->identifier;
         req.attributes = dr->attributes;
         req.type = dr->properties.valueType;
         if (!attributes.empty()) {
@@ -153,47 +153,47 @@ namespace phecda::sdk::application {
                                                  dic);
     }
 
-    std::optional<contracts::Event> readDeviceResourcesRegex(
-            const contracts::Device &device, const std::string &regexResourceName, const std::string &attributes,
-            const std::shared_ptr<bootstrap::DiContainer> &dic
-    ) {
-        auto deviceResources = cache::profiles()->deviceResourcesByRegex(device.profileName, regexResourceName);
-        if (deviceResources.empty()) {
-            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_ENTITY_DOSE_NOT_EXIST,
-                                                   "Regex DeviceResource " + regexResourceName + " not found");
-        }
-        std::list<CommandRequest> reqs;
-        for (auto &dr: deviceResources) {
-            if (dr.properties.readWrite == contracts::constants::READ_WRITE_W) {
-                continue;
-            }
-            auto req = CommandRequest();
-            req.deviceResourceName = dr.name;
-            req.attributes = dr.attributes;
-            req.type = dr.properties.valueType;
-            if (!attributes.empty()) {
-                if (req.attributes.empty()) {
-                    req.attributes = {};
-                }
-                req.attributes[constants::URLRawQuery] = attributes;
-            }
-            reqs.push_back(req);
-        }
-        if (reqs.empty()) {
-            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_NOT_ALLOWED,
-                                                   "no readable resources matched with " + regexResourceName);
-        }
-        auto results = container::protocolDriverFrom(dic)->handleReadCommands(device.name, device.protocols, reqs);
-        auto configuration = sdk::container::configurationFrom(dic);
-        return transformer::commandValuesToEvent(results, device.name, regexResourceName,
-                                                 configuration->device.dataTransform, dic);
-    }
+//    std::optional<contracts::Event> readDeviceResourcesRegex(
+//            const contracts::Device &device, const std::string &regexResourceName, const std::string &attributes,
+//            const std::shared_ptr<bootstrap::DiContainer> &dic
+//    ) {
+//        auto deviceResources = cache::profiles()->deviceResourcesByRegex(device.profileName, regexResourceName);
+//        if (deviceResources.empty()) {
+//            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_ENTITY_DOSE_NOT_EXIST,
+//                                                   "Regex DeviceResource " + regexResourceName + " not found");
+//        }
+//        std::list<CommandRequest> reqs;
+//        for (auto &dr: deviceResources) {
+//            if (dr.properties.readWrite == contracts::constants::READ_WRITE_W) {
+//                continue;
+//            }
+//            auto req = CommandRequest();
+//            req.deviceResourceName = dr.name;
+//            req.attributes = dr.attributes;
+//            req.type = dr.properties.valueType;
+//            if (!attributes.empty()) {
+//                if (req.attributes.empty()) {
+//                    req.attributes = {};
+//                }
+//                req.attributes[constants::URLRawQuery] = attributes;
+//            }
+//            reqs.push_back(req);
+//        }
+//        if (reqs.empty()) {
+//            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_NOT_ALLOWED,
+//                                                   "no readable resources matched with " + regexResourceName);
+//        }
+//        auto results = container::protocolDriverFrom(dic)->handleReadCommands(device.name, device.protocols, reqs);
+//        auto configuration = sdk::container::configurationFrom(dic);
+//        return transformer::commandValuesToEvent(results, device.name, regexResourceName,
+//                                                 configuration->device.dataTransform, dic);
+//    }
 
     std::optional<contracts::Event> readDeviceCommand(
             const contracts::Device &device, const std::string &commandName, const std::string &attributes,
             const std::shared_ptr<bootstrap::DiContainer> &dic
     ) {
-        auto dc = cache::profiles()->deviceCommand(device.profileName, commandName);
+        auto dc = cache::profiles()->deviceCommand(device.productKey, commandName);
         if (!dc.has_value()) {
             throw contracts::CommonPhecdaException(contracts::error_kind::KIND_ENTITY_DOSE_NOT_EXIST,
                                                    "DeviceCommand " + commandName + " not found");
@@ -203,33 +203,25 @@ namespace phecda::sdk::application {
                                                    "DeviceCommand " + dc->name + " is marked as write-only");
         }
         auto configuration = sdk::container::configurationFrom(dic);
-        if (dc->resourceOperations.size() > configuration->device.maxCmdOps) {
-            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
-                                                   "GET command " + dc->name + " exceed device " + device.name +
-                                                   " MaxCmdOps (" + std::to_string(configuration->device.maxCmdOps) +
-                                                   ")");
-        }
+//        if (dc->resourceOperations.size() > configuration->device.maxCmdOps) {
+//            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
+//                                                   "GET command " + dc->name + " exceed device " + device.name +
+//                                                   " MaxCmdOps (" + std::to_string(configuration->device.maxCmdOps) +
+//                                                   ")");
+//        }
         std::list<CommandRequest> reqs;
-        for (auto &ro: dc->resourceOperations) {
-            auto drName = ro.deviceResource;
-            auto dr = cache::profiles()->deviceResource(device.profileName, drName);
-            if (!dr.has_value()) {
-                throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
-                                                       "DeviceResource " + drName + " in GET command " + dc->name +
-                                                       " for " + device.name + " not defined");
-            } else {
-                auto req = CommandRequest();
-                req.deviceResourceName = dr->name;
-                req.attributes = dr->attributes;
-                req.type = dr->properties.valueType;
-                if (!attributes.empty()) {
-                    if (req.attributes.empty()) {
-                        req.attributes = {};
-                    }
-                    req.attributes[constants::URLRawQuery] = attributes;
+        for (auto &inputItem: dc->inputData) {
+            auto req = CommandRequest();
+            req.identifier = inputItem.identifier;
+            req.attributes = inputItem.attributes;
+            req.type = inputItem.properties.valueType;
+            if (!attributes.empty()) {
+                if (req.attributes.empty()) {
+                    req.attributes = {};
                 }
-                reqs.push_back(req);
+                req.attributes[constants::URLRawQuery] = attributes;
             }
+            reqs.push_back(req);
         }
 
         auto results = container::protocolDriverFrom(dic)->handleReadCommands(device.name, device.protocols, reqs);
@@ -242,7 +234,7 @@ namespace phecda::sdk::application {
             const std::map<std::string, std::any> &requests,
             const std::shared_ptr<bootstrap::DiContainer> &dic
     ) {
-        auto dc = cache::profiles()->deviceCommand(device.profileName, commandName);
+        auto dc = cache::profiles()->deviceCommand(device.productKey, commandName);
         if (!dc.has_value()) {
             throw contracts::CommonPhecdaException(contracts::error_kind::KIND_ENTITY_DOSE_NOT_EXIST,
                                                    "DeviceCommand " + commandName + " not found");
@@ -252,56 +244,56 @@ namespace phecda::sdk::application {
                                                    "DeviceCommand " + dc->name + " is marked as read-only");
         }
         auto configuration = sdk::container::configurationFrom(dic);
-        if (dc->resourceOperations.size() > configuration->device.maxCmdOps) {
-            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
-                                                   "POST command " + dc->name + " exceed device " + device.name +
-                                                   " MaxCmdOps (" + std::to_string(configuration->device.maxCmdOps) +
-                                                   ")");
-        }
+//        if (dc->resourceOperations.size() > configuration->device.maxCmdOps) {
+//            throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
+//                                                   "POST command " + dc->name + " exceed device " + device.name +
+//                                                   " MaxCmdOps (" + std::to_string(configuration->device.maxCmdOps) +
+//                                                   ")");
+//        }
         std::list<CommandValue> cvs = {};
-        for (const auto &ro: dc->resourceOperations) {
-            auto drName = ro.deviceResource;
-            auto dr = cache::profiles()->deviceResource(device.profileName, drName);
-            if (dr.has_value()) {
-                std::any value;
-                if (requests.find(ro.deviceResource) != requests.end()) {
-                    value = requests.at(ro.deviceResource);
-                } else {
-                    if (ro.defaultValue.empty()) {
-                        value = ro.defaultValue;
-                    } else if (dr->properties.defaultValue.empty()) {
-                        value = dr->properties.defaultValue;
-                    } else {
-                        throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
-                                                               "DeviceResource " + dr->name +
-                                                               " not found in request body and no default value defined");
-                    }
-                }
-
-                if (!ro.mappings.empty()) {
-                    for (auto &m: ro.mappings) {
-                        if (m.second == std::any_cast<string>(value)) {
-                            value = m.first;
-                            break;
-                        }
-                    }
-                }
-                auto cv = createCommandValueFromDeviceResource(dr.value(), value);
-                cvs.push_back(cv);
-            } else {
-                throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
-                                                       "DeviceResource " + drName + " in SET command " + dc->name +
-                                                       " for " + device.name + " not defined");
-            }
-
-        }
+//        for (const auto &ro: dc->resourceOperations) {
+//            auto drName = ro.deviceResource;
+//            auto dr = cache::profiles()->deviceResource(device.profileName, drName);
+//            if (dr.has_value()) {
+//                std::any value;
+//                if (requests.find(ro.deviceResource) != requests.end()) {
+//                    value = requests.at(ro.deviceResource);
+//                } else {
+//                    if (ro.defaultValue.empty()) {
+//                        value = ro.defaultValue;
+//                    } else if (dr->properties.defaultValue.empty()) {
+//                        value = dr->properties.defaultValue;
+//                    } else {
+//                        throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
+//                                                               "DeviceResource " + dr->name +
+//                                                               " not found in request body and no default value defined");
+//                    }
+//                }
+//
+//                if (!ro.mappings.empty()) {
+//                    for (auto &m: ro.mappings) {
+//                        if (m.second == std::any_cast<string>(value)) {
+//                            value = m.first;
+//                            break;
+//                        }
+//                    }
+//                }
+//                auto cv = createCommandValueFromDeviceResource(dr.value(), value);
+//                cvs.push_back(cv);
+//            } else {
+//                throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
+//                                                       "DeviceResource " + drName + " in SET command " + dc->name +
+//                                                       " for " + device.name + " not defined");
+//            }
+//
+//        }
 
         std::list<CommandRequest> reqs;
         if (!cvs.empty()) {
             for (auto &cv: cvs) {
-                auto dr = cache::profiles()->deviceResource(device.profileName, cv.deviceResourceName);
+                auto dr = cache::profiles()->deviceProperty(device.productKey, cv.identifier);
                 auto req = CommandRequest();
-                req.deviceResourceName = cv.deviceResourceName;
+                req.identifier = cv.identifier;
                 req.attributes = dr->attributes;
                 req.type = cv.type;
                 if (attributes.empty()) {
@@ -321,30 +313,30 @@ namespace phecda::sdk::application {
     }
 
     std::optional<contracts::Event> writeDeviceResource(
-            const contracts::Device &device, const std::string &resourceName, const std::string &attributes,
+            const contracts::Device &device, const std::string &identifier, const std::string &attributes,
             const std::map<std::string, std::any> &requests,
             const std::shared_ptr<bootstrap::DiContainer> &dic
     ) {
-        auto dr = cache::profiles()->deviceResource(device.profileName, resourceName);
+        auto dr = cache::profiles()->deviceProperty(device.productKey, identifier);
         if (!dr.has_value()) {
             throw contracts::CommonPhecdaException(contracts::error_kind::KIND_ENTITY_DOSE_NOT_EXIST,
-                                                   "resource " + resourceName + " not found");
+                                                   "resource " + identifier + " not found");
         }
         if (dr->properties.readWrite == contracts::constants::READ_WRITE_R) {
             throw contracts::CommonPhecdaException(contracts::error_kind::KIND_NOT_ALLOWED,
-                                                   "resource " + resourceName + " is marked as read-only");
+                                                   "resource " + identifier + " is marked as read-only");
         }
-        auto v = requests.at(dr->name);
-        if (requests.find(dr->name) == requests.end()) {
+        auto v = requests.at(dr->identifier);
+        if (requests.find(dr->identifier) == requests.end()) {
             if (dr->properties.defaultValue.empty()) {
                 throw contracts::CommonPhecdaException(contracts::error_kind::KIND_SERVER_ERROR,
-                                                       "DeviceResource " + dr->name +
+                                                       "DeviceResource " + dr->identifier +
                                                        " not found in request body and no default value defined");
             }
             v = dr->properties.defaultValue;
             auto cv = createCommandValueFromDeviceResource(dr.value(), v);
             auto req = CommandRequest();
-            req.deviceResourceName = cv.deviceResourceName;
+            req.identifier = cv.identifier;
             req.attributes = dr->attributes;
             req.type = cv.type;
             if (attributes.empty()) {
@@ -363,7 +355,7 @@ namespace phecda::sdk::application {
                 driver->handleWriteCommands(device.name, device.protocols, {req}, {cv});
             }
             if (dr->properties.readWrite == contracts::constants::READ_WRITE_W) {
-                return transformer::commandValuesToEvent({cv}, device.name, resourceName, false, dic);
+                return transformer::commandValuesToEvent({cv}, device.name, identifier, false, dic);
             }
         }
         return std::nullopt;
@@ -407,15 +399,11 @@ namespace phecda::sdk::application {
         if (!device.has_value()) {
             return std::nullopt;
         }
-        auto deviceCommand = cache::profiles()->deviceCommand(device->profileName, commandName);
+        auto deviceCommand = cache::profiles()->deviceCommand(device->productKey, commandName);
         if (deviceCommand.has_value()) {
             return readDeviceCommand(device.value(), commandName, queryParams, dic);
         } else {
-            if (regexCmd) {
-                return readDeviceResourcesRegex(device.value(), commandName, queryParams, dic);
-            } else {
-                return readDeviceResource(device.value(), commandName, queryParams, dic);
-            }
+            return readDeviceResource(device.value(), commandName, queryParams, dic);
         }
     }
 
@@ -435,7 +423,7 @@ namespace phecda::sdk::application {
         if (!device.has_value()) {
             return std::nullopt;
         }
-        auto deviceCommand = cache::profiles()->deviceCommand(device->profileName, commandName);
+        auto deviceCommand = cache::profiles()->deviceCommand(device->productKey, commandName);
         if (deviceCommand.has_value()) {
             return writeDeviceCommand(device.value(), commandName, queryParams, requests, dic);
         } else {

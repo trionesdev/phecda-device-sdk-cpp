@@ -7,6 +7,7 @@
 
 #include <string>
 #include <utility>
+#include <stdexcept>
 
 namespace phecda::contracts
 {

@@ -28,7 +28,7 @@ namespace phecda::contracts {
     struct AutoEvent {
         std::string interval;
         bool onChange;
-        std::string sourceName;
+        std::string identifier;
     };
 
     struct Device {
@@ -41,7 +41,7 @@ namespace phecda::contracts {
         std::list<std::string> labels;
         std::any location;
         std::string serviceName;
-        std::string profileName;
+        std::string productKey;
         std::list<AutoEvent> autoEvents;
         std::map<std::string, std::any> tags;
         std::map<std::string, std::any> properties;
@@ -64,14 +64,37 @@ namespace phecda::contracts {
         std::map<std::string, std::any> optional;
     };
 
-    struct DeviceResource {
+    struct InputItem{
+        std::string identifier;
         std::string name;
-        std::string description;
-        bool isHidden;
         ResourceProperties properties;
         std::map<std::string, std::any> attributes;
-        std::map<std::string, std::any> tags;
     };
+
+    struct OutputItem{
+        std::string identifier;
+        std::string name;
+        ResourceProperties properties;
+        std::map<std::string, std::any> attributes;
+    };
+
+    struct DeviceProperty{
+        std::string identifier;
+        std::string name;
+        std::string description;
+        ResourceProperties properties;
+        std::map<std::string, std::any> attributes;
+        std::map<std::string, std::string> tags;
+    };
+
+//    struct DeviceResource {
+//        std::string name;
+//        std::string description;
+//        bool isHidden;
+//        ResourceProperties properties;
+//        std::map<std::string, std::any> attributes;
+//        std::map<std::string, std::any> tags;
+//    };
 
     struct ResourceOperation {
         std::string deviceResource;
@@ -80,22 +103,46 @@ namespace phecda::contracts {
     };
 
     struct DeviceCommand {
+//        std::string name;
+//        bool isHidden;
+//        std::string readWrite;
+//        std::list<ResourceOperation> resourceOperations;
+//        std::map<std::string, std::any> tags;
+        std::string identifier;
         std::string name;
-        bool isHidden;
+        std::string callType;
+        std::string description;
         std::string readWrite;
-        std::list<ResourceOperation> resourceOperations;
-        std::map<std::string, std::any> tags;
+        std::list<InputItem> inputData;
+        std::list<OutputItem> outputData;
+        std::map<std::string, std::string> tags;
+    };
+
+    struct DeviceEvent{
+        std::string identifier;
+        std::string name;
+        std::string description;
     };
 
     struct DeviceProfile : DBTimestamp {
-        std::string id;
+//        std::string id;
+//        std::string name;
+//        std::string description;
+//        std::string manufacturer;
+//        std::string model;
+//        std::list<std::string> labels;
+//        std::list<DeviceResource> deviceResources;
+//        std::list<DeviceCommand> deviceCommands;
+
+        std::string productKey;
         std::string name;
         std::string description;
         std::string manufacturer;
-        std::string model;
         std::list<std::string> labels;
-        std::list<DeviceResource> deviceResources;
+        std::list<DeviceProperty> deviceProperties;
         std::list<DeviceCommand> deviceCommands;
+        std::list<DeviceEvent> deviceEvents;
+
     };
 
     struct DeviceService : DBTimestamp {
@@ -110,8 +157,8 @@ namespace phecda::contracts {
         std::string id;
         long long origin;
         std::string deviceName;
-        std::string resourceName;
-        std::string profileName;
+        std::string identifier;
+        std::string productKey;
         std::string valueType;
         std::string utils;
         std::map<std::string, std::any> tags;
@@ -121,7 +168,7 @@ namespace phecda::contracts {
         std::string value;
 
         static BaseReading
-        newBaseReading(const std::string &profileName, const std::string &deviceName, const std::string &resourceName,
+        newBaseReading(const std::string &productKey, const std::string &deviceName, const std::string &identifier,
                        const std::string &valueType);
 
     };
@@ -131,7 +178,7 @@ namespace phecda::contracts {
         std::string mediaType;
 
         static BaseReading
-        newBinaryReading(const std::string &profileName, const std::string &deviceName, const std::string &resourceName,
+        newBinaryReading(const std::string &productKey, const std::string &deviceName, const std::string &resourceName,
                          const std::vector<std::byte> &binaryValue, const std::string &mediaType);
     };
 
@@ -139,7 +186,7 @@ namespace phecda::contracts {
         std::any objectValue;
 
         static BaseReading
-        newObjectReading(const std::string &profileName, const std::string &deviceName, const std::string &resourceName,
+        newObjectReading(const std::string &productKey, const std::string &deviceName, const std::string &resourceName,
                          const std::any &objectValue);
     };
 
@@ -147,21 +194,21 @@ namespace phecda::contracts {
         std::string value;
 
         static BaseReading
-        newSimpleReading(const std::string &profileName, const std::string &deviceName, const std::string &resourceName,
+        newSimpleReading(const std::string &productKey, const std::string &deviceName, const std::string &identifier,
                          const std::string &valueType, std::any &value);
     };
 
     struct Event {
         std::string id;
         std::string deviceName;
-        std::string profileName;
-        std::string sourceName;
+        std::string productKey;
+        std::string identifier;
         long long origin{};
         std::list<BaseReading> readings;
         std::map<std::string, std::any> tags;
 
         static Event
-        newEvent(const std::string &profileName, const std::string &deviceName, const std::string &sourceName);
+        newEvent(const std::string &productKey, const std::string &deviceName, const std::string &identifier);
 
     };
 

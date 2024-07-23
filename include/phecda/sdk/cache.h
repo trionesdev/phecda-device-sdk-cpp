@@ -32,8 +32,10 @@ namespace phecda::sdk::cache {
     class ProfileCache {
     private:
         std::map<std::string, contracts::DeviceProfile> deviceProfileMap = {};
-        std::map<std::string, std::map<std::string, contracts::DeviceResource>> deviceResourceMap = {};
+//        std::map<std::string, std::map<std::string, contracts::DeviceResource>> deviceResourceMap = {};
+        std::map<std::string, std::map<std::string, contracts::DeviceProperty>> devicePropertyMap = {};
         std::map<std::string, std::map<std::string, contracts::DeviceCommand>> deviceCommandMap = {};
+        std::map<std::string, std::map<std::string, contracts::DeviceEvent>> deviceEventMap = {};
     public:
         static std::shared_ptr<ProfileCache> newProfileCache(const std::list<contracts::DeviceProfile> &profiles);
 
@@ -47,15 +49,15 @@ namespace phecda::sdk::cache {
 
         void removeByName(const std::string &name);
 
-        std::optional<contracts::DeviceResource>
-        deviceResource(const std::string &profileName, const std::string &resourceName);
+        std::optional<contracts::DeviceProperty>
+        deviceProperty(const std::string &productKey, const std::string &identifier);
 
-        std::list<contracts::DeviceResource> deviceResourcesByRegex(const std::string& profileName, const std::string& regex);
+//        std::list<contracts::DeviceResource> deviceResourcesByRegex(const std::string& profileName, const std::string& regex);
 
-        std::optional<contracts::DeviceCommand> deviceCommand(const std::string& profileName, const std::string& commandName);
+        std::optional<contracts::DeviceCommand> deviceCommand(const std::string& productKey, const std::string& commandIdentifier);
 
-        std::optional<contracts::ResourceOperation>
-        resourceOperation(const std::string& profileName, const std::string& deviceResource);
+//        std::optional<contracts::ResourceOperation>
+//        resourceOperation(const std::string& profileName, const std::string& deviceResource);
     };
 
     static std::shared_ptr<DeviceCache> dc;

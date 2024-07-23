@@ -15,12 +15,12 @@ namespace phecda::sdk {
               const std::shared_ptr<bootstrap::DiContainer> &dic) {
         auto phecdaEvent = PhecdaEvent::newPhecdaEvent(event);
         LOG4CXX_INFO(logger, "send event: " << phecdaEvent.toJsonString());
-        auto topic = event.profileName + "/" + event.deviceName + "/thing/property/post";
+        auto topic = event.productKey + "/" + event.deviceName + "/thing/property/post";
         sdk::container::messagingClientFrom(dic)->publish(topic, phecdaEvent.toJsonString());
     }
 
     void addEventTags(contracts::Event event) {
-        auto cmd = cache::profiles()->deviceCommand(event.profileName, event.sourceName);
+        auto cmd = cache::profiles()->deviceCommand(event.productKey, event.identifier);
         if (cmd.has_value()) {
             auto cmdTags = cmd.value().tags;
             if (!cmdTags.empty()) {
@@ -37,7 +37,7 @@ namespace phecda::sdk {
     }
 
     void addReadingTags(contracts::BaseReading reading) {
-        auto dr = cache::profiles()->deviceResource(reading.profileName, reading.resourceName);
+        auto dr = cache::profiles()->deviceProperty(reading.productKey, reading.identifier);
         if (dr.has_value()) {
             auto drTags = dr.value().tags;
             if (!drTags.empty()) {

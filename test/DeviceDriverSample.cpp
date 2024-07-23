@@ -27,11 +27,11 @@ namespace phecda {
         std::list<sdk::CommandValue> cvs = {};
         for (auto req: reqs) {
             if (req.type == phecda::contracts::constants::VALUE_TYPE_INT) {
-                cvs.push_back(phecda::sdk::CommandValue::newCommandValue(req.deviceResourceName,
+                cvs.push_back(phecda::sdk::CommandValue::newCommandValue(req.identifier,
                                                                          phecda::contracts::constants::VALUE_TYPE_INT,
                                                                          1));
             } else if (req.type == phecda::contracts::constants::VALUE_TYPE_LONG) {
-                cvs.push_back(phecda::sdk::CommandValue::newCommandValue(req.deviceResourceName,
+                cvs.push_back(phecda::sdk::CommandValue::newCommandValue(req.identifier,
                                                                          phecda::contracts::constants::VALUE_TYPE_LONG,
                                                                          100000000000));
             }

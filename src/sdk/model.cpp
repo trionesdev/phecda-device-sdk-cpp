@@ -9,10 +9,10 @@
 
 namespace phecda::sdk {
 
-    CommandValue CommandValue::newCommandValue(const std::string &deviceResourceName, const std::string &valueType,
+    CommandValue CommandValue::newCommandValue(const std::string &identifier, const std::string &valueType,
                                                const std::any &value) {
         CommandValue cv;
-        cv.deviceResourceName = deviceResourceName;
+        cv.identifier = identifier;
         cv.type = valueType;
         cv.value = value;
         return cv;
@@ -55,7 +55,7 @@ namespace phecda::sdk {
 
     Reading Reading::fromBaseReading(const contracts::BaseReading &baseReading) {
         Reading reading;
-        reading.identifier = baseReading.resourceName;
+        reading.identifier = baseReading.identifier;
         reading.valueType = baseReading.valueType;
         reading.utils = baseReading.utils;
         reading.binaryValue = baseReading.binaryValue;
@@ -89,8 +89,8 @@ namespace phecda::sdk {
         PhecdaEvent phecdaEvent;
         phecdaEvent.id = event.id;
         phecdaEvent.deviceName = event.deviceName;
-        phecdaEvent.productKey = event.profileName;
-        phecdaEvent.sourceName = event.sourceName;
+        phecdaEvent.productKey = event.productKey;
+        phecdaEvent.identifier = event.identifier;
         phecdaEvent.ts = event.origin;
         phecdaEvent.readings = readingsMap;
         phecdaEvent.tags = event.tags;
@@ -102,7 +102,7 @@ namespace phecda::sdk {
         json["id"] = id;
         json["deviceName"] = deviceName;
         json["productKey"] = productKey;
-        json["sourceName"] = sourceName;
+        json["identifier"] = identifier;
         json["ts"] = ts;
 
         for (auto &reading: readings) {

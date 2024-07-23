@@ -23,7 +23,7 @@ namespace phecda::sdk {
         auto duration = phecda::util::DurationUtils::parse(autoEvent.interval);
         auto executor = std::make_shared<Executor>();
         executor->_deviceName = deviceName;
-        executor->_sourceName = autoEvent.sourceName;
+        executor->_identifier = autoEvent.identifier;
         executor->_onChange = autoEvent.onChange;
         executor->_duration = duration;
         executor->_stop = false;
@@ -34,8 +34,8 @@ namespace phecda::sdk {
     Executor::readResource(const Executor *executor, std::shared_ptr<bootstrap::DiContainer> dic) {
         std::map<std::string, std::string> vars = {};
         vars[phecda::contracts::constants::NAME] = executor->_deviceName;
-        vars[phecda::contracts::constants::COMMAND] = executor->_sourceName;
-        return phecda::sdk::application::getCommand(executor->_deviceName, executor->_sourceName, "", false, dic);
+        vars[phecda::contracts::constants::COMMAND] = executor->_identifier;
+        return phecda::sdk::application::getCommand(executor->_deviceName, executor->_identifier, "", false, dic);
     }
 
     void Executor::run(const std::shared_ptr<bootstrap::DiContainer> &dic) {

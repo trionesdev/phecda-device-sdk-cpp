@@ -302,7 +302,7 @@ namespace phecda::sdk::transformer {
         }
         if (isNan(cv)) {
             throw contracts::CommonPhecdaException(contracts::error_kind::KIND_NAN_ERROR,
-                                                   "NaN error for DeviceResource " + cv.deviceResourceName);
+                                                   "NaN error for DeviceResource " + cv.identifier);
         }
         auto value = commandValueForTransform(cv);
         auto newValue = value;
@@ -331,7 +331,7 @@ namespace phecda::sdk::transformer {
             if (mappings.find(value.valueToString()) != mappings.end()) {
                 auto newValue = mappings.at(value.valueToString());
                 if (!newValue.empty()) {
-                    result = CommandValue::newCommandValue(value.deviceResourceName,
+                    result = CommandValue::newCommandValue(value.identifier,
                                                            contracts::constants::VALUE_TYPE_STRING, newValue);
                 }
             }
@@ -358,10 +358,10 @@ namespace phecda::sdk::transformer {
         std::list<contracts::BaseReading> readings = {};
 
         for (auto cv: cvs) {
-            auto dr = cache::profiles()->deviceResource(device->profileName, cv.deviceResourceName);
+            auto dr = cache::profiles()->deviceProperty(device->productKey, cv.identifier);
             if (!dr.has_value()) {
                 throw contracts::CommonPhecdaException(contracts::error_kind::KIND_ENTITY_DOSE_NOT_EXIST,
-                                                       "failed to find DeviceResource " + cv.deviceResourceName +
+                                                       "failed to find DeviceResource " + cv.identifier +
                                                        " in Device " + deviceName + " for CommandValue " +
                                                        cv.toString());
             }
@@ -370,10 +370,10 @@ namespace phecda::sdk::transformer {
                     transformReadResult(cv, dr.value().properties);
                 } catch (contracts::CommonPhecdaException &e) {
                     if (e.kind() == contracts::error_kind::KIND_OVERFLOW_ERROR) {
-                        cv = CommandValue::newCommandValue(cv.deviceResourceName,
+                        cv = CommandValue::newCommandValue(cv.identifier,
                                                            contracts::constants::VALUE_TYPE_STRING, Overflow);
                     } else if (e.kind() == contracts::error_kind::KIND_NAN_ERROR) {
-                        cv = CommandValue::newCommandValue(cv.deviceResourceName,
+                        cv = CommandValue::newCommandValue(cv.identifier,
                                                            contracts::constants::VALUE_TYPE_STRING, NaN);
                     } else {
                         transformsOk = false;
@@ -385,14 +385,14 @@ namespace phecda::sdk::transformer {
             if (!cv.tags.empty()) {
                 tags.insert(cv.tags.begin(), cv.tags.end());
             }
-            auto ro = cache::profiles()->resourceOperation(device->profileName, cv.deviceResourceName);
-            if (ro.has_value()) {
-                if (!ro.value().mappings.empty()) {
-                    auto _mapCommandValue = mapCommandValue(cv, ro.value().mappings);
-                    cv = _mapCommandValue;
-                }
-            }
-            auto reading = commandValueToReading(cv, deviceName, device->profileName, dr.value().properties.mediaType,
+//            auto ro = cache::profiles()->resourceOperation(device->productKey, cv.identifier);
+//            if (ro.has_value()) {
+//                if (!ro.value().mappings.empty()) {
+//                    auto _mapCommandValue = mapCommandValue(cv, ro.value().mappings);
+//                    cv = _mapCommandValue;
+//                }
+//            }
+            auto reading = commandValueToReading(cv, deviceName, device->productKey, dr.value().properties.mediaType,
                                                  origin);
             addReadingTags(reading);
             readings.push_back(reading);
@@ -402,7 +402,7 @@ namespace phecda::sdk::transformer {
                                                    "failed to transform value for " + deviceName);
         }
         if (!readings.empty()) {
-            auto event = contracts::Event::newEvent(device->profileName, device->name, sourceName);
+            auto event = contracts::Event::newEvent(device->productKey, device->name, sourceName);
             event.readings = readings;
             event.origin = origin;
             event.tags = tags;
@@ -418,13 +418,13 @@ namespace phecda::sdk::transformer {
                           long eventOrigin) {
         contracts::BaseReading reading;
         if (cv.type == contracts::constants::VALUE_TYPE_BINARY) {
-            reading = contracts::BinaryReading::newBinaryReading(profileName, deviceName, cv.deviceResourceName,
+            reading = contracts::BinaryReading::newBinaryReading(profileName, deviceName, cv.identifier,
                                                                  cv.binaryValue(), mediaType);
         } else if (cv.type == contracts::constants::VALUE_TYPE_STRUCT) {
-            reading = contracts::ObjectReading::newObjectReading(profileName, deviceName, cv.deviceResourceName,
+            reading = contracts::ObjectReading::newObjectReading(profileName, deviceName, cv.identifier,
                                                                  cv.value);
         } else {
-            reading = contracts::SimpleReading::newSimpleReading(profileName, deviceName, cv.deviceResourceName,
+            reading = contracts::SimpleReading::newSimpleReading(profileName, deviceName, cv.identifier,
                                                                  cv.type, cv.value);
         }
         if (cv.origin > 0) {
