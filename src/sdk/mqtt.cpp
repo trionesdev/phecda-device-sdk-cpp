@@ -65,7 +65,11 @@ namespace phecda::sdk {
 //        mqtt::message msg("test", message.data(), message.size(), 0, false);
         auto msg = mqtt::make_message(_topicPrefix + "/" + topic,
                                       std::string(reinterpret_cast<const char *>(message.data()), message.size()));
-        _mqttClient->publish(msg);
+        try {
+            _mqttClient->publish(msg);
+        }catch (const mqtt::exception &exc) {
+            LOG_ERROR(logger, "[mqtt.cpp] mqtt publish failed" << exc.what());
+        }
     }
 
     void MqttMessagingClient::subscribe(std::string topic,
@@ -81,7 +85,11 @@ namespace phecda::sdk {
 
     void MqttMessagingClient::publish(std::string topic, string message) {
         auto msg = mqtt::make_message(_topicPrefix + "/" + topic, message);
-        _mqttClient->publish(msg);
+        try {
+            _mqttClient->publish(msg);
+        }catch (const mqtt::exception &exc) {
+            LOG_ERROR(logger, "[mqtt.cpp] mqtt publish failed" << exc.what());
+        }
     }
 
 

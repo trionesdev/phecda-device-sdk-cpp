@@ -93,6 +93,7 @@ namespace phecda::contracts {
     Event::newEvent(const std::string &productKey, const std::string &deviceName, const std::string &identifier) {
         Event event;
         event.id = util::StringUtils::uuid();
+        event.type = contracts::constants::EVENT_TYPE_PROPERTY;
         event.origin = util::TimeUtils::timestamp();
         event.productKey = productKey;
         event.deviceName = deviceName;

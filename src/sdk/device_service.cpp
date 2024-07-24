@@ -6,21 +6,18 @@
 #include "phecda/sdk/ProtocolDriver.h"
 #include "phecda/sdk/container.h"
 #include "phecda/contracts/container.h"
-#include "phecda/bootstrap/startup.h"
-#include "phecda/bootstrap/bootstrap.h"
-#include "phecda/sdk/auto_event.h"
 #include "phecda/sdk/service_init.h"
 #include "phecda/sdk/constants.h"
 #include "phecda/sdk/cache.h"
 #include "phecda/contracts/errors.h"
-#include <nlohmann/json.hpp>
+#include <phecda/log/log.h>
 
 
 using namespace phecda::bootstrap;
 using namespace phecda::contracts;
 
 namespace phecda::sdk {
-
+    static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("sdk/device_service"));
     void DeviceServiceSDK::setServiceName(std::string instanceName) {
         auto envValue = util::SystemUtils::getEnv("EnvInstanceName");
         if (!boost::trim_copy(envValue).empty()) {
@@ -125,7 +122,6 @@ namespace phecda::sdk {
     }
 
     void DeviceServiceSDK::run() {
-        std::cout << "Hello, World! run" << std::endl;
         std::string instanceName;
         auto startupTimer = Timer::newStartUpTimer(_serviceKey);
         std::string additionalUsage =
@@ -171,6 +167,8 @@ namespace phecda::sdk {
                                                             std::forward<decltype(args)>(args));
                                                 }
                                         });
+        LOG_INFO(logger, "Starting device service: " << _serviceKey);
+
         this->driver->start();
         wg->await();
     }

@@ -88,6 +88,7 @@ namespace phecda::sdk {
         std::map<std::string, Reading> readingsMap = Reading::fromBaseReadingsToMap(event.readings);
         PhecdaEvent phecdaEvent;
         phecdaEvent.id = event.id;
+        phecdaEvent.type = event.type;
         phecdaEvent.deviceName = event.deviceName;
         phecdaEvent.productKey = event.productKey;
         phecdaEvent.identifier = event.identifier;
@@ -100,6 +101,7 @@ namespace phecda::sdk {
     std::string PhecdaEvent::toJsonString() {
         nlohmann::json json;
         json["id"] = id;
+        json["type"] = type;
         json["deviceName"] = deviceName;
         json["productKey"] = productKey;
         json["identifier"] = identifier;

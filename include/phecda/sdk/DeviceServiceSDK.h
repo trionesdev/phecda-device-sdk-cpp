@@ -60,7 +60,7 @@ namespace phecda::sdk {
 
         std::optional<DeviceProperty> deviceProperty(const std::string &deviceName, const std::string &identifier);
 
-        std::optional<DeviceCommand> deviceCommand(const std::string &deviceName, const std::string &commandName);
+        std::optional<DeviceCommand> deviceCommand(const std::string &deviceName, const std::string &commandIdentifier);
 
         void
         addDeviceAutoEvent(const std::string &deviceName, const std::string &sourceName, const AutoEvent &autoEvent);

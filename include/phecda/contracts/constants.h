@@ -36,6 +36,10 @@ namespace phecda::contracts::constants {
     static std::string VALUE_TYPE_BINARY = "Binary";
     //endregion
 
+    static std::string EVENT_TYPE_EVENT="event";
+    static std::string EVENT_TYPE_COMMAND="command";
+    static std::string EVENT_TYPE_PROPERTY="property";
+
 }
 
 #endif //PHECDA_DEVICE_SDK_CONTRACTS_CONSTANTS_H

@@ -74,6 +74,7 @@ namespace phecda::sdk {
     struct PhecdaEvent {
         std::string version;
         std::string id;
+        std::string type;
         std::string deviceName;
         std::string productKey;
         std::string identifier;

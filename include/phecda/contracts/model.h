@@ -200,6 +200,7 @@ namespace phecda::contracts {
 
     struct Event {
         std::string id;
+        std::string type;
         std::string deviceName;
         std::string productKey;
         std::string identifier;

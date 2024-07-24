@@ -26,7 +26,6 @@ namespace phecda::sdk {
             return false;
         }
         args.dic->update({{container::messagingClientName, messagingClient}});
-//        messagingClient->connect();
         while (args.startupTimer->hasNotElapsed()) {
             try {
                 messagingClient->connect();

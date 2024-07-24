@@ -27,10 +27,8 @@ namespace phecda::sdk {
         //region driver initialize
         ds->driver->initialize(ds);
         //endregion
-
         phecda::sdk::provision::loadProfiles(ds->_config->device.profilesDir, dic);
         phecda::sdk::provision::loadDevices(ds->_config->device.devicesDir, dic);
-
         ds->_autoEventManager->startAutoEvents();
         return true;
     }

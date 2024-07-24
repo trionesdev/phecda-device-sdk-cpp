@@ -8,7 +8,6 @@
 #include "phecda/contracts/errors.h"
 #include "phecda/contracts/constants.h"
 #include <phecda/sdk/cache.h>
-#include <phecda/contracts/model.h>
 #include <phecda/sdk/common_utils.h>
 
 namespace phecda::sdk::transformer {
