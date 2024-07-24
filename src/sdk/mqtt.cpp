@@ -9,7 +9,8 @@
 namespace phecda::sdk {
     static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("sdk/messaging"));
 
-    class MqttCallback : public virtual mqtt::callback {
+    class callback : public virtual mqtt::callback {
+    public:
         void connected(const std::string &cause) override {
             std::cout << "\tCause: " << cause << std::endl;
             LOG_INFO(logger, cause);
@@ -41,16 +42,17 @@ namespace phecda::sdk {
         connOpts.set_clean_session(mqttInfo.cleanSession);
         connOpts.set_keep_alive_interval(mqttInfo.keepAliveInterval);
 
-        auto mqttClient = std::make_shared<MqttMessagingClient>(client);
+        auto mqttClient = std::make_shared<MqttMessagingClient>();
+        mqttClient->_mqttClient = client;
         mqttClient->_connOpts = connOpts;
         mqttClient->_topicPrefix = mqttInfo.topicPrefix;
         return mqttClient;
     }
 
     void MqttMessagingClient::connect() {
-        MqttCallback cb;
-        _mqttClient->set_callback(cb);
         try {
+            callback cb;
+            _mqttClient->set_callback(cb);
             _mqttClient->connect(_connOpts)->wait();
         } catch (const mqtt::exception &exc) {
             LOG_ERROR(logger, "[mqtt.cpp] mqtt connect failed" << exc.what());

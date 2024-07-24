@@ -167,7 +167,7 @@ namespace phecda::sdk {
                                                             std::forward<decltype(args)>(args));
                                                 }
                                         });
-        LOG_INFO(logger, "Starting device service: " << _serviceKey);
+        LOG_INFO(logger, "[deviceService:run]Starting device service: " << _serviceKey);
 
         this->driver->start();
         wg->await();

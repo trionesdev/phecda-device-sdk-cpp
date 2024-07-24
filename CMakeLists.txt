@@ -3,6 +3,11 @@ project(phecda-device-sdk)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if ( CMAKE_SYSTEM_NAME MATCHES "Windows" )
+    add_definitions( -D_WIN32_WINNT=0x0601 )
+else ()
+endif ()
+
 add_subdirectory(test)
 
 file(GLOB HEADERS "${PROJECT_SOURCE_DIR}/include/**/*")

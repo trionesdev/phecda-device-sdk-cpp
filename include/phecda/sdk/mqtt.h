@@ -20,8 +20,7 @@ namespace phecda::sdk {
         mqtt::connect_options _connOpts;
         std::string _topicPrefix = "phecda";
     public:
-        explicit MqttMessagingClient(std::shared_ptr<mqtt::async_client> client) : _mqttClient(std::move(client)), _connOpts(),
-                                                                                   _topicPrefix("phecda") {};
+        explicit MqttMessagingClient() : _mqttClient(), _connOpts(), _topicPrefix("phecda") {};
 
         static std::shared_ptr<MqttMessagingClient>
         newMqttClient(const MqttInfo &mqtt, const std::shared_ptr<bootstrap::DiContainer> &dic);
