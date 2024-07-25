@@ -3,11 +3,12 @@
 //
 
 #include "phecda/sdk/mqtt.h"
+#include <phecda/sdk/cache.h>
 #include <phecda/log/log.h>
 
 
 namespace phecda::sdk {
-    static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("sdk/messaging"));
+    static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("sdk/mqtt"));
 
     class callback : public virtual mqtt::callback {
     public:
@@ -29,42 +30,76 @@ namespace phecda::sdk {
         }
     };
 
+    class action_listener : public virtual mqtt::iaction_listener
+    {
+        std::function<void(std::string, std::vector<std::byte>)> _callback;
+
+        void on_failure(const mqtt::token& tok) override {
+
+        }
+
+        void on_success(const mqtt::token& tok) override {
+
+        }
+
+    public:
+        explicit action_listener(const std::function<void(std::string, std::vector<std::byte>)>& callback) : _callback(callback) {}
+    };
+
+
     std::shared_ptr<MqttMessagingClient>
     MqttMessagingClient::newMqttClient(const MqttInfo &mqttInfo, const shared_ptr<bootstrap::DiContainer> &dic) {
         std::string serverUri = mqttInfo.protocol + "://" + mqttInfo.host + ":" + std::to_string(mqttInfo.port);
         auto client = std::make_shared<mqtt::async_client>(serverUri, mqttInfo.clientId);
+        client->set_connected_handler([&](const std::string &cause) {
+            std::cout << "\tCause: " << cause << std::endl;
+            LOG_INFO(logger, cause);
+        });
+        client->set_disconnected_handler([&](const mqtt::properties&, mqtt::ReasonCode) {});
+        client->set_connection_lost_handler([&](const std::string &cause) {
+            LOG_INFO(logger, cause);
+        });
+        client->set_message_callback([&](mqtt::const_message_ptr msg) {
+            LOG_INFO(logger, "Delivery complete for token: "
+                    << (msg ? 1 : -1)
+                    << std::endl);
+        });
 
-        mqtt::connect_options connOpts;
-        connOpts.set_user_name(mqttInfo.username);
-        connOpts.set_password(mqttInfo.password);
-        connOpts.set_connect_timeout(mqttInfo.connectionTimeout);
-        connOpts.set_automatic_reconnect(mqttInfo.automaticReconnect);
-        connOpts.set_clean_session(mqttInfo.cleanSession);
-        connOpts.set_keep_alive_interval(mqttInfo.keepAliveInterval);
+        auto connOptionsBuilder = mqtt::connect_options_builder().user_name(mqttInfo.username)
+                .password(mqttInfo.password).clean_session(mqttInfo.cleanSession).automatic_reconnect(mqttInfo.automaticReconnect)
+                .connect_timeout(std::chrono::seconds(mqttInfo.connectionTimeout))
+                .keep_alive_interval(std::chrono::seconds(mqttInfo.keepAliveInterval));
+
+        auto connOptions = std::make_shared<mqtt::connect_options>();
+        connOptions->set_user_name(mqttInfo.username);
+        connOptions->set_password(mqttInfo.password);
+        connOptions->set_clean_session(mqttInfo.cleanSession);
+        connOptions->set_automatic_reconnect(mqttInfo.automaticReconnect);
+        connOptions->set_connect_timeout(std::chrono::seconds(mqttInfo.connectionTimeout));
+        connOptions->set_keep_alive_interval(std::chrono::seconds(mqttInfo.keepAliveInterval));
 
         auto mqttClient = std::make_shared<MqttMessagingClient>();
         mqttClient->_mqttClient = client;
-        mqttClient->_connOpts = connOpts;
+        mqttClient->_connOpts = connOptions;
         mqttClient->_topicPrefix = mqttInfo.topicPrefix;
         return mqttClient;
     }
 
     void MqttMessagingClient::connect() {
         try {
-            callback cb;
-            _mqttClient->set_callback(cb);
-            _mqttClient->connect(_connOpts)->wait();
+//            auto cb = std::make_shared<callback>();
+//            _mqttClient->set_callback(*cb);
+            _mqttClient->connect(*_connOpts)->wait();
         } catch (const mqtt::exception &exc) {
             LOG_ERROR(logger, "[mqtt.cpp] mqtt connect failed" << exc.what());
         }
     }
 
     void MqttMessagingClient::subscribeDefault() {
-
+       auto profiles = phecda::sdk::cache::profiles()->all();
     }
 
     void MqttMessagingClient::publish(std::string topic, std::vector<std::byte> message) {
-//        mqtt::message msg("test", message.data(), message.size(), 0, false);
         auto msg = mqtt::make_message(_topicPrefix + "/" + topic,
                                       std::string(reinterpret_cast<const char *>(message.data()), message.size()));
         try {
@@ -76,7 +111,10 @@ namespace phecda::sdk {
 
     void MqttMessagingClient::subscribe(std::string topic,
                                         std::function<void(std::string, std::vector<std::byte>)> callback) {
+//        mqtt::iaction_listener action_listener2 = action_listener("ss");
 
+//        action_listener action_listener("ss");
+        _mqttClient->subscribe("ddd",0);
     }
 
     MqttMessagingClient::~MqttMessagingClient() {

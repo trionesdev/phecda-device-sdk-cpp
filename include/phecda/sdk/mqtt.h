@@ -17,7 +17,7 @@ namespace phecda::sdk {
     class MqttMessagingClient : public virtual MessagingClient {
     private:
         std::shared_ptr<mqtt::async_client> _mqttClient;
-        mqtt::connect_options _connOpts;
+        std::shared_ptr<mqtt::connect_options> _connOpts;
         std::string _topicPrefix = "phecda";
     public:
         explicit MqttMessagingClient() : _mqttClient(), _connOpts(), _topicPrefix("phecda") {};
